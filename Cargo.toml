@@ -16,7 +16,7 @@ repository = "https://github.com/hougesen/mdsf"
 assert_cmd = "2.0.16"
 clap = { version = "4.5.36", features = ["derive"] }
 clap_complete = "4.5.47"
-clap_complete_nushell = "4.5.5"
+clap_complete_nushell = "4.5.7"
 console = "0.15.11"
 convert_case = "0.6.0"
 directories = { version = "6.0.0" }
