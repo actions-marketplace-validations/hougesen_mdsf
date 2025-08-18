@@ -16,7 +16,7 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
       - uses: Swatinem/rust-cache@v2
       - run: rustup toolchain install stable --profile minimal
       - run: rustup component add rustfmt clippy
@@ -34,7 +34,7 @@ jobs:
       run:
         working-directory: ./github-action
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -59,7 +59,7 @@ jobs:
       run:
         working-directory: ./mdsf-vscode
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
