@@ -8,14 +8,14 @@
       "tests": [
         {
           "language": "markdown",
-          "test_input": "langauge",
-          "test_output": "language"
+          "test_input": "langauge\n",
+          "test_output": "language\n"
         }
       ]
     }
   },
   "description": "Correct commonly misspelled English words in source files",
-  "homepage": "https://github.com/client9/misspell/",
+  "homepage": "https://github.com/client9/misspell",
   "languages": [],
   "packages": {
     "go": {

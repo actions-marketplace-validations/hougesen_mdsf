@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,7 +17,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("eradicate"),
     CommandType::Uv("eradicate", "eradicate"),
-    CommandType::Pipx("eradicate"),
+    CommandType::Pipx("eradicate", "eradicate"),
 ];
 
 pub const IS_STDIN: bool = false;

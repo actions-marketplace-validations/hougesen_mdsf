@@ -1,5 +1,3 @@
-use crate::terminal::print_error;
-
 pub static HAS_ERROR: core::sync::atomic::AtomicBool = core::sync::atomic::AtomicBool::new(false);
 
 #[inline]
@@ -9,7 +7,7 @@ pub fn set_exit_code_error() {
 
 #[inline]
 pub fn exit_with_error(error: &MdsfError) -> ! {
-    print_error(error);
+    crate::terminal::print_error(error);
 
     std::process::exit(1)
 }
@@ -20,7 +18,7 @@ pub enum MdsfError {
     ConfigAlreadyExist,
     ConfigNotFound(std::path::PathBuf),
     // TODO: use &std::path::Path
-    ConfigParse(std::path::PathBuf),
+    ConfigParse((std::path::PathBuf, serde_json::Error)),
     Io(std::io::Error),
     /// Another alias clashes
     LanguageAliasClash(String, String, String),
@@ -51,8 +49,12 @@ impl core::fmt::Display for MdsfError {
             ),
             Self::ConfigAlreadyExist => write!(f, "A config already exists in this directory"),
             Self::ConfigNotFound(path) => write!(f, "No config found at: '{}'", path.display()),
-            Self::ConfigParse(path) => {
-                write!(f, "Error parsing config found at '{}'", path.display())
+            Self::ConfigParse((path, error)) => {
+                write!(
+                    f,
+                    "Error parsing config found at '{}' - {error}",
+                    path.display()
+                )
             }
             Self::Io(e) => e.fmt(f),
             Self::LanguageAliasClash(language, alias, already_set_by) => {
@@ -69,7 +71,7 @@ impl core::fmt::Display for MdsfError {
                 f,
                 "'{alias}' cannot be used as an alias since it has no tools specified"
             ),
-            Self::MissingBinary(binary_name) => write!(f, "{binary_name} was not found in path"),
+            Self::MissingBinary(binary_name) => write!(f, "{binary_name} not found in path"),
             Self::MissingLanguageDefinition(path, language) => {
                 write!(f, "{} no tool configured for '{language}'", path.display())
             }

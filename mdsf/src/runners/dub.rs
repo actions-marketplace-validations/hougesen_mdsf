@@ -3,6 +3,7 @@ pub fn setup_dub_run_command(package_name: &str) -> std::process::Command {
     let mut cmd = std::process::Command::new("dub");
 
     cmd.arg("run");
+    cmd.arg("--quiet");
     cmd.arg("-y");
     cmd.arg(package_name);
     cmd.arg("--");
@@ -23,7 +24,7 @@ mod test_dub {
 }
 "#;
 
-        let file_ext = crate::fttype::get_file_extension("d");
+        let file_ext = crate::filetype::get_file_extension("d");
 
         let snippet =
             crate::execution::setup_snippet(input, &file_ext).expect("it to create a snippet file");

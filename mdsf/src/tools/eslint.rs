@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,11 +17,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("eslint"),
     CommandType::Direct("eslint"),
-    CommandType::Npm("eslint"),
-    CommandType::Pnpm("eslint"),
-    CommandType::Bun("eslint"),
-    CommandType::Deno("eslint"),
-    CommandType::Yarn("eslint"),
+    CommandType::Npm("eslint", "eslint"),
+    CommandType::Pnpm("eslint", "eslint"),
+    CommandType::Bun("eslint", "eslint"),
+    CommandType::Deno("eslint", "eslint"),
+    CommandType::Yarn("eslint", "eslint"),
 ];
 
 pub const IS_STDIN: bool = false;

@@ -12,17 +12,17 @@ use terminal::{
 pub mod caching;
 pub mod cli;
 pub mod config;
+pub mod custom;
 pub mod error;
 pub mod execution;
-pub mod fttype;
-pub mod generated;
+pub mod filetype;
 pub mod languages;
 mod parser;
 pub mod runners;
 pub mod terminal;
 #[cfg(test)]
 mod testing;
-mod tools;
+pub mod tools;
 
 static MDSF_PROJECT_DIR: std::sync::OnceLock<std::path::PathBuf> = std::sync::OnceLock::new();
 
@@ -132,11 +132,11 @@ pub fn format_file(
 
                     output.push_str(line);
 
-                    output.push('\n');
+                    output.push(crate::config::LF_NEWLINE_CHAR);
 
                     output.push_str(&formatted);
 
-                    output.push('\n');
+                    output.push(crate::config::LF_NEWLINE_CHAR);
                     output.push_str(&indentation);
                     output.push_str("```");
                 } else {
@@ -154,12 +154,9 @@ pub fn format_file(
 
                             set_exit_code_error();
                         }
-                        OnMissingLanguageDefinition::FailFast => {
-                            exit_with_error(&MdsfError::MissingLanguageDefinition(
-                                filename.to_path_buf(),
-                                language,
-                            ));
-                        }
+                        OnMissingLanguageDefinition::FailFast => exit_with_error(
+                            &MdsfError::MissingLanguageDefinition(filename.to_path_buf(), language),
+                        ),
                     }
                 }
 
@@ -169,7 +166,7 @@ pub fn format_file(
             output.push_str(line);
         }
 
-        output.push('\n');
+        output.push(crate::config::LF_NEWLINE_CHAR);
     }
 
     if config.format_finished_document && !output.is_empty() {
@@ -187,6 +184,8 @@ pub fn format_file(
             on_missing_tool_binary,
         );
     }
+
+    output = config.newline.normalize(output);
 
     (output != input, output)
 }
@@ -315,11 +314,11 @@ impl LineInfo<'_> {
 #[cfg(test)]
 mod test_lib {
     use crate::{
-        config::MdsfConfig,
-        execution::{MdsfFormatter, setup_snippet},
-        format_file,
-        fttype::get_file_extension,
-        handle_file,
+        config::{MdsfConfig, MdsfTool},
+        error::MdsfError,
+        execution::{MdsfToolWrapper, setup_snippet},
+        filetype::get_file_extension,
+        format_file, handle_file,
         testing::{DEFAULT_ON_MISSING_LANGUAGE_DEFINITION, DEFAULT_ON_MISSING_TOOL_BINARY},
         tools::Tooling,
     };
@@ -347,7 +346,13 @@ fn add(a: i32, b: i32) -> i32 {
 ```
 ";
 
-        let config = MdsfConfig::default();
+        let config = MdsfConfig {
+            languages: std::collections::BTreeMap::from_iter([(
+                "rust".to_string(),
+                MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Rustfmt)),
+            )]),
+            ..Default::default()
+        };
 
         {
             let (modified, output) = format_file(
@@ -387,7 +392,7 @@ fn add(a: i32, b: i32) -> i32 {
     }
 
     #[test]
-    fn it_should_format_the_codeblocks_that_start_with_whitespace() {
+    fn it_should_format_the_codeblocks_that_start_with_whitespace() -> Result<(), MdsfError> {
         let mut whitespaces = std::collections::HashSet::new();
 
         let mut spaces = String::new();
@@ -402,7 +407,7 @@ fn add(a: i32, b: i32) -> i32 {
 
         for whitespace in whitespaces {
             let input = format!(
-                "{whitespace}```rust
+                "{whitespace}```rs
 fn           add(
      a:
       i32, b: i32) -> i32 {{
@@ -412,7 +417,7 @@ fn           add(
             );
 
             let expected_output = format!(
-                "{whitespace}```rust
+                "{whitespace}```rs
 {whitespace}fn add(a: i32, b: i32) -> i32 {{
 {whitespace}    a + b
 {whitespace}}}
@@ -420,7 +425,19 @@ fn           add(
 "
             );
 
-            let config = MdsfConfig::default();
+            let mut config = MdsfConfig {
+                languages: std::collections::BTreeMap::from_iter([(
+                    "rust".to_string(),
+                    MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Rustfmt)),
+                )]),
+                language_aliases: std::collections::BTreeMap::from_iter([(
+                    "rs".to_string(),
+                    "rust".to_string(),
+                )]),
+                ..Default::default()
+            };
+
+            config.setup_language_aliases()?;
 
             {
                 let (modified, output) = format_file(
@@ -458,10 +475,12 @@ fn           add(
                 assert_eq!(output, expected_output);
             };
         }
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_not_modify_outside_blocks() {
+    fn it_should_not_modify_outside_blocks() -> Result<(), MdsfError> {
         let input = "# title
 
 Let's play!
@@ -508,7 +527,19 @@ fn add(a: i32, b: i32) -> i32 {
 
 ";
 
-        let config = MdsfConfig::default();
+        let mut config = MdsfConfig {
+            languages: std::collections::BTreeMap::from_iter([(
+                "rs".to_string(),
+                MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Rustfmt)),
+            )]),
+            language_aliases: std::collections::BTreeMap::from_iter([(
+                "rust".to_string(),
+                "rs".to_string(),
+            )]),
+            ..Default::default()
+        };
+
+        config.setup_language_aliases()?;
 
         let (modified, output) = format_file(
             &config,
@@ -523,8 +554,11 @@ fn add(a: i32, b: i32) -> i32 {
         assert!(modified);
 
         assert_eq!(output, expected_output);
+
+        Ok(())
     }
 
+    #[allow(clippy::too_many_lines)]
     #[test_with::executable(gofmt)]
     #[test]
     fn it_should_support_go_with_package() {
@@ -564,7 +598,24 @@ type Whatever struct {
 ";
 
         {
-            let config = MdsfConfig::default();
+            let config = MdsfConfig {
+                languages: std::collections::BTreeMap::from_iter([(
+                    "go".to_string(),
+                    MdsfToolWrapper::Multiple(vec![
+                        MdsfToolWrapper::Multiple(vec![
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gci)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::GoimportsReviser)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Goimports)),
+                        ]),
+                        MdsfToolWrapper::Multiple(vec![
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofumpt)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofmt)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Crlfmt)),
+                        ]),
+                    ]),
+                )]),
+                ..Default::default()
+            };
 
             {
                 let (modified, output) = format_file(
@@ -607,7 +658,7 @@ type Whatever struct {
             let config = MdsfConfig {
                 languages: std::collections::BTreeMap::from_iter([(
                     "go".to_string(),
-                    MdsfFormatter::Single(Tooling::Gofmt),
+                    MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofmt)),
                 )]),
                 ..MdsfConfig::default()
             };
@@ -650,6 +701,7 @@ type Whatever struct {
         }
     }
 
+    #[allow(clippy::too_many_lines)]
     #[test]
     fn it_should_add_go_package_if_missing() {
         let input = "```go
@@ -684,7 +736,24 @@ type Whatever struct {
 ";
 
         {
-            let config = MdsfConfig::default();
+            let config = MdsfConfig {
+                languages: std::collections::BTreeMap::from_iter([(
+                    "go".to_string(),
+                    MdsfToolWrapper::Multiple(vec![
+                        MdsfToolWrapper::Multiple(vec![
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gci)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::GoimportsReviser)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Goimports)),
+                        ]),
+                        MdsfToolWrapper::Multiple(vec![
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofumpt)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofmt)),
+                            MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Crlfmt)),
+                        ]),
+                    ]),
+                )]),
+                ..Default::default()
+            };
 
             {
                 let (modified, output) = format_file(
@@ -727,7 +796,7 @@ type Whatever struct {
             let config = MdsfConfig {
                 languages: std::collections::BTreeMap::from_iter([(
                     "go".to_string(),
-                    MdsfFormatter::Single(Tooling::Gofmt),
+                    MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofmt)),
                 )]),
 
                 ..MdsfConfig::default()
@@ -833,7 +902,7 @@ func add(a int, b int) int {
             let config = MdsfConfig {
                 languages: std::collections::BTreeMap::from_iter([(
                     "go".to_string(),
-                    MdsfFormatter::Single(Tooling::Gofmt),
+                    MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofmt)),
                 )]),
                 ..Default::default()
             };
@@ -879,7 +948,7 @@ func add(a int, b int) int {
             let config = MdsfConfig {
                 languages: std::collections::BTreeMap::from_iter([(
                     "go".to_string(),
-                    MdsfFormatter::Single(Tooling::Gofmt),
+                    MdsfToolWrapper::Single(MdsfTool::Preset(Tooling::Gofmt)),
                 )]),
                 ..MdsfConfig::default()
             };

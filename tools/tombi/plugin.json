@@ -1,0 +1,36 @@
+{
+  "$schema": "../tool.schema.json",
+  "binary": "tombi",
+  "categories": ["formatter", "linter"],
+  "commands": {
+    "format": {
+      "arguments": ["format", "-"],
+      "stdin": true,
+      "tests": [
+        {
+          "language": "toml",
+          "test_input": "[project ]\nname =     \"hello\"",
+          "test_output": "[project]\nname = \"hello\"\n"
+        }
+      ]
+    },
+    "lint": {
+      "arguments": ["lint", "$PATH"],
+      "tests": [
+        {
+          "language": "toml",
+          "test_input": "[project]\nname = \"hello\"\n",
+          "test_output": "[project]\nname = \"hello\"\n"
+        }
+      ]
+    }
+  },
+  "description": "TOML Formatter / Linter",
+  "homepage": "https://github.com/tombi-toml/tombi",
+  "languages": ["toml"],
+  "packages": {
+    "pip": {
+      "package": "tombi"
+    }
+  }
+}

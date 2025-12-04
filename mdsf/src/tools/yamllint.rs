@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -15,37 +16,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("yamllint"),
     CommandType::Uv("yamllint", "yamllint"),
-    CommandType::Pipx("yamllint"),
+    CommandType::Pipx("yamllint", "yamllint"),
 ];
 
 pub const IS_STDIN: bool = false;
-
-#[cfg(test)]
-mod test_yamllint {
-    #[test_with::executable(yamllint || pipx || uv)]
-    fn test_yamllint_yaml_e7ca97ee9ae56e12() {
-        let input = r#"---
-name: action
-on: [push]
-jobs:
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - run: mdsf format .
-"#;
-
-        let output = r#"---
-name: action
-on: [push]
-jobs:
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - run: mdsf format .
-"#;
-
-        let file_ext = crate::fttype::get_file_extension("yaml");
-
-        crate::tools::Tooling::Yamllint.test_format_snippet(input, output, &file_ext);
-    }
-}

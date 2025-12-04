@@ -12,9 +12,11 @@ jobs:
           - macos-latest
           # disabled because of an issue with crlf
           # - windows-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install mdsf
         uses: hougesen/mdsf@main
       - name: Run mdsf

@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,28 +17,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("fixjson"),
     CommandType::Direct("fixjson"),
-    CommandType::Npm("fixjson"),
-    CommandType::Pnpm("fixjson"),
-    CommandType::Bun("fixjson"),
-    CommandType::Deno("fixjson"),
-    CommandType::Yarn("fixjson"),
+    CommandType::Npm("fixjson", "fixjson"),
+    CommandType::Pnpm("fixjson", "fixjson"),
+    CommandType::Bun("fixjson", "fixjson"),
+    CommandType::Deno("fixjson", "fixjson"),
+    CommandType::Yarn("fixjson", "fixjson"),
 ];
 
 pub const IS_STDIN: bool = false;
-
-#[cfg(test)]
-mod test_fixjson {
-    #[test_with::executable(fixjson || npx || pnpm || deno || bunx)]
-    fn test_fixjson_json_115ca7a7d8b2cc2b() {
-        let input = r#"{     "fixjson": "fixjson"  }"#;
-
-        let output = r#"{
-  "fixjson": "fixjson"
-}
-"#;
-
-        let file_ext = crate::fttype::get_file_extension("json");
-
-        crate::tools::Tooling::Fixjson.test_format_snippet(input, output, &file_ext);
-    }
-}

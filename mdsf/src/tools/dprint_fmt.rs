@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,11 +17,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("dprint"),
     CommandType::Direct("dprint"),
-    CommandType::Npm("dprint"),
-    CommandType::Pnpm("dprint"),
-    CommandType::Bun("dprint"),
-    CommandType::Deno("dprint"),
-    CommandType::Yarn("dprint"),
+    CommandType::Npm("dprint", "dprint"),
+    CommandType::Pnpm("dprint", "dprint"),
+    CommandType::Bun("dprint", "dprint"),
+    CommandType::Deno("dprint", "dprint"),
+    CommandType::Yarn("dprint", "dprint"),
 ];
 
 pub const IS_STDIN: bool = false;

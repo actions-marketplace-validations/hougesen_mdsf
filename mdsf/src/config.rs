@@ -1,12 +1,6 @@
 use json_comments::{CommentSettings, StripComments};
 
-use crate::{
-    cli::{OnMissingLanguageDefinition, OnMissingToolBinary},
-    error::MdsfError,
-    execution::MdsfFormatter,
-    languages::default_tools,
-    tools::Tooling,
-};
+use crate::error::MdsfError;
 
 #[allow(clippy::trivially_copy_pass_by_ref)]
 #[inline]
@@ -29,6 +23,12 @@ pub struct MdsfConfigRunners {
     /// Default: `false`
     #[serde(default, skip_serializing_if = "is_false")]
     pub deno: bool,
+
+    /// Whether to support running dub packages using `dotnet $PACKAGE_NAME`
+    ///
+    /// Default: `false`
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub dotnet: bool,
 
     /// Whether to support running dub packages using `dub run $PACKAGE_NAME`
     ///
@@ -84,6 +84,7 @@ impl MdsfConfigRunners {
         Self {
             bunx: true,
             deno: true,
+            dotnet: true,
             dub: true,
             gem_exec: true,
             npx: true,
@@ -91,6 +92,69 @@ impl MdsfConfigRunners {
             pnpm: true,
             uv: true,
             yarn: true,
+        }
+    }
+}
+
+#[derive(
+    Clone, Copy, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize, Hash, Default,
+)]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
+pub enum Newline {
+    #[default]
+    #[serde(rename = "lf")]
+    Lf,
+    #[serde(rename = "cr")]
+    Cr,
+    #[serde(rename = "crlf")]
+    CrLf,
+}
+
+pub const LF_NEWLINE_CHAR: char = '\n';
+
+impl Newline {
+    #[inline]
+    pub const fn as_str(&self) -> &'static str {
+        match self {
+            Self::Lf => "\n",
+            Self::Cr => "\r",
+            Self::CrLf => "\r\n",
+        }
+    }
+
+    #[allow(clippy::trivially_copy_pass_by_ref)]
+    #[inline]
+    fn is_default(&self) -> bool {
+        *self == Self::default()
+    }
+
+    #[inline]
+    pub fn normalize(self, input: String) -> String {
+        // We could most likely optimize this, but I am not sure if the added complexity is worth it
+
+        if self == Self::Lf && !input.contains('\r') {
+            input
+        } else {
+            input.lines().collect::<Vec<_>>().join(self.as_str())
+        }
+    }
+}
+
+#[derive(Debug, serde::Serialize, serde::Deserialize, Hash, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
+#[serde(untagged)]
+pub enum MdsfTool {
+    Preset(crate::tools::Tooling),
+
+    Custom(crate::custom::CustomTool),
+}
+
+impl core::fmt::Display for MdsfTool {
+    #[inline]
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Self::Preset(t) => t.fmt(f),
+            Self::Custom(t) => t.fmt(f),
         }
     }
 }
@@ -152,15 +216,21 @@ pub struct MdsfConfig {
     /// }
     /// ```
     #[serde(default)]
-    pub languages: std::collections::BTreeMap<String, MdsfFormatter<Tooling>>,
+    pub languages: std::collections::BTreeMap<String, crate::execution::MdsfToolWrapper<MdsfTool>>,
+
+    /// The newline used for the output.
+    ///
+    /// Default: `lf`
+    #[serde(default, skip_serializing_if = "Newline::is_default")]
+    pub newline: Newline,
 
     /// What to do when a codeblock language has no tools defined.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub on_missing_language_definition: Option<OnMissingLanguageDefinition>,
+    pub on_missing_language_definition: Option<crate::cli::OnMissingLanguageDefinition>,
 
     /// What to do when the binary of a tool cannot be found.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub on_missing_tool_binary: Option<OnMissingToolBinary>,
+    pub on_missing_tool_binary: Option<crate::cli::OnMissingToolBinary>,
 
     /// List of package registry script runners that should be enabled.
     ///
@@ -177,7 +247,8 @@ impl Default for MdsfConfig {
             custom_file_extensions: std::collections::BTreeMap::default(),
             format_finished_document: false,
             language_aliases: std::collections::BTreeMap::default(),
-            languages: default_tools(),
+            languages: crate::languages::default_tools(),
+            newline: Newline::default(),
             on_missing_language_definition: None,
             on_missing_tool_binary: None,
             runners: MdsfConfigRunners::default(),
@@ -190,21 +261,27 @@ impl MdsfConfig {
     pub fn load(path: impl AsRef<std::path::Path>) -> Result<Self, MdsfError> {
         let path = path.as_ref();
 
-        match std::fs::read_to_string(path) {
-            Ok(raw_config) => Self::parse(&raw_config)
-                .map_err(|_serde_error| MdsfError::ConfigParse(path.to_path_buf())),
-            Err(error) => {
-                if error.kind() == std::io::ErrorKind::NotFound {
-                    return Err(MdsfError::ConfigNotFound(path.to_path_buf()));
-                }
-
-                Err(MdsfError::Io(error))
+        let contents = std::fs::read_to_string(path).map_err(|error| {
+            if error.kind() == std::io::ErrorKind::NotFound {
+                MdsfError::ConfigNotFound(path.to_path_buf())
+            } else {
+                MdsfError::Io(error)
             }
+        })?;
+
+        // TODO: do something with serde error
+        let parsed = Self::parse(&contents)
+            .map_err(|serde_error| MdsfError::ConfigParse((path.to_path_buf(), serde_error)))?;
+
+        if let Some((version, false)) = parsed.parse_schema_version() {
+            crate::terminal::print_config_schema_version_mismatch(version);
         }
+
+        Ok(parsed)
     }
 
     #[inline]
-    pub fn parse(input: &str) -> serde_json::Result<Self> {
+    fn parse(input: &str) -> serde_json::Result<Self> {
         let stripped = StripComments::with_settings(CommentSettings::c_style(), input.as_bytes());
 
         serde_json::from_reader(stripped)
@@ -231,17 +308,43 @@ impl MdsfConfig {
                     ));
                 }
 
-                if let Some(tools) = self.languages.get(alias) {
-                    self.languages.insert(language.to_owned(), tools.clone());
+                let tools = self
+                    .languages
+                    .get(alias)
+                    .ok_or_else(|| MdsfError::LanguageAliasMissingTools(alias.to_owned()))?;
 
-                    seen_languages.insert(language.to_owned(), alias.to_owned());
-                } else {
-                    return Err(MdsfError::LanguageAliasMissingTools(alias.to_owned()));
-                }
+                self.languages.insert(language.to_owned(), tools.clone());
+
+                seen_languages.insert(language.to_owned(), alias.to_owned());
             }
         }
 
         Ok(())
+    }
+
+    #[inline]
+    fn parse_schema_version(&self) -> Option<(&str, bool)> {
+        let package_version = env!("CARGO_PKG_VERSION");
+
+        if self.schema == default_schema_location() {
+            return Some((package_version, true));
+        }
+
+        let start = "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/";
+        let end = "/mdsf.schema.json";
+
+        // TODO: make this pretty
+        if self.schema.starts_with(start)
+            && self.schema.ends_with(end)
+            && let Some((_, remaining)) = self.schema.split_once(start)
+            && !remaining.is_empty()
+            && let Some((version, _)) = remaining.rsplit_once(end)
+            && !version.is_empty()
+        {
+            return Some((version, version == package_version));
+        }
+
+        None
     }
 }
 
@@ -296,15 +399,18 @@ mod test_config {
     }
 
     #[test]
-    fn test_config_load_works() {
-        let f = tempfile::Builder::new().rand_bytes(24).tempfile().unwrap();
+    fn test_config_load_works() -> Result<(), Box<dyn core::error::Error>> {
+        let f = tempfile::Builder::new().rand_bytes(24).tempfile()?;
 
         let default_config = MdsfConfig::default();
-        std::fs::write(f.path(), serde_json::to_string(&default_config).unwrap()).unwrap();
+
+        std::fs::write(f.path(), serde_json::to_string(&default_config)?)?;
 
         let loaded = MdsfConfig::load(f.path()).expect("it to return the config");
 
         assert_eq!(default_config, loaded);
+
+        Ok(())
     }
 
     #[test]
@@ -318,13 +424,15 @@ mod test_config {
     }
 
     #[test]
-    fn it_should_error_on_broken_config() {
+    fn it_should_error_on_broken_config() -> std::io::Result<()> {
         let input = "{thisisnotvalidjson}";
 
-        let file = setup_snippet(input, ".json").unwrap();
+        let file = setup_snippet(input, ".json")?;
 
         let output = MdsfConfig::load(file.path()).expect_err("it should return an error");
 
-        assert!(matches!(output, MdsfError::ConfigParse(_)));
+        assert!(matches!(output, MdsfError::ConfigParse((_, _))));
+
+        Ok(())
     }
 }

@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -14,6 +15,10 @@ pub fn set_args(
     cmd
 }
 
-pub const COMMANDS: [CommandType; 1] = [CommandType::Direct("mojo")];
+pub const COMMANDS: [CommandType; 3] = [
+    CommandType::Direct("mojo"),
+    CommandType::Uv("modular", "mojo"),
+    CommandType::Pipx("modular", "mojo"),
+];
 
 pub const IS_STDIN: bool = false;

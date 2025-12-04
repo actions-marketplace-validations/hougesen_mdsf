@@ -1,46 +1,47 @@
 [workspace]
+resolver = "3"
 members = ["codegen", "mdsf"]
 exclude = []
-resolver = "3"
 
 [workspace.package]
-version = "0.9.1-next"
-readme = "README.md"
-edition = "2024"
-homepage = "https://github.com/hougesen/mdsf"
+version = "0.11.0-next"
 authors = ["Mads Hougesen <mads@mhouge.dk>"]
-license = "MIT"
+edition = "2024"
+documentation = "https://github.com/hougesen/mdsf#readme"
+readme = "README.md"
+homepage = "https://github.com/hougesen/mdsf?tab=readme-ov-file"
 repository = "https://github.com/hougesen/mdsf"
+license = "MIT"
 
 [workspace.dependencies]
-assert_cmd = "2.0.16"
-clap = { version = "4.5.36", features = ["derive"] }
-clap_complete = "4.5.47"
-clap_complete_nushell = "4.5.5"
-console = "0.15.11"
-convert_case = "0.6.0"
+assert_cmd = "2.1.1"
+clap = { version = "4.5.53", features = ["derive"] }
+clap_complete = "4.5.61"
+clap_complete_nushell = "4.5.10"
+convert_case = "0.10.0"
 directories = { version = "6.0.0" }
-env_logger = "0.11.6"
-ignore = "0.4.23"
+env_logger = "0.11.8"
+ignore = "0.4.25"
 json_comments = "0.2.2"
-log = "0.4.27"
+log = "0.4.28"
 mdsf = { path = "./mdsf", features = ["json-schema"] }
+owo-colors = { version = "4.2.3", features = ["supports-colors"] }
 predicates = "3.1.3"
-process_control = { version = "5.0.0" }
-regex = "1.11.1"
-schemars = { version = "0.8.22" }
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
+process_control = { version = "5.2.0" }
+regex = "1.12.2"
+schemars = { version = "1.1.0" }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
 serde_yaml = { version = "0.9.34" }
-sha2 = "0.10.8"
-tempfile = "3.19.1"
-terminal_size = "0.4.1"
-test-with = { version = "0.14.9", default-features = false, features = [
+sha2 = "0.10.9"
+tempfile = "3.23.0"
+terminal_size = "0.4.3"
+test-with = { version = "0.15.5", default-features = false, features = [
   "executable",
 ] }
 threadpool = "1.8.1"
-ureq = "3.0.10"
-which = "7.0.3"
+ureq = "3.1.4"
+which = { version = "8.0.0" }
 
 # The profile that 'cargo dist' will build with
 [profile.dist]

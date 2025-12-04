@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,25 +17,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("oxlint"),
     CommandType::Direct("oxlint"),
-    CommandType::Npm("oxlint"),
-    CommandType::Pnpm("oxlint"),
-    CommandType::Bun("oxlint"),
-    CommandType::Deno("oxlint"),
-    CommandType::Yarn("oxlint"),
+    CommandType::Npm("oxlint", "oxlint"),
+    CommandType::Pnpm("oxlint", "oxlint"),
+    CommandType::Bun("oxlint", "oxlint"),
+    CommandType::Deno("oxlint", "oxlint"),
+    CommandType::Yarn("oxlint", "oxlint"),
 ];
 
 pub const IS_STDIN: bool = false;
-
-#[cfg(test)]
-mod test_oxlint {
-    #[test_with::executable(oxlint || npx || pnpm || deno || bunx)]
-    fn test_oxlint_typescript_a2154a11ef1c153b() {
-        let input = r#"debugger;"#;
-
-        let output = r#""#;
-
-        let file_ext = crate::fttype::get_file_extension("typescript");
-
-        crate::tools::Tooling::Oxlint.test_format_snippet(input, output, &file_ext);
-    }
-}

@@ -3,10 +3,9 @@ use std::hash::DefaultHasher;
 
 use convert_case::{Case, Casing};
 
-const INDENT: &str = "    ";
+use crate::GENERATED_FILE_COMMENT;
 
-const GENERATED_FILE_COMMENT: &str =
-    "///\n/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY\n///";
+const INDENT: &str = "    ";
 
 #[allow(clippy::trivially_copy_pass_by_ref)]
 #[inline]
@@ -59,6 +58,12 @@ pub struct ToolPackagesApt {
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema, Clone, Default, serde::Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ToolPackagesBrew {
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub cask: bool,
+
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub skip_brew_install: bool,
+
     pub package: String,
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -101,6 +106,9 @@ pub struct ToolPackagesDotnet {
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema, Clone, Default, serde::Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ToolPackagesDub {
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub disable_dub_run: bool,
+
     pub package: String,
 }
 
@@ -139,7 +147,26 @@ pub struct ToolPackagesNimble {
 
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema, Clone, Default, serde::Serialize)]
 #[serde(deny_unknown_fields)]
+#[allow(clippy::struct_excessive_bools)]
 pub struct ToolPackagesNpm {
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub disable_bunx: bool,
+
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub disable_deno_run: bool,
+
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub disable_npx: bool,
+
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub disable_pnpm_dlx: bool,
+
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub disable_yarn_exec: bool,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub executable: Option<String>,
+
     pub package: String,
 }
 
@@ -286,6 +313,8 @@ pub struct GeneratedCommand {
     pub homepage: String,
 
     pub deprecated: bool,
+
+    pub tests: String,
 }
 
 const DEPRECATED_ATTRIBUTE: &str = "\n    #[deprecated]";
@@ -326,11 +355,26 @@ impl Tool {
 
         let mut test_with_binaries = vec![self.binary.as_str()];
 
-        if self.packages.npm.is_some() {
-            test_with_binaries.push("npx");
-            test_with_binaries.push("pnpm");
-            test_with_binaries.push("deno");
-            test_with_binaries.push("bunx");
+        if let Some(npm) = self.packages.npm.as_ref() {
+            if !npm.disable_bunx {
+                test_with_binaries.push("bunx");
+            }
+
+            if !npm.disable_deno_run {
+                test_with_binaries.push("deno");
+            }
+
+            if !npm.disable_npx {
+                test_with_binaries.push("npx");
+            }
+
+            if !npm.disable_pnpm_dlx {
+                test_with_binaries.push("pnpm");
+            }
+
+            if !npm.disable_yarn_exec {
+                test_with_binaries.push("yarn");
+            }
         }
 
         if let Some(pip) = self.packages.pip.as_ref() {
@@ -343,7 +387,12 @@ impl Tool {
             }
         }
 
-        if self.packages.dub.is_some() {
+        if self
+            .packages
+            .dub
+            .as_ref()
+            .is_some_and(|package| !package.disable_dub_run)
+        {
             test_with_binaries.push("dub");
         }
 
@@ -358,35 +407,72 @@ impl Tool {
 
         let executable = test_with_binaries.join(" || ");
 
-        let disable_attribute = if test.disabled {
-            format!("{INDENT}#[ignore]\n")
-        } else {
-            String::new()
-        };
-
         let test_input = &test.test_input;
 
         let test_output = &test.test_output;
 
         let test_language = &test.language;
 
-        let test_code = format!(
-            "{disable_attribute}{INDENT}#[test_with::executable({executable})]
-{INDENT}fn {test_fn_name}() {{
+        format!(
+            "{INDENT}#[test_with::executable({executable})]
+{INDENT}fn {test_fn_name}() -> Result<(), Box<dyn core::error::Error>> {{
 {INDENT}{INDENT}let input = r#\"{test_input}\"#;
 
 {INDENT}{INDENT}let output = r#\"{test_output}\"#;
 
-{INDENT}{INDENT}let file_ext = crate::fttype::get_file_extension(\"{test_language}\");
+{INDENT}{INDENT}let ft = \"{test_language}\";
 
-{INDENT}{INDENT}crate::tools::Tooling::{enum_value}.test_format_snippet(input, output, &file_ext);
+{INDENT}{INDENT}crate::common::run_tooling_test(mdsf::config::MdsfTool::Preset(mdsf::tools::Tooling::{enum_value}), input, output, ft)
 {INDENT}}}",
+        )
+    }
+
+    fn generate_custom_tool_test(&self, options: &ToolCommand, test: &ToolCommandTest) -> String {
+        let binary = &self.binary;
+
+        let is_stdin = if options.stdin { "true" } else { "false" };
+
+        let arguments = options
+            .arguments
+            .iter()
+            .map(|arg| format!("\"{arg}\".to_owned()"))
+            .collect::<Vec<_>>()
+            .join(",");
+
+        let test_input = &test.test_input;
+        let test_output = &test.test_output;
+        let test_language = &test.language;
+
+        let mut hasher = DefaultHasher::new();
+
+        test.language.hash(&mut hasher);
+        test.test_input.hash(&mut hasher);
+        test.test_output.hash(&mut hasher);
+
+        let id = format!("{:x}", hasher.finish());
+
+        let test_fn_name = format!(
+            "test_custom_tool_{}_{}_{id}",
+            binary.to_case(Case::Snake).replace('.', ""),
+            test.language.to_case(Case::Snake).replace('.', "")
         );
 
-        test_code
+        format!(
+            "{INDENT}#[test_with::executable({binary})]
+{INDENT}fn {test_fn_name}() -> Result<(), Box<dyn core::error::Error>> {{
+{INDENT}{INDENT}let input = r#\"{test_input}\"#;
+
+{INDENT}{INDENT}let output = r#\"{test_output}\"#;
+
+{INDENT}{INDENT}let ft = \"{test_language}\";
+
+{INDENT}{INDENT}crate::common::run_tooling_test(mdsf::config::MdsfTool::Custom(mdsf::custom::CustomTool {{ binary: \"{binary}\".to_owned(), arguments: vec![{arguments}], stdin: {is_stdin} }}), input, output, ft)
+{INDENT}}}"
+        )
     }
 
     #[allow(clippy::too_many_lines)]
+    #[allow(clippy::cognitive_complexity)]
     fn generate(&self) -> Vec<GeneratedCommand> {
         let mut all_commands = Vec::new();
 
@@ -403,42 +489,76 @@ impl Tool {
                     command_types.push(format!("CommandType::PhpVendor(\"{}\")", php.binary));
                 }
 
+                if let Some(dotnet) = &self.packages.dotnet {
+                    command_types.push(format!("CommandType::Dotnet(\"{}\")", &dotnet.package));
+                }
+
                 command_types.push(format!("CommandType::Direct(\"{}\")", self.binary));
 
                 if let Some(npm) = &self.packages.npm {
-                    command_types.push(format!("CommandType::Npm(\"{}\")", &npm.package));
+                    let package_name = &npm.package;
+                    let executable_name = npm.executable.as_ref().unwrap_or(&npm.package);
 
-                    command_types.push(format!("CommandType::Pnpm(\"{}\")", &npm.package));
+                    let mut flavors = Vec::new();
 
-                    command_types.push(format!("CommandType::Bun(\"{}\")", &npm.package));
+                    if !npm.disable_npx {
+                        flavors.push("Npm");
+                    }
 
-                    command_types.push(format!("CommandType::Deno(\"{}\")", &npm.package));
+                    if !npm.disable_pnpm_dlx {
+                        flavors.push("Pnpm");
+                    }
 
-                    command_types.push(format!("CommandType::Yarn(\"{}\")", &npm.package));
+                    if !npm.disable_bunx {
+                        flavors.push("Bun");
+                    }
+
+                    if !npm.disable_deno_run {
+                        flavors.push("Deno");
+                    }
+
+                    if !npm.disable_yarn_exec {
+                        flavors.push("Yarn");
+                    }
+
+                    for flavor in flavors {
+                        command_types.push(format!(
+                            "CommandType::{flavor}(\"{package_name}\", \"{executable_name}\")"
+                        ));
+                    }
                 }
 
                 if let Some(pip) = &self.packages.pip {
+                    let package_name = &pip.package;
+                    let executable_name = pip.executable.as_ref().unwrap_or(&pip.package);
+
+                    let mut flavors = Vec::new();
+
                     if !pip.disable_uv_tool_run {
-                        command_types.push(format!(
-                            "CommandType::Uv(\"{}\", \"{}\")",
-                            &pip.package,
-                            &pip.executable.clone().as_ref().unwrap_or(&pip.package)
-                        ));
+                        flavors.push("Uv");
                     }
 
                     if !pip.disable_pipx_run {
-                        command_types.push(format!("CommandType::Pipx(\"{}\")", &pip.package));
+                        flavors.push("Pipx");
+                    }
+
+                    for flavor in flavors {
+                        command_types.push(format!(
+                            "CommandType::{flavor}(\"{package_name}\", \"{executable_name}\")"
+                        ));
                     }
                 }
 
-                if let Some(dub) = &self.packages.dub {
+                if let Some(dub) = &self.packages.dub
+                    && !dub.disable_dub_run
+                {
                     command_types.push(format!("CommandType::Dub(\"{}\")", &dub.package));
                 }
 
-                if let Some(gem) = &self.packages.gem {
-                    if !gem.disable_gem_exec {
-                        command_types.push(format!("CommandType::GemExec(\"{}\")", &gem.package));
-                    }
+                if let Some(gem) = &self.packages.gem
+                    && !gem.disable_gem_exec
+                {
+                    command_types.push(format!("CommandType::GemExec(\"{}\")", &gem.package));
                 }
             };
 
@@ -460,22 +580,15 @@ impl Tool {
                     if arg == "$PATH" {
                         args_includes_path = true;
                         format!("{INDENT}cmd.arg(file_path);")
-                    } else if arg == "$PATH_STRING" {
+                    } else if arg.contains("$PATH") {
                         args_includes_path = true;
-
-                        let arg_str = "cmd.arg(format!(\"'{}'\", file_path.to_string_lossy()));";
-                        format!("{INDENT}{arg_str}")
-                    } else if arg.contains("$PATH_STRING") {
-                        args_includes_path = true;
-
-                        let declaration = "let fps = file_path.to_string_lossy();\n";
 
                         format!(
-                            "{INDENT}{declaration}{INDENT}cmd.arg(format!(\"{}\"));",
-                            arg.replace("$PATH_STRING", "fps")
+                            "{INDENT}cmd.arg(format!(\"{}\", file_path.to_string_lossy()));",
+                            arg.replace("$PATH", "{}")
                         )
                     } else {
-                        format!("{INDENT}cmd.arg(\"{arg}\");",)
+                        format!("{INDENT}cmd.arg(\"{arg}\");")
                     }
                 })
                 .collect::<Vec<_>>()
@@ -496,38 +609,41 @@ impl Tool {
                 cmd
             );
 
-            let test_mod = if options.tests.is_empty() {
+            if options.tests.is_empty() {
                 println!("Missing tests for: '{serde_rename}'");
+            }
 
+            let test_methods = options
+                .tests
+                .iter()
+                .filter(|test| !test.disabled)
+                .flat_map(|test| {
+                    [
+                        self.generate_test(cmd, test),
+                        self.generate_custom_tool_test(options, test),
+                    ]
+                })
+                .collect::<Vec<_>>();
+
+            let test_mod = if test_methods.is_empty() {
                 String::new()
             } else {
-                let tests = options
-                    .tests
-                    .iter()
-                    .map(|test| self.generate_test(cmd, test))
-                    .collect::<Vec<_>>();
-
-                if tests.is_empty() {
-                    String::new()
-                } else {
-                    format!(
-                        "
-#[cfg(test)]
-mod test_{module_name} {{
-{tests}
-}}
+                format!(
+                    "#[cfg(test)]
+mod test_{module_name} {{{maybe_line_break}{tests}{maybe_line_break}}}
 ",
-                        tests = tests.join("\n\n")
-                    )
-                }
+                    maybe_line_break = if options.tests.is_empty() { "" } else { "\n" },
+                    tests = test_methods.join("\n\n")
+                )
             };
 
             let code = format!(
                 "{GENERATED_FILE_COMMENT}
+
 use crate::runners::CommandType;
 
 #[inline]
-pub fn set_args(
+pub {set_args_is_const}fn set_args(
 {INDENT}{is_mut}cmd: std::process::Command,
 {INDENT}{unused_prefix}file_path: &std::path::Path,
 ) -> std::process::Command {{
@@ -538,8 +654,13 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; {command_type_count}] = [{command_arr}];
 
 pub const IS_STDIN: bool = {is_stdin};
-{test_mod}",
-                unused_prefix = if options.stdin { "_" } else { "" },
+",
+                set_args_is_const = if options.arguments.is_empty() {
+                    "const "
+                } else {
+                    ""
+                },
+                unused_prefix = if args_includes_path { "" } else { "_" },
                 is_mut = if string_args.is_empty() { "" } else { "mut " },
                 is_stdin = if options.stdin { "true" } else { "false" }
             );
@@ -566,6 +687,7 @@ pub const IS_STDIN: bool = {is_stdin};
                     description
                 },
                 deprecated: options.deprecated || self.deprecated,
+                tests: test_mod,
             });
         }
 
@@ -655,10 +777,14 @@ impl AsRef<str> for Tooling {
 
     let mut enum_value_names = std::collections::BTreeSet::new();
 
+    let mut all_tests = Vec::new();
+
     for plugin in plugins {
         let converted = plugin.generate();
 
         for command in converted {
+            all_tests.push(command.tests.clone());
+
             std::fs::write(
                 format!("{folder}/{}.rs", command.module_name),
                 &command.code,
@@ -669,7 +795,7 @@ impl AsRef<str> for Tooling {
             let enum_value = &command.enum_value;
             let module_name = &command.module_name;
 
-            enum_value_names.insert(enum_value.to_string());
+            enum_value_names.insert(enum_value.clone());
 
             let homepage = if command.homepage.is_empty() {
                 String::new()
@@ -695,7 +821,7 @@ impl AsRef<str> for Tooling {
                 "{INDENT}#[serde(rename = \"{rename}\")]{maybe_deprecated}
 {description}
 {homepage}
-{INDENT}/// `{bin} {args}`
+{INDENT}/// `{bin}{space_if_args}{args}`
 {INDENT}{enum_value},",
                 rename = command.serde_rename,
                 maybe_deprecated = if command.deprecated {
@@ -704,6 +830,7 @@ impl AsRef<str> for Tooling {
                     ""
                 },
                 bin = plugin.binary,
+                space_if_args = if command.args.is_empty() { "" } else { " " },
                 args = command.args.join(" ")
             ));
 
@@ -719,6 +846,21 @@ impl AsRef<str> for Tooling {
             all_commands.push(command);
         }
     }
+
+    std::fs::write(
+        "mdsf/tests/tooling.rs",
+        format!(
+            "{GENERATED_FILE_COMMENT}
+
+#[allow(dead_code)]
+mod common;
+
+{}
+",
+            all_tests.join("\n")
+        ),
+    )
+    .unwrap();
 
     let mut modules = files
         .iter()
@@ -739,6 +881,7 @@ impl AsRef<str> for Tooling {
 
     let mod_file_contents = format!(
         "{GENERATED_FILE_COMMENT}
+
 {}
 
 #[derive(serde::Serialize, serde::Deserialize, Hash, Clone, Copy, Debug, PartialEq, Eq)]
@@ -757,9 +900,10 @@ impl Tooling {{
 {INDENT}{INDENT}debug_enabled: bool,
 {INDENT}{INDENT}config_runners: &crate::config::MdsfConfigRunners,
 {INDENT}) -> Result<(bool, Option<String>), crate::error::MdsfError> {{
+{INDENT}{INDENT}#[allow(clippy::type_complexity)]
 {INDENT}{INDENT}let (commands, set_args_fn, is_stdin): (
 {INDENT}{INDENT}{INDENT}&[crate::runners::CommandType],
-{INDENT}{INDENT}{INDENT}crate::execution::SetArgsFn,
+{INDENT}{INDENT}{INDENT}fn(std::process::Command, &std::path::Path) -> std::process::Command,
 {INDENT}{INDENT}{INDENT}bool,
 {INDENT}{INDENT}) = match self {{
 {}

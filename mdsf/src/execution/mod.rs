@@ -7,9 +7,9 @@ use which::which;
 use crate::{
     LineInfo,
     cli::OnMissingToolBinary,
-    config::{MdsfConfig, MdsfConfigRunners},
+    config::{MdsfConfig, MdsfConfigRunners, MdsfTool},
     error::{MdsfError, exit_with_error, set_exit_code_error},
-    fttype::get_file_extension,
+    filetype::get_file_extension,
     get_project_dir,
     runners::CommandType,
     terminal::{
@@ -205,15 +205,15 @@ pub fn format_snippet(
                 );
 
                 if let Err(MdsfError::MissingBinary(binary)) = result {
-                    exit_with_error(&MdsfError::MissingBinary(binary));
-                } else if let Ok(Some(formatted_code)) = result {
-                    if language_formatters.is_none() {
-                        let mut f = formatted_code.trim().to_owned();
+                    exit_with_error(&MdsfError::MissingBinary(binary))
+                } else if let Ok(Some(formatted_code)) = result
+                    && language_formatters.is_none()
+                {
+                    let mut f = formatted_code.trim().to_owned();
 
-                        f.push('\n');
+                    f.push(crate::config::LF_NEWLINE_CHAR);
 
-                        return f;
-                    }
+                    return f;
                 }
             }
 
@@ -228,11 +228,11 @@ pub fn format_snippet(
                 );
 
                 if let Err(MdsfError::MissingBinary(binary)) = result {
-                    exit_with_error(&MdsfError::MissingBinary(binary));
+                    exit_with_error(&MdsfError::MissingBinary(binary))
                 } else if let Ok(Some(formatted_code)) = result {
                     let mut f = formatted_code.trim().to_owned();
 
-                    f.push('\n');
+                    f.push(crate::config::LF_NEWLINE_CHAR);
 
                     return f;
                 }
@@ -246,12 +246,12 @@ pub fn format_snippet(
 #[derive(Debug, serde::Serialize, serde::Deserialize, Hash, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 #[serde(untagged)]
-pub enum MdsfFormatter<T>
+pub enum MdsfToolWrapper<T>
 where
     T: core::fmt::Display,
 {
     Single(T),
-    Multiple(Vec<MdsfFormatter<T>>),
+    Multiple(Vec<MdsfToolWrapper<T>>),
 }
 
 #[inline]
@@ -266,14 +266,14 @@ impl core::fmt::Display for Tooling {
     }
 }
 
-impl Default for MdsfFormatter<Tooling> {
+impl Default for MdsfToolWrapper<MdsfTool> {
     #[inline]
     fn default() -> Self {
         Self::Multiple(Vec::new())
     }
 }
 
-impl MdsfFormatter<Tooling> {
+impl MdsfToolWrapper<MdsfTool> {
     #[inline]
     pub fn format(
         &self,
@@ -311,13 +311,23 @@ impl MdsfFormatter<Tooling> {
     ) -> Result<(bool, Option<String>), MdsfError> {
         match formatter {
             Self::Single(f) => {
-                let formatter_name: &str = f.as_ref();
+                let formatter_name: &str = match f {
+                    MdsfTool::Preset(t) => t.as_ref(),
+                    MdsfTool::Custom(t) => t.tool_name(),
+                };
 
                 print_tool_info(formatter_name, info);
 
                 let time = std::time::Instant::now();
 
-                let r = f.format_snippet(snippet_path, timeout, debug_enabled, config_runners);
+                let r = match f {
+                    MdsfTool::Custom(t) => {
+                        t.format_snippet(snippet_path, timeout, debug_enabled, config_runners)
+                    }
+                    MdsfTool::Preset(t) => {
+                        t.format_snippet(snippet_path, timeout, debug_enabled, config_runners)
+                    }
+                };
 
                 print_tool_time(formatter_name, info, time.elapsed());
 
@@ -381,18 +391,19 @@ impl MdsfFormatter<Tooling> {
     }
 }
 
-pub type SetArgsFn = fn(std::process::Command, &std::path::Path) -> std::process::Command;
-
 #[inline]
-pub fn run_tools(
+pub fn run_tools<F>(
     command_types: &[CommandType],
     file_path: &std::path::Path,
-    set_args_fn: SetArgsFn,
+    set_args_fn: F,
     timeout: u64,
     is_stdin: bool,
     debug_enabled: bool,
     config_runners: &MdsfConfigRunners,
-) -> Result<(bool, Option<String>), MdsfError> {
+) -> Result<(bool, Option<String>), MdsfError>
+where
+    F: Fn(std::process::Command, &std::path::Path) -> std::process::Command,
+{
     for (index, cmd) in command_types.iter().enumerate() {
         if !cmd.is_enabled(config_runners) {
             continue;
@@ -406,10 +417,10 @@ pub fn run_tools(
             return execution_result;
         }
 
-        if let Ok(r) = execution_result {
-            if !r.0 {
-                return Ok(r);
-            }
+        if let Ok(r) = execution_result
+            && !r.0
+        {
+            return Ok(r);
         }
     }
 
@@ -418,21 +429,25 @@ pub fn run_tools(
 
 #[cfg(test)]
 mod test_run_tools {
-    use crate::{config::MdsfConfigRunners, runners::CommandType};
+    use crate::{config::MdsfConfigRunners, error::MdsfError, runners::CommandType};
 
     #[test]
-    fn it_should_skip_if_bun_runner_is_disabled() {
+    fn it_should_skip_if_bun_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
-            &[CommandType::Bun("thisbinarydoesnotexist")],
+            &[CommandType::Bun(
+                "thisbinarydoesnotexist",
+                "thisbinarydoesnotexist",
+            )],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: false,
 
                 deno: true,
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
                 npx: true,
@@ -441,26 +456,31 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_deno_runner_is_disabled() {
+    fn it_should_skip_if_deno_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
-            &[CommandType::Deno("thisbinarydoesnotexist")],
+            &[CommandType::Deno(
+                "thisbinarydoesnotexist",
+                "thisbinarydoesnotexist",
+            )],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
 
                 deno: false,
 
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
                 npx: true,
@@ -469,24 +489,56 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_dub_runner_is_disabled() {
+    fn it_should_skip_if_dotnet_runner_is_disabled() -> Result<(), MdsfError> {
+        let (was_not_modified, _) = super::run_tools(
+            &[CommandType::Dotnet("thisbinarydoesnotexist")],
+            std::path::Path::new("thisdoesnotexist"),
+            |_, _| unreachable!(),
+            crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
+            false,
+            crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
+            &MdsfConfigRunners {
+                bunx: true,
+                deno: true,
+
+                dotnet: false,
+
+                dub: true,
+                gem_exec: true,
+                npx: true,
+                pipx: true,
+                pnpm: true,
+                uv: true,
+                yarn: true,
+            },
+        )?;
+
+        assert!(was_not_modified);
+
+        Ok(())
+    }
+
+    #[test]
+    fn it_should_skip_if_dub_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
             &[CommandType::Dub("thisbinarydoesnotexist")],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
 
                 dub: false,
 
@@ -497,24 +549,26 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_gem_exec_runner_is_disabled() {
+    fn it_should_skip_if_gem_exec_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
             &[CommandType::GemExec("thisbinarydoesnotexist")],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
                 dub: true,
 
                 gem_exec: false,
@@ -525,24 +579,29 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_npx_runner_is_disabled() {
+    fn it_should_skip_if_npx_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
-            &[CommandType::Npm("thisbinarydoesnotexist")],
+            &[CommandType::Npm(
+                "thisbinarydoesnotexist",
+                "thisbinarydoesnotexist",
+            )],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
 
@@ -553,24 +612,29 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_pipx_runner_is_disabled() {
+    fn it_should_skip_if_pipx_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
-            &[CommandType::Pipx("thisbinarydoesnotexist")],
+            &[CommandType::Pipx(
+                "thisbinarydoesnotexist",
+                "thisbinarydoesnotexist",
+            )],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
                 npx: true,
@@ -581,24 +645,29 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_pnpm_runner_is_disabled() {
+    fn it_should_skip_if_pnpm_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
-            &[CommandType::Pnpm("thisbinarydoesnotexist")],
+            &[CommandType::Pnpm(
+                "thisbinarydoesnotexist",
+                "thisbinarydoesnotexist",
+            )],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
                 npx: true,
@@ -609,14 +678,15 @@ mod test_run_tools {
                 uv: true,
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_uv_runner_is_disabled() {
+    fn it_should_skip_if_uv_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
             &[CommandType::Uv(
                 "thisbinarydoesnotexist",
@@ -625,11 +695,12 @@ mod test_run_tools {
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
                 npx: true,
@@ -640,24 +711,29 @@ mod test_run_tools {
 
                 yarn: true,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 
     #[test]
-    fn it_should_skip_if_yarn_runner_is_disabled() {
+    fn it_should_skip_if_yarn_runner_is_disabled() -> Result<(), MdsfError> {
         let (was_not_modified, _) = super::run_tools(
-            &[CommandType::Yarn("thisbinarydoesnotexist")],
+            &[CommandType::Yarn(
+                "thisbinarydoesnotexist",
+                "thisbinarydoesnotexist",
+            )],
             std::path::Path::new("thisdoesnotexist"),
             |_, _| unreachable!(),
             crate::testing::DEFAULT_TEST_FORMATTER_TIMEOUT,
-            crate::tools::prettier::IS_STDIN,
+            false,
             crate::testing::DEFAULT_TEST_DEBUG_ENABLED,
             &MdsfConfigRunners {
                 bunx: true,
                 deno: true,
+                dotnet: true,
                 dub: true,
                 gem_exec: true,
                 npx: true,
@@ -667,9 +743,10 @@ mod test_run_tools {
 
                 yarn: false,
             },
-        )
-        .unwrap();
+        )?;
 
         assert!(was_not_modified);
+
+        Ok(())
     }
 }

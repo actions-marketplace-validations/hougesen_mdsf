@@ -1,10 +1,11 @@
 {
   "$schema": "../tool.schema.json",
-  "binary": "dotnet",
+  "binary": "csharpier",
   "categories": ["formatter"],
   "commands": {
     "": {
-      "arguments": ["csharpier", "$PATH"],
+      "arguments": ["format", "--write-stdout"],
+      "stdin": true,
       "tests": [
         {
           "language": "csharp",
@@ -14,10 +15,9 @@
       ]
     }
   },
-  "description": "An Opinionated Code Formatter for C#",
-  "homepage": "https://csharpier.com/",
+  "description": "CSharpier is an opinionated code formatter for C#",
+  "homepage": "https://github.com/belav/csharpier",
   "languages": ["c#"],
-  "name": "csharpier",
   "packages": {
     "dotnet": {
       "package": "csharpier"

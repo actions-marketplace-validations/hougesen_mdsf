@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -15,35 +16,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("nginxbeautifier"),
     CommandType::Direct("nginxbeautifier"),
-    CommandType::Npm("nginxbeautifier"),
-    CommandType::Pnpm("nginxbeautifier"),
-    CommandType::Bun("nginxbeautifier"),
-    CommandType::Deno("nginxbeautifier"),
-    CommandType::Yarn("nginxbeautifier"),
+    CommandType::Npm("nginxbeautifier", "nginxbeautifier"),
+    CommandType::Pnpm("nginxbeautifier", "nginxbeautifier"),
+    CommandType::Bun("nginxbeautifier", "nginxbeautifier"),
+    CommandType::Deno("nginxbeautifier", "nginxbeautifier"),
+    CommandType::Yarn("nginxbeautifier", "nginxbeautifier"),
 ];
 
 pub const IS_STDIN: bool = false;
-
-#[cfg(test)]
-mod test_nginxbeautifier {
-    #[test_with::executable(nginxbeautifier || npx || pnpm || deno || bunx)]
-    fn test_nginxbeautifier_conf_5c2a2e0d4f44354f() {
-        let input = r#"server {
-    listen 80;
-        listen [::]:80;
-       server_name example.com;
-    }
-"#;
-
-        let output = r#"server {
-	listen 80;
-	listen [::]:80;
-	server_name example.com;
-}
-"#;
-
-        let file_ext = crate::fttype::get_file_extension(".conf");
-
-        crate::tools::Tooling::Nginxbeautifier.test_format_snippet(input, output, &file_ext);
-    }
-}

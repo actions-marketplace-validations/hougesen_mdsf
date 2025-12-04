@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -18,7 +19,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("oelint-adv"),
     CommandType::Uv("oelint_adv", "oelint-adv"),
-    CommandType::Pipx("oelint_adv"),
+    CommandType::Pipx("oelint_adv", "oelint-adv"),
 ];
 
 pub const IS_STDIN: bool = false;

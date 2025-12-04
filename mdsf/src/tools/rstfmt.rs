@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -15,7 +16,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("rstfmt"),
     CommandType::Uv("rstfmt", "rstfmt"),
-    CommandType::Pipx("rstfmt"),
+    CommandType::Pipx("rstfmt", "rstfmt"),
 ];
 
 pub const IS_STDIN: bool = false;

@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,35 +17,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("xo"),
     CommandType::Direct("xo"),
-    CommandType::Npm("xo"),
-    CommandType::Pnpm("xo"),
-    CommandType::Bun("xo"),
-    CommandType::Deno("xo"),
-    CommandType::Yarn("xo"),
+    CommandType::Npm("xo", "xo"),
+    CommandType::Pnpm("xo", "xo"),
+    CommandType::Bun("xo", "xo"),
+    CommandType::Deno("xo", "xo"),
+    CommandType::Yarn("xo", "xo"),
 ];
 
 pub const IS_STDIN: bool = true;
-
-#[cfg(test)]
-mod test_xo {
-    #[test_with::executable(xo || npx || pnpm || deno || bunx)]
-    fn test_xo_javascript_77a8cbfa8cbcea9d() {
-        let input = r#"    function asyncAddition(a,b  )
-    {
-        return a+b
-    }
-
-                    console.info(asyncAddition(1, 2));"#;
-
-        let output = r#"function asyncAddition(a, b) {
-	return a + b;
-}
-
-console.info(asyncAddition(1, 2));
-"#;
-
-        let file_ext = crate::fttype::get_file_extension("javascript");
-
-        crate::tools::Tooling::Xo.test_format_snippet(input, output, &file_ext);
-    }
-}

@@ -15,11 +15,13 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: Swatinem/rust-cache@v2
+      - uses: actions/checkout@v6
       - run: rustup toolchain install stable --profile minimal
       - run: rustup component add rustfmt clippy
+      - uses: Swatinem/rust-cache@v2
       - run: cargo fetch
       - run: cargo fmt -- --check --color always
       - run: cargo clippy
@@ -33,9 +35,11 @@ jobs:
     defaults:
       run:
         working-directory: ./github-action
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
@@ -58,9 +62,11 @@ jobs:
     defaults:
       run:
         working-directory: ./mdsf-vscode
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           check-latest: true

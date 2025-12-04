@@ -15,7 +15,7 @@
     }
   },
   "description": "Formatting technology for Swift source code",
-  "homepage": "https://github.com/apple/swift-format",
+  "homepage": "https://github.com/swiftlang/swift-format",
   "languages": ["swift"],
   "packages": {}
 }

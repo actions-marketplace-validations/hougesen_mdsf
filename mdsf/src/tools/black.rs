@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,23 +17,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("black"),
     CommandType::Uv("black", "black"),
-    CommandType::Pipx("black"),
+    CommandType::Pipx("black", "black"),
 ];
 
 pub const IS_STDIN: bool = false;
-
-#[cfg(test)]
-mod test_black {
-    #[test_with::executable(black || pipx || uv)]
-    fn test_black_python_229ec2b01c2bfe3c() {
-        let input = r#"def add( a: int ,  b:int)->int: return a+b"#;
-
-        let output = r#"def add(a: int, b: int) -> int:
-    return a + b
-"#;
-
-        let file_ext = crate::fttype::get_file_extension("python");
-
-        crate::tools::Tooling::Black.test_format_snippet(input, output, &file_ext);
-    }
-}

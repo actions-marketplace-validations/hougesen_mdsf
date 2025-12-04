@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,7 +17,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("curlylint"),
     CommandType::Uv("curlylint", "curlylint"),
-    CommandType::Pipx("curlylint"),
+    CommandType::Pipx("curlylint", "curlylint"),
 ];
 
 pub const IS_STDIN: bool = false;

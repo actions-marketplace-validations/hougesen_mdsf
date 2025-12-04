@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -19,33 +20,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("html-beautify"),
     CommandType::Direct("html-beautify"),
-    CommandType::Npm("js-beautify"),
-    CommandType::Pnpm("js-beautify"),
-    CommandType::Bun("js-beautify"),
-    CommandType::Deno("js-beautify"),
-    CommandType::Yarn("js-beautify"),
+    CommandType::Npm("js-beautify", "js-beautify"),
+    CommandType::Pnpm("js-beautify", "js-beautify"),
+    CommandType::Bun("js-beautify", "js-beautify"),
+    CommandType::Deno("js-beautify", "js-beautify"),
+    CommandType::Yarn("js-beautify", "js-beautify"),
 ];
 
 pub const IS_STDIN: bool = false;
-
-#[cfg(test)]
-mod test_html_beautify {
-    #[test_with::executable(html-beautify || npx || pnpm || deno || bunx)]
-    fn test_html_beautify_html_63850f31f2ef5caf() {
-        let input = r#"<div>
-                    <p>
-                    Mads was here
-                    </p>
-        </div>"#;
-
-        let output = r#"<div>
-    <p>
-        Mads was here
-    </p>
-</div>"#;
-
-        let file_ext = crate::fttype::get_file_extension("html");
-
-        crate::tools::Tooling::HtmlBeautify.test_format_snippet(input, output, &file_ext);
-    }
-}

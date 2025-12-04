@@ -7,8 +7,10 @@ jobs:
   extension-release:
     name: Release Extension
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: npm ci
         working-directory: mdsf-vscode
       - name: Publish to VSCode

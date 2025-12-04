@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -15,11 +16,11 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 7] = [
     CommandType::NodeModules("quick-lint-js"),
     CommandType::Direct("quick-lint-js"),
-    CommandType::Npm("quick-lint-js"),
-    CommandType::Pnpm("quick-lint-js"),
-    CommandType::Bun("quick-lint-js"),
-    CommandType::Deno("quick-lint-js"),
-    CommandType::Yarn("quick-lint-js"),
+    CommandType::Npm("quick-lint-js", "quick-lint-js"),
+    CommandType::Pnpm("quick-lint-js", "quick-lint-js"),
+    CommandType::Bun("quick-lint-js", "quick-lint-js"),
+    CommandType::Deno("quick-lint-js", "quick-lint-js"),
+    CommandType::Yarn("quick-lint-js", "quick-lint-js"),
 ];
 
 pub const IS_STDIN: bool = false;

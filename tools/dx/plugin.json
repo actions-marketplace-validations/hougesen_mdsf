@@ -5,6 +5,7 @@
   "commands": {
     "fmt": {
       "arguments": ["fmt", "--all-code", "--file", "$PATH"],
+      "description": "Format `rsx!` snippets in Rust files.",
       "tests": [
         {
           "language": "rust",
@@ -14,7 +15,7 @@
       ]
     }
   },
-  "description": "Dioxus cli",
+  "description": "Fullstack app framework for web, desktop, and mobile",
   "homepage": "https://github.com/dioxuslabs/dioxus",
   "languages": ["rsx", "rust"],
   "packages": {

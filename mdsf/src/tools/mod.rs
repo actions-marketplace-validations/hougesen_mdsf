@@ -1,12 +1,14 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 pub mod actionlint;
 pub mod air_format;
 pub mod alejandra;
 pub mod alex;
 pub mod ameba;
 pub mod ansible_lint;
+pub mod api_linter;
 pub mod asmfmt;
 pub mod astyle;
 pub mod atlas_fmt;
@@ -37,9 +39,11 @@ pub mod buf_lint;
 pub mod buildifier;
 pub mod cabal_fmt;
 pub mod cabal_format;
+pub mod cabal_gild;
 pub mod cabal_prettify;
 pub mod caddy_fmt;
 pub mod caramel_fmt;
+pub mod cedar_format;
 pub mod cfn_lint;
 pub mod checkmake;
 pub mod clang_format;
@@ -84,6 +88,7 @@ pub mod dotenv_linter_fix;
 pub mod dprint_fmt;
 pub mod dscanner_fix;
 pub mod dscanner_lint;
+pub mod dune_format_dune_file;
 pub mod duster_fix;
 pub mod duster_lint;
 pub mod dx_fmt;
@@ -92,6 +97,7 @@ pub mod efmt;
 pub mod elm_format;
 pub mod eradicate;
 pub mod erb_formatter;
+pub mod erg_lint;
 pub mod erlfmt;
 pub mod eslint;
 pub mod fantomas;
@@ -108,10 +114,13 @@ pub mod fortran_linter;
 pub mod fourmolu;
 pub mod fprettify;
 pub mod futhark_fmt;
+pub mod fvm_dart_fix;
+pub mod fvm_dart_format;
 pub mod gci;
 pub mod gdformat;
 pub mod gdlint;
 pub mod gersemi;
+pub mod ghokin_fmt;
 pub mod gleam_format;
 pub mod gluon_fmt;
 pub mod gofmt;
@@ -124,6 +133,7 @@ pub mod golangci_lint_run_fix;
 pub mod golines;
 pub mod google_java_format;
 pub mod gospel;
+pub mod grafbase_lint;
 pub mod grain_format;
 pub mod hadolint;
 pub mod haml_lint;
@@ -138,14 +148,17 @@ pub mod hurlfmt;
 pub mod imba_fmt;
 pub mod inko_fmt;
 pub mod isort;
+pub mod janet_format;
 pub mod joker;
 pub mod jq;
 pub mod jqfmt;
 pub mod js_beautify;
 pub mod json_5_format;
+pub mod json_repair;
 pub mod jsona_format;
 pub mod jsona_lint;
 pub mod jsonlint;
+pub mod jsonlint_sort;
 pub mod jsonnet_lint;
 pub mod jsonnetfmt;
 pub mod jsonpp;
@@ -154,7 +167,10 @@ pub mod just;
 pub mod kcl_fmt;
 pub mod kcl_lint;
 pub mod kdlfmt;
+pub mod kdlfmt_v_1;
+pub mod kdlfmt_v_2;
 pub mod kdoc_formatter;
+pub mod keep_sorted;
 pub mod ktfmt;
 pub mod ktlint;
 pub mod kulala_fmt_check;
@@ -163,6 +179,7 @@ pub mod leptosfmt;
 pub mod liquidsoap_prettier;
 pub mod luacheck;
 pub mod luaformatter;
+pub mod luau_analyze;
 pub mod mado_check;
 pub mod mago_format;
 pub mod mago_lint;
@@ -172,12 +189,16 @@ pub mod markdownfmt;
 pub mod markdownlint;
 pub mod markdownlint_cli_2;
 pub mod markuplint;
+pub mod mbake_format;
+pub mod mbake_validate;
 pub mod md_padding;
 pub mod mdformat;
 pub mod mdsf_format;
 pub mod mdsf_verify;
 pub mod mdslw;
 pub mod meson_fmt;
+pub mod mh_lint;
+pub mod mh_style;
 pub mod mise_fmt;
 pub mod misspell;
 pub mod mix_format;
@@ -202,6 +223,7 @@ pub mod odinfmt;
 pub mod oelint_adv;
 pub mod opa_fmt;
 pub mod ormolu;
+pub mod oxfmt;
 pub mod oxlint;
 pub mod packer_fix;
 pub mod packer_fmt;
@@ -214,7 +236,9 @@ pub mod php_cs_fixer_fix;
 pub mod phpcbf;
 pub mod phpinsights_fix;
 pub mod pint;
+pub mod pkl_format;
 pub mod prettier;
+pub mod prettierd;
 pub mod pretty_php;
 pub mod prettypst;
 pub mod prisma_format;
@@ -233,9 +257,13 @@ pub mod pydocstyle;
 pub mod pyflakes;
 pub mod pyink;
 pub mod pylint;
+pub mod pymarkdownlnt_fix;
 pub mod pyment;
+pub mod pyrefly;
 pub mod pyupgrade;
 pub mod qmlfmt;
+pub mod qmlformat;
+pub mod qmllint;
 pub mod quick_lint_js;
 pub mod raco_fmt;
 pub mod reek;
@@ -254,6 +282,9 @@ pub mod rubyfmt;
 pub mod ruff_check;
 pub mod ruff_format;
 pub mod rufo;
+pub mod rumdl_check;
+pub mod rumdl_check_fix;
+pub mod rumdl_fmt;
 pub mod rune_fmt;
 pub mod runic;
 pub mod rustfmt;
@@ -277,7 +308,9 @@ pub mod sqlfluff_fix;
 pub mod sqlfluff_format;
 pub mod sqlfluff_lint;
 pub mod sqlfmt;
+pub mod sqlint;
 pub mod sqruff;
+pub mod squawk;
 pub mod standardjs;
 pub mod standardrb;
 pub mod statix_check;
@@ -287,9 +320,12 @@ pub mod stylelint;
 pub mod stylish_haskell;
 pub mod stylua;
 pub mod superhtml_fmt;
+pub mod svlint;
 pub mod swift_format;
 pub mod swiftformat;
 pub mod taplo;
+pub mod tclfmt;
+pub mod tclint;
 pub mod templ_fmt;
 pub mod terraform_fmt;
 pub mod terragrunt_hclfmt;
@@ -298,6 +334,8 @@ pub mod textlint;
 pub mod textlint_fix;
 pub mod tlint_format;
 pub mod tofu_fmt;
+pub mod tombi_format;
+pub mod tombi_lint;
 pub mod toml_sort;
 pub mod topiary;
 pub mod tryceratops;
@@ -306,6 +344,7 @@ pub mod tsp_format;
 pub mod tsqllint;
 pub mod twig_cs_fixer_lint;
 pub mod twigcs;
+pub mod ty;
 pub mod typos;
 pub mod typstfmt;
 pub mod typstyle;
@@ -315,6 +354,7 @@ pub mod unimport;
 pub mod usort;
 pub mod v_fmt;
 pub mod vacuum_lint;
+pub mod verusfmt;
 pub mod veryl_fmt;
 pub mod vhdl_style_guide;
 pub mod vint;
@@ -331,6 +371,7 @@ pub mod yamlfix;
 pub mod yamlfmt;
 pub mod yamllint;
 pub mod yapf;
+pub mod yard_lint;
 pub mod yew_fmt;
 pub mod yq;
 pub mod zig_fmt;
@@ -388,6 +429,14 @@ pub enum Tooling {
     /// `ansible-lint $PATH`
     AnsibleLint,
 
+    #[serde(rename = "api-linter")]
+    /// A linter for APIs defined in protocol buffers
+    ///
+    /// [https://github.com/googleapis/api-linter](https://github.com/googleapis/api-linter)
+    ///
+    /// `api-linter $PATH`
+    ApiLinter,
+
     #[serde(rename = "asmfmt")]
     /// Go Assembler Formatter
     ///
@@ -413,7 +462,7 @@ pub enum Tooling {
     AtlasFmt,
 
     #[serde(rename = "auto-optional")]
-    /// Adds the Optional type-hint to arguments where the default value is None
+    /// Makes typed arguments Optional when the default argument is None
     ///
     /// [https://github.com/luttik/auto-optional](https://github.com/luttik/auto-optional)
     ///
@@ -437,7 +486,7 @@ pub enum Tooling {
     Autoflake,
 
     #[serde(rename = "autopep8")]
-    /// A tool that automatically formats Python code to conform to the PEP 8 style guid
+    /// A tool that automatically formats Python code to conform to the PEP 8 style guide
     ///
     /// [https://github.com/hhatto/autopep8](https://github.com/hhatto/autopep8)
     ///
@@ -557,7 +606,7 @@ pub enum Tooling {
     Bpfmt,
 
     #[serde(rename = "brittany")]
-    /// A Haskell source code formatter
+    /// Haskell source code formatter
     ///
     /// [https://github.com/lspitzner/brittany](https://github.com/lspitzner/brittany)
     ///
@@ -567,13 +616,13 @@ pub enum Tooling {
     #[serde(rename = "brunette")]
     /// A best practice Python code formatter
     ///
-    /// [https://github.com/odwyersoftware/brunette](https://github.com/odwyersoftware/brunette)
+    /// [https://pypi.org/project/brunette](https://pypi.org/project/brunette)
     ///
     /// `brunette --quiet $PATH`
     Brunette,
 
     #[serde(rename = "bsfmt")]
-    /// A code formatter for BrightScript and BrighterScript
+    /// A code formatter for BrighterScript (and BrightScript)
     ///
     /// [https://github.com/rokucommunity/brighterscript-formatter](https://github.com/rokucommunity/brighterscript-formatter)
     ///
@@ -591,7 +640,7 @@ pub enum Tooling {
     #[serde(rename = "buf:format")]
     /// Format Protobuf files
     ///
-    /// [https://buf.build/docs/format/style/](https://buf.build/docs/format/style/)
+    /// [https://buf.build/docs/format/style](https://buf.build/docs/format/style)
     ///
     /// `buf format --write $PATH`
     BufFormat,
@@ -599,13 +648,13 @@ pub enum Tooling {
     #[serde(rename = "buf:lint")]
     /// Lint Protobuf files
     ///
-    /// [https://buf.build/docs/lint/overview/](https://buf.build/docs/lint/overview/)
+    /// [https://buf.build/docs/lint/overview](https://buf.build/docs/lint/overview)
     ///
     /// `buf lint $PATH`
     BufLint,
 
     #[serde(rename = "buildifier")]
-    /// A bazel BUILD file formatter and
+    /// A bazel BUILD file formatter and editor
     ///
     /// [https://github.com/bazelbuild/buildtools](https://github.com/bazelbuild/buildtools)
     ///
@@ -620,6 +669,14 @@ pub enum Tooling {
     /// `cabal-fmt --inplace $PATH`
     CabalFmt,
 
+    #[serde(rename = "cabal-gild")]
+    /// Format Haskell package descriptions
+    ///
+    /// [https://github.com/tfausak/cabal-gild](https://github.com/tfausak/cabal-gild)
+    ///
+    /// `cabal-gild --input $PATH --output $PATH`
+    CabalGild,
+
     #[serde(rename = "cabal-prettify")]
     /// Prettify your Cabal package configuration files
     ///
@@ -631,7 +688,7 @@ pub enum Tooling {
     #[serde(rename = "cabal:format")]
     /// Reformat the .cabal file using the standard style
     ///
-    /// [https://www.haskell.org/cabal/](https://www.haskell.org/cabal/)
+    /// [https://www.haskell.org/cabal](https://www.haskell.org/cabal)
     ///
     /// `cabal format $PATH`
     CabalFormat,
@@ -647,10 +704,18 @@ pub enum Tooling {
     #[serde(rename = "caramel:fmt")]
     /// Format Caramel code
     ///
-    /// [https://caramel.run/](https://caramel.run/)
+    /// [https://caramel.run](https://caramel.run)
     ///
     /// `caramel fmt $PATH`
     CaramelFmt,
+
+    #[serde(rename = "cedar:format")]
+    /// Format a cedar policy set
+    ///
+    /// [https://github.com/cedar-policy/cedar](https://github.com/cedar-policy/cedar)
+    ///
+    /// `cedar format`
+    CedarFormat,
 
     #[serde(rename = "cfn-lint")]
     /// CloudFormation Linter
@@ -661,7 +726,7 @@ pub enum Tooling {
     CfnLint,
 
     #[serde(rename = "checkmake")]
-    /// Experimental linter/analyzer for Makefiles
+    /// Linter/analyzer for Makefiles
     ///
     /// [https://github.com/mrtazz/checkmake](https://github.com/mrtazz/checkmake)
     ///
@@ -679,7 +744,7 @@ pub enum Tooling {
     #[serde(rename = "clang-tidy")]
     /// clang-tidy is a clang-based C++ “linter” tool
     ///
-    /// [https://clang.llvm.org/extra/clang-tidy/](https://clang.llvm.org/extra/clang-tidy/)
+    /// [https://clang.llvm.org/extra/clang-tidy](https://clang.llvm.org/extra/clang-tidy)
     ///
     /// `clang-tidy --fix $PATH`
     ClangTidy,
@@ -751,7 +816,7 @@ pub enum Tooling {
     #[serde(rename = "cppcheck")]
     /// Cppcheck is a static analysis tool for C/C++ code
     ///
-    /// [https://cppcheck.sourceforge.io/](https://cppcheck.sourceforge.io/)
+    /// [https://cppcheck.sourceforge.io](https://cppcheck.sourceforge.io)
     ///
     /// `cppcheck $PATH`
     Cppcheck,
@@ -781,15 +846,15 @@ pub enum Tooling {
     CrystalFormat,
 
     #[serde(rename = "csharpier")]
-    /// An Opinionated Code Formatter for C#
+    /// CSharpier is an opinionated code formatter for C#
     ///
-    /// [https://csharpier.com/](https://csharpier.com/)
+    /// [https://github.com/belav/csharpier](https://github.com/belav/csharpier)
     ///
-    /// `dotnet csharpier $PATH`
+    /// `csharpier format --write-stdout`
     Csharpier,
 
     #[serde(rename = "css-beautify")]
-    /// A css formatter
+    /// A CSS formatter
     ///
     /// [https://github.com/beautifier/js-beautify](https://github.com/beautifier/js-beautify)
     ///
@@ -813,9 +878,9 @@ pub enum Tooling {
     Csslint,
 
     #[serde(rename = "cue:fmt")]
-    /// Validate and define text-based and dynamic configuration
+    /// Format CUE files
     ///
-    /// [https://cuelang.org/docs/reference/command/cue-help-fmt/](https://cuelang.org/docs/reference/command/cue-help-fmt/)
+    /// [https://cuelang.org/docs/reference/command/cue-help-fmt](https://cuelang.org/docs/reference/command/cue-help-fmt)
     ///
     /// `cue fmt $PATH`
     CueFmt,
@@ -825,7 +890,7 @@ pub enum Tooling {
     ///
     /// [https://github.com/asdine/cueimports](https://github.com/asdine/cueimports)
     ///
-    /// `cueimports `
+    /// `cueimports`
     Cueimports,
 
     #[serde(rename = "curlylint")]
@@ -839,7 +904,7 @@ pub enum Tooling {
     #[serde(rename = "d2:fmt")]
     /// Format d2 code
     ///
-    /// [https://d2lang.com/](https://d2lang.com/)
+    /// [https://d2lang.com](https://d2lang.com)
     ///
     /// `d2 fmt $PATH`
     D2Fmt,
@@ -863,7 +928,7 @@ pub enum Tooling {
     #[serde(rename = "dcm:fix")]
     /// Fixes issues produced by dcm analyze, dcm check-unused-code, dcm check-unused-files or dcm check-dependencies commands
     ///
-    /// [https://dcm.dev/docs/cli/formatting/fix/](https://dcm.dev/docs/cli/formatting/fix/)
+    /// [https://dcm.dev/docs/cli/formatting/fix](https://dcm.dev/docs/cli/formatting/fix)
     ///
     /// `dcm fix $PATH`
     DcmFix,
@@ -871,7 +936,7 @@ pub enum Tooling {
     #[serde(rename = "dcm:format")]
     /// Formats dart files
     ///
-    /// [https://dcm.dev/docs/cli/formatting/format/](https://dcm.dev/docs/cli/formatting/format/)
+    /// [https://dcm.dev/docs/cli/formatting/format](https://dcm.dev/docs/cli/formatting/format)
     ///
     /// `dcm format $PATH`
     DcmFormat,
@@ -887,7 +952,7 @@ pub enum Tooling {
     #[serde(rename = "deno:fmt")]
     /// Formatter and linter for JavaScript and TypeScript
     ///
-    /// [https://docs.deno.com/runtime/reference/cli/fmt/](https://docs.deno.com/runtime/reference/cli/fmt/)
+    /// [https://docs.deno.com/runtime/reference/cli/fmt](https://docs.deno.com/runtime/reference/cli/fmt)
     ///
     /// `deno fmt --quiet $PATH`
     DenoFmt,
@@ -895,7 +960,7 @@ pub enum Tooling {
     #[serde(rename = "deno:lint")]
     /// Formatter and linter for JavaScript and TypeScript
     ///
-    /// [https://docs.deno.com/runtime/reference/cli/lint/](https://docs.deno.com/runtime/reference/cli/lint/)
+    /// [https://docs.deno.com/runtime/reference/cli/lint](https://docs.deno.com/runtime/reference/cli/lint)
     ///
     /// `deno lint --fix $PATH`
     DenoLint,
@@ -911,7 +976,7 @@ pub enum Tooling {
     #[serde(rename = "dhall")]
     /// Format Dhall files
     ///
-    /// [https://dhall-lang.org/](https://dhall-lang.org/)
+    /// [https://dhall-lang.org](https://dhall-lang.org)
     ///
     /// `dhall format $PATH`
     Dhall,
@@ -927,7 +992,7 @@ pub enum Tooling {
     #[serde(rename = "djlint")]
     /// Lint & Format HTML Templates
     ///
-    /// [https://www.djlint.com/](https://www.djlint.com/)
+    /// [https://www.djlint.com](https://www.djlint.com)
     ///
     /// `djlint $PATH --reformat`
     Djlint,
@@ -935,7 +1000,7 @@ pub enum Tooling {
     #[serde(rename = "docformatter")]
     /// Formats docstrings to follow PEP 257
     ///
-    /// [https://github.com/PyCQA/docformatter](https://github.com/PyCQA/docformatter)
+    /// [https://github.com/pycqa/docformatter](https://github.com/pycqa/docformatter)
     ///
     /// `docformatter --in-place $PATH`
     Docformatter,
@@ -957,9 +1022,9 @@ pub enum Tooling {
     Dockfmt,
 
     #[serde(rename = "docstrfmt")]
-    /// A formatter for Sphinx flavored reStructuredText
+    /// A formatter for reStructuredText
     ///
-    /// [https://github.com/LilSpazJoekp/docstrfmt](https://github.com/LilSpazJoekp/docstrfmt)
+    /// [https://github.com/lilspazjoekp/docstrfmt](https://github.com/lilspazjoekp/docstrfmt)
     ///
     /// `docstrfmt $PATH`
     Docstrfmt,
@@ -983,7 +1048,7 @@ pub enum Tooling {
     #[serde(rename = "dprint:fmt")]
     /// A pluggable and configurable code formatting platform written in Rust
     ///
-    /// [https://dprint.dev/](https://dprint.dev/)
+    /// [https://dprint.dev](https://dprint.dev)
     ///
     /// `dprint fmt $PATH`
     DprintFmt,
@@ -1004,6 +1069,14 @@ pub enum Tooling {
     /// `dscanner lint $PATH`
     DscannerLint,
 
+    #[serde(rename = "dune:format-dune-file")]
+    /// Format dune files
+    ///
+    /// [https://github.com/ocaml/dune](https://github.com/ocaml/dune)
+    ///
+    /// `dune format-dune-file`
+    DuneFormatDuneFile,
+
     #[serde(rename = "duster:fix")]
     /// Automatic configuration for Laravel apps to apply Tighten's standard linting & code standards
     ///
@@ -1021,7 +1094,7 @@ pub enum Tooling {
     DusterLint,
 
     #[serde(rename = "dx:fmt")]
-    /// Dioxus cli
+    /// Format `rsx!` snippets in Rust files.
     ///
     /// [https://github.com/dioxuslabs/dioxus](https://github.com/dioxuslabs/dioxus)
     ///
@@ -1055,7 +1128,7 @@ pub enum Tooling {
     #[serde(rename = "eradicate")]
     /// Removes commented-out code from Python files
     ///
-    /// [https://github.com/PyCQA/eradicate](https://github.com/PyCQA/eradicate)
+    /// [https://github.com/pycqa/eradicate](https://github.com/pycqa/eradicate)
     ///
     /// `eradicate --in-place $PATH`
     Eradicate,
@@ -1068,18 +1141,26 @@ pub enum Tooling {
     /// `erb-format $PATH --write`
     ErbFormatter,
 
+    #[serde(rename = "erg:lint")]
+    /// A statically typed language compatible with Python
+    ///
+    /// [https://github.com/erg-lang/erg](https://github.com/erg-lang/erg)
+    ///
+    /// `erg lint $PATH`
+    ErgLint,
+
     #[serde(rename = "erlfmt")]
     /// An automated code formatter for Erlang
     ///
     /// [https://github.com/whatsapp/erlfmt](https://github.com/whatsapp/erlfmt)
     ///
-    /// `erlfmt -w $PATH_STRING`
+    /// `erlfmt -w '$PATH'`
     Erlfmt,
 
     #[serde(rename = "eslint")]
     /// Find and fix problems in your JavaScript code
     ///
-    /// [https://github.com/eslint/eslint/](https://github.com/eslint/eslint/)
+    /// [https://github.com/eslint/eslint](https://github.com/eslint/eslint)
     ///
     /// `eslint --fix $PATH`
     Eslint,
@@ -1133,7 +1214,7 @@ pub enum Tooling {
     Fnlfmt,
 
     #[serde(rename = "forge:fmt")]
-    /// A Solidity formatter
+    /// Format Solidity code
     ///
     /// [https://github.com/foundry-rs/foundry](https://github.com/foundry-rs/foundry)
     ///
@@ -1141,7 +1222,7 @@ pub enum Tooling {
     ForgeFmt,
 
     #[serde(rename = "fortitude:check")]
-    /// A Fortran linter, written in Rust
+    /// A Fortran linter
     ///
     /// [https://github.com/plasmafair/fortitude](https://github.com/plasmafair/fortitude)
     ///
@@ -1149,7 +1230,7 @@ pub enum Tooling {
     FortitudeCheck,
 
     #[serde(rename = "fortitude:check:fix")]
-    /// A Fortran linter, written in Rust
+    /// A Fortran linter
     ///
     /// [https://github.com/plasmafair/fortitude](https://github.com/plasmafair/fortitude)
     ///
@@ -1157,7 +1238,7 @@ pub enum Tooling {
     FortitudeCheckFix,
 
     #[serde(rename = "fortitude:check:fix:unsafe")]
-    /// A Fortran linter, written in Rust
+    /// A Fortran linter
     ///
     /// [https://github.com/plasmafair/fortitude](https://github.com/plasmafair/fortitude)
     ///
@@ -1173,7 +1254,7 @@ pub enum Tooling {
     FortranLinter,
 
     #[serde(rename = "fourmolu")]
-    /// A formatter for Haskell source code
+    /// A fourk of ormolu that uses four space indentation and allows arbitrary configuration
     ///
     /// [https://github.com/fourmolu/fourmolu](https://github.com/fourmolu/fourmolu)
     ///
@@ -1195,6 +1276,22 @@ pub enum Tooling {
     ///
     /// `futhark fmt $PATH`
     FutharkFmt,
+
+    #[serde(rename = "fvm:dart:fix")]
+    /// Fixes errors in dart code
+    ///
+    /// [https://dart.dev/tools/dart-fix](https://dart.dev/tools/dart-fix)
+    ///
+    /// `fvm dart fix --apply $PATH`
+    FvmDartFix,
+
+    #[serde(rename = "fvm:dart:format")]
+    /// Formats dart code
+    ///
+    /// [https://dart.dev/tools/dart-format](https://dart.dev/tools/dart-format)
+    ///
+    /// `fvm dart format $PATH`
+    FvmDartFormat,
 
     #[serde(rename = "gci")]
     /// GCI, a tool that control golang package import order and make it always deterministic
@@ -1228,10 +1325,18 @@ pub enum Tooling {
     /// `gersemi -i -q $PATH`
     Gersemi,
 
+    #[serde(rename = "ghokin:fmt")]
+    /// Parallelized formatter with no external dependencies for gherkin (cucumber, behat...)
+    ///
+    /// [https://github.com/antham/ghokin](https://github.com/antham/ghokin)
+    ///
+    /// `ghokin fmt replace $PATH`
+    GhokinFmt,
+
     #[serde(rename = "gleam:format")]
     /// Format Gleam source code
     ///
-    /// [https://gleam.run/](https://gleam.run/)
+    /// [https://gleam.run](https://gleam.run)
     ///
     /// `gleam format $PATH`
     GleamFormat,
@@ -1279,7 +1384,7 @@ pub enum Tooling {
     #[serde(rename = "golangci-lint:fmt")]
     /// Format go source code
     ///
-    /// [https://golangci-lint.run/usage/formatters/](https://golangci-lint.run/usage/formatters/)
+    /// [https://golangci-lint.run/usage/formatters](https://golangci-lint.run/usage/formatters)
     ///
     /// `golangci-lint fmt $PATH`
     GolangciLintFmt,
@@ -1287,7 +1392,7 @@ pub enum Tooling {
     #[serde(rename = "golangci-lint:run")]
     /// Fast linters runner for Go
     ///
-    /// [https://golangci-lint.run/usage/linters/](https://golangci-lint.run/usage/linters/)
+    /// [https://golangci-lint.run/usage/linters](https://golangci-lint.run/usage/linters)
     ///
     /// `golangci-lint run $PATH`
     GolangciLintRun,
@@ -1295,7 +1400,7 @@ pub enum Tooling {
     #[serde(rename = "golangci-lint:run:fix")]
     /// Fast linters runner for Go
     ///
-    /// [https://golangci-lint.run/usage/linters/](https://golangci-lint.run/usage/linters/)
+    /// [https://golangci-lint.run/usage/linters](https://golangci-lint.run/usage/linters)
     ///
     /// `golangci-lint run --fix $PATH`
     GolangciLintRunFix,
@@ -1323,6 +1428,14 @@ pub enum Tooling {
     ///
     /// `gospel $PATH`
     Gospel,
+
+    #[serde(rename = "grafbase:lint")]
+    /// Lint GraphQL schemas
+    ///
+    /// [https://grafbase.com/docs/reference/grafbase-cli/lint](https://grafbase.com/docs/reference/grafbase-cli/lint)
+    ///
+    /// `grafbase lint $PATH`
+    GrafbaseLint,
 
     #[serde(rename = "grain:format")]
     /// Code formatter for the Grain programming language
@@ -1365,7 +1478,7 @@ pub enum Tooling {
     Hfmt,
 
     #[serde(rename = "hindent")]
-    /// Extensible Haskell pretty printer
+    /// Haskell pretty printer
     ///
     /// [https://github.com/mihaimaruseac/hindent](https://github.com/mihaimaruseac/hindent)
     ///
@@ -1407,7 +1520,7 @@ pub enum Tooling {
     #[serde(rename = "hurlfmt")]
     /// Formatter for hurl files
     ///
-    /// [https://hurl.dev/](https://hurl.dev/)
+    /// [https://hurl.dev](https://hurl.dev)
     ///
     /// `hurlfmt --in-place $PATH`
     Hurlfmt,
@@ -1415,7 +1528,7 @@ pub enum Tooling {
     #[serde(rename = "imba:fmt")]
     /// A formatter for Imba
     ///
-    /// [https://imba.io/](https://imba.io/)
+    /// [https://imba.io](https://imba.io)
     ///
     /// `imba fmt -f $PATH`
     ImbaFmt,
@@ -1436,6 +1549,14 @@ pub enum Tooling {
     /// `isort --quiet $PATH`
     Isort,
 
+    #[serde(rename = "janet-format")]
+    /// A formatter for Janet code.
+    ///
+    /// [https://github.com/janet-lang/spork](https://github.com/janet-lang/spork)
+    ///
+    /// `janet-format`
+    JanetFormat,
+
     #[serde(rename = "joker")]
     /// Small Clojure interpreter, linter and formatter
     ///
@@ -1445,11 +1566,11 @@ pub enum Tooling {
     Joker,
 
     #[serde(rename = "jq")]
-    /// JSON processor
+    /// Command-line JSON processor
     ///
     /// [https://github.com/jqlang/jq](https://github.com/jqlang/jq)
     ///
-    /// `jq `
+    /// `jq`
     Jq,
 
     #[serde(rename = "jqfmt")]
@@ -1457,11 +1578,11 @@ pub enum Tooling {
     ///
     /// [https://github.com/noperator/jqfmt](https://github.com/noperator/jqfmt)
     ///
-    /// `jqfmt `
+    /// `jqfmt`
     Jqfmt,
 
     #[serde(rename = "js-beautify")]
-    /// A JavaScript formatter
+    /// Beautifier for javascript
     ///
     /// [https://github.com/beautifier/js-beautify](https://github.com/beautifier/js-beautify)
     ///
@@ -1469,15 +1590,23 @@ pub enum Tooling {
     JsBeautify,
 
     #[serde(rename = "json5format")]
-    /// JSON5 (a.k.a., JSON for Humans) formatter that preserves contextual comments
+    /// JSON5 formatter that preserves contextual comments
     ///
     /// [https://github.com/google/json5format](https://github.com/google/json5format)
     ///
     /// `json5format -r $PATH`
     Json5Format,
 
+    #[serde(rename = "json_repair")]
+    /// A python module to repair invalid JSON from LLMs
+    ///
+    /// [https://github.com/mangiucugna/json_repair](https://github.com/mangiucugna/json_repair)
+    ///
+    /// `json_repair -i $PATH`
+    JsonRepair,
+
     #[serde(rename = "jsona:format")]
-    /// JSONA linter and formatter
+    /// Format JSONA
     ///
     /// [https://github.com/jsona/jsona](https://github.com/jsona/jsona)
     ///
@@ -1485,7 +1614,7 @@ pub enum Tooling {
     JsonaFormat,
 
     #[serde(rename = "jsona:lint")]
-    /// JSONA linter and formatter
+    /// Lint JSONA
     ///
     /// [https://github.com/jsona/jsona](https://github.com/jsona/jsona)
     ///
@@ -1493,12 +1622,20 @@ pub enum Tooling {
     JsonaLint,
 
     #[serde(rename = "jsonlint")]
-    /// A JSON parser and validator with a CLI
+    /// A JSON parser and validator
     ///
     /// [https://github.com/zaach/jsonlint](https://github.com/zaach/jsonlint)
     ///
     /// `jsonlint -i $PATH`
     Jsonlint,
+
+    #[serde(rename = "jsonlint:sort")]
+    /// Sort JSON using jsonlint
+    ///
+    /// [https://github.com/zaach/jsonlint](https://github.com/zaach/jsonlint)
+    ///
+    /// `jsonlint -s -i $PATH`
+    JsonlintSort,
 
     #[serde(rename = "jsonnet-lint")]
     /// Linter for jsonnet files
@@ -1529,11 +1666,11 @@ pub enum Tooling {
     ///
     /// [https://github.com/domluna/juliaformatter.jl](https://github.com/domluna/juliaformatter.jl)
     ///
-    /// `julia -E using JuliaFormatter;format_file(\"{$PATH_STRING}\")`
+    /// `julia -E using JuliaFormatter;format_file(\"$PATH\")`
     JuliaformatterJl,
 
     #[serde(rename = "just")]
-    /// A formatter for justfiles
+    /// Format Just files
     ///
     /// [https://github.com/casey/just](https://github.com/casey/just)
     ///
@@ -1564,6 +1701,22 @@ pub enum Tooling {
     /// `kdlfmt format $PATH`
     Kdlfmt,
 
+    #[serde(rename = "kdlfmt:v1")]
+    /// A formatter for kdl documents
+    ///
+    /// [https://github.com/hougesen/kdlfmt](https://github.com/hougesen/kdlfmt)
+    ///
+    /// `kdlfmt format --kdl-version v1 $PATH`
+    KdlfmtV1,
+
+    #[serde(rename = "kdlfmt:v2")]
+    /// A formatter for kdl documents
+    ///
+    /// [https://github.com/hougesen/kdlfmt](https://github.com/hougesen/kdlfmt)
+    ///
+    /// `kdlfmt format --kdl-version v2 $PATH`
+    KdlfmtV2,
+
     #[serde(rename = "kdoc-formatter")]
     /// Reformats Kotlin KDoc comments, reflowing text and other cleanup
     ///
@@ -1572,8 +1725,16 @@ pub enum Tooling {
     /// `kdoc-formatter --quiet $PATH`
     KdocFormatter,
 
+    #[serde(rename = "keep-sorted")]
+    /// keep-sorted is a language-agnostic formatter that sorts lines between two markers in a larger file
+    ///
+    /// [https://github.com/google/keep-sorted](https://github.com/google/keep-sorted)
+    ///
+    /// `keep-sorted $PATH`
+    KeepSorted,
+
     #[serde(rename = "ktfmt")]
-    /// program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions
+    /// A program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions
     ///
     /// [https://github.com/facebook/ktfmt](https://github.com/facebook/ktfmt)
     ///
@@ -1635,6 +1796,14 @@ pub enum Tooling {
     ///
     /// `lua-format -i $PATH`
     Luaformatter,
+
+    #[serde(rename = "luau-analyze")]
+    /// Typecheck and lint luau files
+    ///
+    /// [https://luau.org](https://luau.org)
+    ///
+    /// `luau-analyze $PATH`
+    LuauAnalyze,
 
     #[serde(rename = "mado:check")]
     /// A fast Markdown linter written in Rust
@@ -1703,13 +1872,29 @@ pub enum Tooling {
     #[serde(rename = "markuplint")]
     /// An HTML linter for all markup developers
     ///
-    /// [https://markuplint.dev/](https://markuplint.dev/)
+    /// [https://markuplint.dev](https://markuplint.dev)
     ///
     /// `markuplint --fix $PATH`
     Markuplint,
 
+    #[serde(rename = "mbake:format")]
+    /// mbake is a Makefile formatter and linter
+    ///
+    /// [https://github.com/ebodshojaei/bake](https://github.com/ebodshojaei/bake)
+    ///
+    /// `mbake format $PATH`
+    MbakeFormat,
+
+    #[serde(rename = "mbake:validate")]
+    /// mbake is a Makefile formatter and linter
+    ///
+    /// [https://github.com/ebodshojaei/bake](https://github.com/ebodshojaei/bake)
+    ///
+    /// `mbake validate $PATH`
+    MbakeValidate,
+
     #[serde(rename = "md-padding")]
-    /// Fix mixed spaces in Markdown: Chinese and English, numbers, links
+    /// AST-based padding for Markdown and natural language, improving readability in multilingual documents
     ///
     /// [https://github.com/harttle/md-padding](https://github.com/harttle/md-padding)
     ///
@@ -1751,10 +1936,26 @@ pub enum Tooling {
     #[serde(rename = "meson:fmt")]
     /// Meson is an open source build system meant to be both extremely fast, and, even more importantly, as user friendly as possible
     ///
-    /// [https://mesonbuild.com/](https://mesonbuild.com/)
+    /// [https://mesonbuild.com](https://mesonbuild.com)
     ///
     /// `meson fmt -i $PATH`
     MesonFmt,
+
+    #[serde(rename = "mh_lint")]
+    /// A linter for MATLAB
+    ///
+    /// [https://github.com/florianschanda/miss_hit](https://github.com/florianschanda/miss_hit)
+    ///
+    /// `mh_lint $PATH`
+    MhLint,
+
+    #[serde(rename = "mh_style")]
+    /// A formatter for MATLAB
+    ///
+    /// [https://github.com/florianschanda/miss_hit](https://github.com/florianschanda/miss_hit)
+    ///
+    /// `mh_style $PATH`
+    MhStyle,
 
     #[serde(rename = "mise:fmt")]
     /// Formats mise.toml
@@ -1767,7 +1968,7 @@ pub enum Tooling {
     #[serde(rename = "misspell")]
     /// Correct commonly misspelled English words in source files
     ///
-    /// [https://github.com/client9/misspell/](https://github.com/client9/misspell/)
+    /// [https://github.com/client9/misspell](https://github.com/client9/misspell)
     ///
     /// `misspell -w $PATH`
     Misspell,
@@ -1789,7 +1990,7 @@ pub enum Tooling {
     MojoFormat,
 
     #[serde(rename = "muon:fmt")]
-    /// An implementation of the meson build system
+    /// Format meson files
     ///
     /// [https://github.com/muon-build/muon](https://github.com/muon-build/muon)
     ///
@@ -1797,7 +1998,7 @@ pub enum Tooling {
     MuonFmt,
 
     #[serde(rename = "muon:lint")]
-    /// An implementation of the meson build system
+    /// Lint meson files
     ///
     /// [https://github.com/muon-build/muon](https://github.com/muon-build/muon)
     ///
@@ -1839,7 +2040,7 @@ pub enum Tooling {
     #[serde(rename = "nickel:format")]
     /// Better configuration for less
     ///
-    /// [https://nickel-lang.org/](https://nickel-lang.org/)
+    /// [https://nickel-lang.org](https://nickel-lang.org)
     ///
     /// `nickel format $PATH`
     NickelFormat,
@@ -1853,7 +2054,7 @@ pub enum Tooling {
     Nimpretty,
 
     #[serde(rename = "nixfmt")]
-    /// The official (but not yet stable) formatter for Nix code
+    /// The official formatter for Nix code
     ///
     /// [https://github.com/nixos/nixfmt](https://github.com/nixos/nixfmt)
     ///
@@ -1893,7 +2094,7 @@ pub enum Tooling {
     NpmGroovyLint,
 
     #[serde(rename = "nufmt")]
-    /// the nushell formatter
+    /// The nushell formatter
     ///
     /// [https://github.com/nushell/nufmt](https://github.com/nushell/nufmt)
     ///
@@ -1935,7 +2136,7 @@ pub enum Tooling {
     #[serde(rename = "opa:fmt")]
     /// Format Rego source files
     ///
-    /// [https://www.openpolicyagent.org/docs/latest/cli/](https://www.openpolicyagent.org/docs/latest/cli/)
+    /// [https://www.openpolicyagent.org/docs/latest/cli](https://www.openpolicyagent.org/docs/latest/cli)
     ///
     /// `opa fmt $PATH -w`
     OpaFmt,
@@ -1947,6 +2148,14 @@ pub enum Tooling {
     ///
     /// `ormolu --mode inplace $PATH`
     Ormolu,
+
+    #[serde(rename = "oxfmt")]
+    /// Oxfmt a fast JavaScript/TypeScript formatter written in Rust
+    ///
+    /// [https://oxc.rs/docs/guide/usage/formatter.html](https://oxc.rs/docs/guide/usage/formatter.html)
+    ///
+    /// `oxfmt $PATH`
+    Oxfmt,
 
     #[serde(rename = "oxlint")]
     /// Oxlint is designed to catch erroneous or useless code without requiring any configurations by default
@@ -2044,6 +2253,14 @@ pub enum Tooling {
     /// `pint $PATH`
     Pint,
 
+    #[serde(rename = "pkl:format")]
+    /// Formats or checks formatting of Pkl files
+    ///
+    /// [https://pkl-lang.org/main/current/pkl-cli/index.html#command-format](https://pkl-lang.org/main/current/pkl-cli/index.html#command-format)
+    ///
+    /// `pkl -w $PATH`
+    PklFormat,
+
     #[serde(rename = "prettier")]
     /// Prettier is an opinionated code formatter
     ///
@@ -2051,6 +2268,14 @@ pub enum Tooling {
     ///
     /// `prettier --embedded-language-formatting off --log-level error --write $PATH`
     Prettier,
+
+    #[serde(rename = "prettierd")]
+    /// prettier, as a daemon, for improved formatting speed
+    ///
+    /// [https://github.com/fsouza/prettierd](https://github.com/fsouza/prettierd)
+    ///
+    /// `prettierd $PATH`
+    Prettierd,
 
     #[serde(rename = "pretty-php")]
     /// The opinionated PHP code formatter
@@ -2073,7 +2298,7 @@ pub enum Tooling {
     ///
     /// [https://www.prisma.io/docs/orm/tools/prisma-cli](https://www.prisma.io/docs/orm/tools/prisma-cli)
     ///
-    /// `prisma format --schema={$PATH_STRING}`
+    /// `prisma format --schema=$PATH`
     PrismaFormat,
 
     #[serde(rename = "proselint")]
@@ -2117,7 +2342,7 @@ pub enum Tooling {
     PuppetLint,
 
     #[serde(rename = "purs-tidy")]
-    /// PureScript code formatter
+    /// A syntax tidy-upper for PureScript
     ///
     /// [https://github.com/natefaubion/purescript-tidy](https://github.com/natefaubion/purescript-tidy)
     ///
@@ -2149,7 +2374,7 @@ pub enum Tooling {
     Pycodestyle,
 
     #[serde(rename = "pydoclint")]
-    /// A Python docstring linter that checks arguments, returns, yields, and raises sections
+    /// A very fast Python docstring linter
     ///
     /// [https://github.com/jsh9/pydoclint](https://github.com/jsh9/pydoclint)
     ///
@@ -2167,7 +2392,7 @@ pub enum Tooling {
     #[serde(rename = "pydocstyle")]
     /// docstring style checker
     ///
-    /// [https://github.com/PyCQA/pydocstyle](https://github.com/PyCQA/pydocstyle)
+    /// [https://github.com/pycqa/pydocstyle](https://github.com/pycqa/pydocstyle)
     ///
     /// `pydocstyle $PATH`
     Pydocstyle,
@@ -2189,12 +2414,20 @@ pub enum Tooling {
     Pyink,
 
     #[serde(rename = "pylint")]
-    /// Pylint is a static code analyser for Python 2 or 3
+    /// Pylint is a static code analyser for Python 2 and 3
     ///
     /// [https://github.com/pylint-dev/pylint](https://github.com/pylint-dev/pylint)
     ///
     /// `pylint --module-naming-style=any $PATH`
     Pylint,
+
+    #[serde(rename = "pymarkdownlnt:fix")]
+    /// A GitHub Flavored Markdown compliant Markdown linter
+    ///
+    /// [https://github.com/jackdewinter/pymarkdown](https://github.com/jackdewinter/pymarkdown)
+    ///
+    /// `pymarkdownlnt --return-code-scheme minimal fix $PATH`
+    PymarkdownlntFix,
 
     #[serde(rename = "pyment")]
     /// Format and convert Python docstrings and generates patches
@@ -2204,12 +2437,20 @@ pub enum Tooling {
     /// `pyment -w $PATH`
     Pyment,
 
+    #[serde(rename = "pyrefly")]
+    /// A fast type checker for Python
+    ///
+    /// [https://github.com/facebook/pyrefly](https://github.com/facebook/pyrefly)
+    ///
+    /// `pyrefly check $PATH`
+    Pyrefly,
+
     #[serde(rename = "pyupgrade")]
     /// A tool to automatically upgrade Python syntax to newer versions
     ///
     /// [https://github.com/asottile/pyupgrade](https://github.com/asottile/pyupgrade)
     ///
-    /// `pyupgrade $PATH`
+    /// `pyupgrade --exit-zero-even-if-changed $PATH`
     Pyupgrade,
 
     #[serde(rename = "qmlfmt")]
@@ -2219,6 +2460,22 @@ pub enum Tooling {
     ///
     /// `qmlfmt -w $PATH`
     Qmlfmt,
+
+    #[serde(rename = "qmlformat")]
+    /// qmlformat is a tool that automatically formats QML files in accordance with the QML Coding Conventions
+    ///
+    /// [https://doc.qt.io/qt-6/qtqml-tooling-qmlformat.html](https://doc.qt.io/qt-6/qtqml-tooling-qmlformat.html)
+    ///
+    /// `qmlformat -i $PATH`
+    Qmlformat,
+
+    #[serde(rename = "qmllint")]
+    /// qmllint is a tool shipped with Qt, that verifies the syntatic validity of QML files
+    ///
+    /// [https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html](https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html)
+    ///
+    /// `qmllint $PATH`
+    Qmllint,
 
     #[serde(rename = "quick-lint-js")]
     /// quick-lint-js finds bugs in JavaScript programs
@@ -2231,7 +2488,7 @@ pub enum Tooling {
     #[serde(rename = "raco:fmt")]
     /// An extensible code formatter for Racket
     ///
-    /// [https://docs.racket-lang.org/fmt/](https://docs.racket-lang.org/fmt/)
+    /// [https://docs.racket-lang.org/fmt](https://docs.racket-lang.org/fmt)
     ///
     /// `raco fmt -i $PATH`
     RacoFmt,
@@ -2253,7 +2510,7 @@ pub enum Tooling {
     Refmt,
 
     #[serde(rename = "reformat-gherkin")]
-    /// Reformat-gherkin automatically formats Gherkin files
+    /// Formatter for Gherkin language
     ///
     /// [https://github.com/ducminh-phan/reformat-gherkin](https://github.com/ducminh-phan/reformat-gherkin)
     ///
@@ -2289,7 +2546,7 @@ pub enum Tooling {
     ///
     /// [https://github.com/asottile/reorder-python-imports](https://github.com/asottile/reorder-python-imports)
     ///
-    /// `reorder-python-imports $PATH`
+    /// `reorder-python-imports --exit-zero-even-if-changed $PATH`
     ReorderPythonImports,
 
     #[serde(rename = "rescript:format")]
@@ -2309,7 +2566,7 @@ pub enum Tooling {
     Revive,
 
     #[serde(rename = "roc:format")]
-    /// Tools for the roc programming language
+    /// Format Roc code
     ///
     /// [https://github.com/roc-lang/roc](https://github.com/roc-lang/roc)
     ///
@@ -2364,8 +2621,32 @@ pub enum Tooling {
     /// `rufo --simple-exit $PATH`
     Rufo,
 
+    #[serde(rename = "rumdl:check")]
+    /// Lint Markdown
+    ///
+    /// [https://github.com/rvben/rumdl](https://github.com/rvben/rumdl)
+    ///
+    /// `rumdl check $PATH`
+    RumdlCheck,
+
+    #[serde(rename = "rumdl:check:fix")]
+    /// Lint Markdown and fix errors
+    ///
+    /// [https://github.com/rvben/rumdl](https://github.com/rvben/rumdl)
+    ///
+    /// `rumdl check --fix $PATH`
+    RumdlCheckFix,
+
+    #[serde(rename = "rumdl:fmt")]
+    /// Format markdown
+    ///
+    /// [https://github.com/rvben/rumdl](https://github.com/rvben/rumdl)
+    ///
+    /// `rumdl fmt $PATH`
+    RumdlFmt,
+
     #[serde(rename = "rune:fmt")]
-    /// Tools for the Rune programming language
+    /// Format Rune source code
     ///
     /// [https://github.com/rune-rs/rune](https://github.com/rune-rs/rune)
     ///
@@ -2373,7 +2654,7 @@ pub enum Tooling {
     RuneFmt,
 
     #[serde(rename = "runic")]
-    /// Julia code formatter
+    /// A code formatter for Julia with rules set in stone
     ///
     /// [https://github.com/fredrikekre/runic.jl](https://github.com/fredrikekre/runic.jl)
     ///
@@ -2381,7 +2662,7 @@ pub enum Tooling {
     Runic,
 
     #[serde(rename = "rustfmt")]
-    /// The official code formatter for Rust
+    /// Format Rust code
     ///
     /// [https://github.com/rust-lang/rustfmt](https://github.com/rust-lang/rustfmt)
     ///
@@ -2453,7 +2734,7 @@ pub enum Tooling {
     Shellharden,
 
     #[serde(rename = "shfmt")]
-    /// Shell script formatter
+    /// A shell parser, formatter, and interpreter with bash support
     ///
     /// [https://github.com/mvdan/sh](https://github.com/mvdan/sh)
     ///
@@ -2469,7 +2750,7 @@ pub enum Tooling {
     Sleek,
 
     #[serde(rename = "slim-lint")]
-    /// Tool for analyzing Slim templates
+    /// Configurable tool for analyzing Slim templates
     ///
     /// [https://github.com/sds/slim-lint](https://github.com/sds/slim-lint)
     ///
@@ -2548,16 +2829,32 @@ pub enum Tooling {
     /// `sqlfmt $PATH`
     Sqlfmt,
 
+    #[serde(rename = "sqlint")]
+    /// Simple SQL linter supporting ANSI and PostgreSQL syntaxes
+    ///
+    /// [https://github.com/purcell/sqlint](https://github.com/purcell/sqlint)
+    ///
+    /// `sqlint $PATH`
+    Sqlint,
+
     #[serde(rename = "sqruff")]
     /// Fast SQL formatter/linter
     ///
     /// [https://github.com/quarylabs/sqruff](https://github.com/quarylabs/sqruff)
     ///
-    /// `sqruff fix --force $PATH`
+    /// `sqruff fix $PATH`
     Sqruff,
 
+    #[serde(rename = "squawk")]
+    /// Linter for Postgres migrations & SQL
+    ///
+    /// [https://github.com/sbdchd/squawk](https://github.com/sbdchd/squawk)
+    ///
+    /// `squawk $PATH`
+    Squawk,
+
     #[serde(rename = "standardjs")]
-    /// JavaScript style guide, linter, and formatter
+    /// JavaScript Style Guide, with linter & automatic code fixer
     ///
     /// [https://github.com/standard/standard](https://github.com/standard/standard)
     ///
@@ -2613,7 +2910,7 @@ pub enum Tooling {
     StylishHaskell,
 
     #[serde(rename = "stylua")]
-    /// An opinionated Lua code formatter
+    /// A Lua code formatter
     ///
     /// [https://github.com/johnnymorganz/stylua](https://github.com/johnnymorganz/stylua)
     ///
@@ -2621,17 +2918,25 @@ pub enum Tooling {
     Stylua,
 
     #[serde(rename = "superhtml:fmt")]
-    /// HTML Language Server & Templating Language Library
+    /// HTML Validator, Formatter, LSP, and Templating Language Library
     ///
     /// [https://github.com/kristoff-it/superhtml](https://github.com/kristoff-it/superhtml)
     ///
     /// `superhtml fmt $PATH`
     SuperhtmlFmt,
 
+    #[serde(rename = "svlint")]
+    /// SystemVerilog linter
+    ///
+    /// [https://github.com/dalance/svlint](https://github.com/dalance/svlint)
+    ///
+    /// `svlint $PATH`
+    Svlint,
+
     #[serde(rename = "swift-format")]
     /// Formatting technology for Swift source code
     ///
-    /// [https://github.com/apple/swift-format](https://github.com/apple/swift-format)
+    /// [https://github.com/swiftlang/swift-format](https://github.com/swiftlang/swift-format)
     ///
     /// `swift-format --in-place $PATH`
     SwiftFormat,
@@ -2652,8 +2957,24 @@ pub enum Tooling {
     /// `taplo format $PATH`
     Taplo,
 
+    #[serde(rename = "tclfmt")]
+    /// Formatter for Tcl
+    ///
+    /// [https://github.com/nmoroze/tclint](https://github.com/nmoroze/tclint)
+    ///
+    /// `tclfmt $PATH`
+    Tclfmt,
+
+    #[serde(rename = "tclint")]
+    /// Linter for Tcl
+    ///
+    /// [https://github.com/nmoroze/tclint](https://github.com/nmoroze/tclint)
+    ///
+    /// `tclint $PATH`
+    Tclint,
+
     #[serde(rename = "templ:fmt")]
-    /// Tooling for the Templ template language
+    /// Format Templ files
     ///
     /// [https://github.com/a-h/templ](https://github.com/a-h/templ)
     ///
@@ -2711,10 +3032,26 @@ pub enum Tooling {
     #[serde(rename = "tofu:fmt")]
     /// The tofu fmt command is used to rewrite OpenTofu configuration files to a canonical format and style
     ///
-    /// [https://opentofu.org/docs/cli/commands/fmt/](https://opentofu.org/docs/cli/commands/fmt/)
+    /// [https://opentofu.org/docs/cli/commands/fmt](https://opentofu.org/docs/cli/commands/fmt)
     ///
     /// `tofu fmt -write=true $PATH`
     TofuFmt,
+
+    #[serde(rename = "tombi:format")]
+    /// TOML Formatter / Linter
+    ///
+    /// [https://github.com/tombi-toml/tombi](https://github.com/tombi-toml/tombi)
+    ///
+    /// `tombi format -`
+    TombiFormat,
+
+    #[serde(rename = "tombi:lint")]
+    /// TOML Formatter / Linter
+    ///
+    /// [https://github.com/tombi-toml/tombi](https://github.com/tombi-toml/tombi)
+    ///
+    /// `tombi lint $PATH`
+    TombiLint,
 
     #[serde(rename = "toml-sort")]
     /// A command line utility to sort and format toml files
@@ -2779,6 +3116,14 @@ pub enum Tooling {
     ///
     /// `twigcs $PATH`
     Twigcs,
+
+    #[serde(rename = "ty")]
+    /// An extremely fast Python type checker written in Rust
+    ///
+    /// [https://github.com/astral-sh/ty](https://github.com/astral-sh/ty)
+    ///
+    /// `ty check $PATH`
+    Ty,
 
     #[serde(rename = "typos")]
     /// Source code spell checker
@@ -2852,6 +3197,14 @@ pub enum Tooling {
     /// `vacuum lint $PATH`
     VacuumLint,
 
+    #[serde(rename = "verusfmt")]
+    /// An Opinionated Formatter for Verus
+    ///
+    /// [https://github.com/verus-lang/verusfmt](https://github.com/verus-lang/verusfmt)
+    ///
+    /// `verusfmt $PATH`
+    Verusfmt,
+
     #[serde(rename = "veryl:fmt")]
     /// Format veryl code
     ///
@@ -2869,7 +3222,7 @@ pub enum Tooling {
     VhdlStyleGuide,
 
     #[serde(rename = "vint")]
-    /// Lint Vim script
+    /// Fast and Highly Extensible Vim script Language Lint
     ///
     /// [https://github.com/vimjas/vint](https://github.com/vimjas/vint)
     ///
@@ -2877,7 +3230,7 @@ pub enum Tooling {
     Vint,
 
     #[serde(rename = "vint:neovim")]
-    /// Lint Vim script
+    /// Fast and Highly Extensible Vim script Language Lint
     ///
     /// [https://github.com/vimjas/vint](https://github.com/vimjas/vint)
     ///
@@ -2887,7 +3240,7 @@ pub enum Tooling {
     #[serde(rename = "wa:fmt")]
     /// Format Wa source code
     ///
-    /// [https://github.com/wa-lang/wa/](https://github.com/wa-lang/wa/)
+    /// [https://github.com/wa-lang/wa](https://github.com/wa-lang/wa)
     ///
     /// `wa fmt $PATH`
     WaFmt,
@@ -2937,7 +3290,7 @@ pub enum Tooling {
     ///
     /// [https://github.com/sibprogrammer/xq](https://github.com/sibprogrammer/xq)
     ///
-    /// `xq `
+    /// `xq`
     Xq,
 
     #[serde(rename = "xq:html")]
@@ -2980,6 +3333,14 @@ pub enum Tooling {
     /// `yapf --in-place $PATH`
     Yapf,
 
+    #[serde(rename = "yard-lint")]
+    /// Check your YARD docs like RuboCop checks your code - a linter for YARD documentation
+    ///
+    /// [https://github.com/mensfeld/yard-lint](https://github.com/mensfeld/yard-lint)
+    ///
+    /// `yard-lint $PATH`
+    YardLint,
+
     #[serde(rename = "yew-fmt")]
     /// Code formatter for the Yew framework
     ///
@@ -2999,7 +3360,7 @@ pub enum Tooling {
     #[serde(rename = "zig:fmt")]
     /// Reformat Zig source into canonical form
     ///
-    /// [https://ziglang.org/](https://ziglang.org/)
+    /// [https://ziglang.org](https://ziglang.org)
     ///
     /// `zig fmt $PATH`
     ZigFmt,
@@ -3007,13 +3368,13 @@ pub enum Tooling {
     #[serde(rename = "ziggy:fmt")]
     /// Formats Ziggy documents and Ziggy schemas
     ///
-    /// [https://ziggy-lang.io/documentation/ziggy-fmt/](https://ziggy-lang.io/documentation/ziggy-fmt/)
+    /// [https://ziggy-lang.io/documentation/ziggy-fmt](https://ziggy-lang.io/documentation/ziggy-fmt)
     ///
     /// `ziggy fmt $PATH`
     ZiggyFmt,
 
     #[serde(rename = "zprint")]
-    /// Executables beautifully format Clojure and Clojurescript source code and s-expressions
+    /// Beautifully format Clojure and Clojurescript source code and s-expressions
     ///
     /// [https://github.com/kkinnear/zprint](https://github.com/kkinnear/zprint)
     ///
@@ -3031,9 +3392,10 @@ impl Tooling {
         debug_enabled: bool,
         config_runners: &crate::config::MdsfConfigRunners,
     ) -> Result<(bool, Option<String>), crate::error::MdsfError> {
+        #[allow(clippy::type_complexity)]
         let (commands, set_args_fn, is_stdin): (
             &[crate::runners::CommandType],
-            crate::execution::SetArgsFn,
+            fn(std::process::Command, &std::path::Path) -> std::process::Command,
             bool,
         ) = match self {
             Self::Actionlint => (
@@ -3057,6 +3419,11 @@ impl Tooling {
                 &ansible_lint::COMMANDS,
                 ansible_lint::set_args,
                 ansible_lint::IS_STDIN,
+            ),
+            Self::ApiLinter => (
+                &api_linter::COMMANDS,
+                api_linter::set_args,
+                api_linter::IS_STDIN,
             ),
             Self::Asmfmt => (&asmfmt::COMMANDS, asmfmt::set_args, asmfmt::IS_STDIN),
             Self::Astyle => (&astyle::COMMANDS, astyle::set_args, astyle::IS_STDIN),
@@ -3160,6 +3527,11 @@ impl Tooling {
                 cabal_format::set_args,
                 cabal_format::IS_STDIN,
             ),
+            Self::CabalGild => (
+                &cabal_gild::COMMANDS,
+                cabal_gild::set_args,
+                cabal_gild::IS_STDIN,
+            ),
             Self::CabalPrettify => (
                 &cabal_prettify::COMMANDS,
                 cabal_prettify::set_args,
@@ -3174,6 +3546,11 @@ impl Tooling {
                 &caramel_fmt::COMMANDS,
                 caramel_fmt::set_args,
                 caramel_fmt::IS_STDIN,
+            ),
+            Self::CedarFormat => (
+                &cedar_format::COMMANDS,
+                cedar_format::set_args,
+                cedar_format::IS_STDIN,
             ),
             Self::CfnLint => (&cfn_lint::COMMANDS, cfn_lint::set_args, cfn_lint::IS_STDIN),
             Self::Checkmake => (
@@ -3319,6 +3696,11 @@ impl Tooling {
                 dscanner_lint::set_args,
                 dscanner_lint::IS_STDIN,
             ),
+            Self::DuneFormatDuneFile => (
+                &dune_format_dune_file::COMMANDS,
+                dune_format_dune_file::set_args,
+                dune_format_dune_file::IS_STDIN,
+            ),
             Self::DusterFix => (
                 &duster_fix::COMMANDS,
                 duster_fix::set_args,
@@ -3351,6 +3733,7 @@ impl Tooling {
                 erb_formatter::set_args,
                 erb_formatter::IS_STDIN,
             ),
+            Self::ErgLint => (&erg_lint::COMMANDS, erg_lint::set_args, erg_lint::IS_STDIN),
             Self::Erlfmt => (&erlfmt::COMMANDS, erlfmt::set_args, erlfmt::IS_STDIN),
             Self::Eslint => (&eslint::COMMANDS, eslint::set_args, eslint::IS_STDIN),
             Self::Fantomas => (&fantomas::COMMANDS, fantomas::set_args, fantomas::IS_STDIN),
@@ -3399,10 +3782,25 @@ impl Tooling {
                 futhark_fmt::set_args,
                 futhark_fmt::IS_STDIN,
             ),
+            Self::FvmDartFix => (
+                &fvm_dart_fix::COMMANDS,
+                fvm_dart_fix::set_args,
+                fvm_dart_fix::IS_STDIN,
+            ),
+            Self::FvmDartFormat => (
+                &fvm_dart_format::COMMANDS,
+                fvm_dart_format::set_args,
+                fvm_dart_format::IS_STDIN,
+            ),
             Self::Gci => (&gci::COMMANDS, gci::set_args, gci::IS_STDIN),
             Self::Gdformat => (&gdformat::COMMANDS, gdformat::set_args, gdformat::IS_STDIN),
             Self::Gdlint => (&gdlint::COMMANDS, gdlint::set_args, gdlint::IS_STDIN),
             Self::Gersemi => (&gersemi::COMMANDS, gersemi::set_args, gersemi::IS_STDIN),
+            Self::GhokinFmt => (
+                &ghokin_fmt::COMMANDS,
+                ghokin_fmt::set_args,
+                ghokin_fmt::IS_STDIN,
+            ),
             Self::GleamFormat => (
                 &gleam_format::COMMANDS,
                 gleam_format::set_args,
@@ -3447,6 +3845,11 @@ impl Tooling {
                 google_java_format::IS_STDIN,
             ),
             Self::Gospel => (&gospel::COMMANDS, gospel::set_args, gospel::IS_STDIN),
+            Self::GrafbaseLint => (
+                &grafbase_lint::COMMANDS,
+                grafbase_lint::set_args,
+                grafbase_lint::IS_STDIN,
+            ),
             Self::GrainFormat => (
                 &grain_format::COMMANDS,
                 grain_format::set_args,
@@ -3477,6 +3880,11 @@ impl Tooling {
             Self::ImbaFmt => (&imba_fmt::COMMANDS, imba_fmt::set_args, imba_fmt::IS_STDIN),
             Self::InkoFmt => (&inko_fmt::COMMANDS, inko_fmt::set_args, inko_fmt::IS_STDIN),
             Self::Isort => (&isort::COMMANDS, isort::set_args, isort::IS_STDIN),
+            Self::JanetFormat => (
+                &janet_format::COMMANDS,
+                janet_format::set_args,
+                janet_format::IS_STDIN,
+            ),
             Self::Joker => (&joker::COMMANDS, joker::set_args, joker::IS_STDIN),
             Self::Jq => (&jq::COMMANDS, jq::set_args, jq::IS_STDIN),
             Self::Jqfmt => (&jqfmt::COMMANDS, jqfmt::set_args, jqfmt::IS_STDIN),
@@ -3490,6 +3898,11 @@ impl Tooling {
                 json_5_format::set_args,
                 json_5_format::IS_STDIN,
             ),
+            Self::JsonRepair => (
+                &json_repair::COMMANDS,
+                json_repair::set_args,
+                json_repair::IS_STDIN,
+            ),
             Self::JsonaFormat => (
                 &jsona_format::COMMANDS,
                 jsona_format::set_args,
@@ -3501,6 +3914,11 @@ impl Tooling {
                 jsona_lint::IS_STDIN,
             ),
             Self::Jsonlint => (&jsonlint::COMMANDS, jsonlint::set_args, jsonlint::IS_STDIN),
+            Self::JsonlintSort => (
+                &jsonlint_sort::COMMANDS,
+                jsonlint_sort::set_args,
+                jsonlint_sort::IS_STDIN,
+            ),
             Self::JsonnetLint => (
                 &jsonnet_lint::COMMANDS,
                 jsonnet_lint::set_args,
@@ -3521,10 +3939,25 @@ impl Tooling {
             Self::KclFmt => (&kcl_fmt::COMMANDS, kcl_fmt::set_args, kcl_fmt::IS_STDIN),
             Self::KclLint => (&kcl_lint::COMMANDS, kcl_lint::set_args, kcl_lint::IS_STDIN),
             Self::Kdlfmt => (&kdlfmt::COMMANDS, kdlfmt::set_args, kdlfmt::IS_STDIN),
+            Self::KdlfmtV1 => (
+                &kdlfmt_v_1::COMMANDS,
+                kdlfmt_v_1::set_args,
+                kdlfmt_v_1::IS_STDIN,
+            ),
+            Self::KdlfmtV2 => (
+                &kdlfmt_v_2::COMMANDS,
+                kdlfmt_v_2::set_args,
+                kdlfmt_v_2::IS_STDIN,
+            ),
             Self::KdocFormatter => (
                 &kdoc_formatter::COMMANDS,
                 kdoc_formatter::set_args,
                 kdoc_formatter::IS_STDIN,
+            ),
+            Self::KeepSorted => (
+                &keep_sorted::COMMANDS,
+                keep_sorted::set_args,
+                keep_sorted::IS_STDIN,
             ),
             Self::Ktfmt => (&ktfmt::COMMANDS, ktfmt::set_args, ktfmt::IS_STDIN),
             Self::Ktlint => (&ktlint::COMMANDS, ktlint::set_args, ktlint::IS_STDIN),
@@ -3553,6 +3986,11 @@ impl Tooling {
                 &luaformatter::COMMANDS,
                 luaformatter::set_args,
                 luaformatter::IS_STDIN,
+            ),
+            Self::LuauAnalyze => (
+                &luau_analyze::COMMANDS,
+                luau_analyze::set_args,
+                luau_analyze::IS_STDIN,
             ),
             Self::MadoCheck => (
                 &mado_check::COMMANDS,
@@ -3599,6 +4037,16 @@ impl Tooling {
                 markuplint::set_args,
                 markuplint::IS_STDIN,
             ),
+            Self::MbakeFormat => (
+                &mbake_format::COMMANDS,
+                mbake_format::set_args,
+                mbake_format::IS_STDIN,
+            ),
+            Self::MbakeValidate => (
+                &mbake_validate::COMMANDS,
+                mbake_validate::set_args,
+                mbake_validate::IS_STDIN,
+            ),
             Self::MdPadding => (
                 &md_padding::COMMANDS,
                 md_padding::set_args,
@@ -3621,6 +4069,8 @@ impl Tooling {
                 meson_fmt::set_args,
                 meson_fmt::IS_STDIN,
             ),
+            Self::MhLint => (&mh_lint::COMMANDS, mh_lint::set_args, mh_lint::IS_STDIN),
+            Self::MhStyle => (&mh_style::COMMANDS, mh_style::set_args, mh_style::IS_STDIN),
             Self::MiseFmt => (&mise_fmt::COMMANDS, mise_fmt::set_args, mise_fmt::IS_STDIN),
             Self::Misspell => (&misspell::COMMANDS, misspell::set_args, misspell::IS_STDIN),
             Self::MixFormat => (
@@ -3693,6 +4143,7 @@ impl Tooling {
             ),
             Self::OpaFmt => (&opa_fmt::COMMANDS, opa_fmt::set_args, opa_fmt::IS_STDIN),
             Self::Ormolu => (&ormolu::COMMANDS, ormolu::set_args, ormolu::IS_STDIN),
+            Self::Oxfmt => (&oxfmt::COMMANDS, oxfmt::set_args, oxfmt::IS_STDIN),
             Self::Oxlint => (&oxlint::COMMANDS, oxlint::set_args, oxlint::IS_STDIN),
             Self::PackerFix => (
                 &packer_fix::COMMANDS,
@@ -3729,7 +4180,17 @@ impl Tooling {
                 phpinsights_fix::IS_STDIN,
             ),
             Self::Pint => (&pint::COMMANDS, pint::set_args, pint::IS_STDIN),
+            Self::PklFormat => (
+                &pkl_format::COMMANDS,
+                pkl_format::set_args,
+                pkl_format::IS_STDIN,
+            ),
             Self::Prettier => (&prettier::COMMANDS, prettier::set_args, prettier::IS_STDIN),
+            Self::Prettierd => (
+                &prettierd::COMMANDS,
+                prettierd::set_args,
+                prettierd::IS_STDIN,
+            ),
             Self::PrettyPhp => (
                 &pretty_php::COMMANDS,
                 pretty_php::set_args,
@@ -3792,13 +4253,25 @@ impl Tooling {
             Self::Pyflakes => (&pyflakes::COMMANDS, pyflakes::set_args, pyflakes::IS_STDIN),
             Self::Pyink => (&pyink::COMMANDS, pyink::set_args, pyink::IS_STDIN),
             Self::Pylint => (&pylint::COMMANDS, pylint::set_args, pylint::IS_STDIN),
+            Self::PymarkdownlntFix => (
+                &pymarkdownlnt_fix::COMMANDS,
+                pymarkdownlnt_fix::set_args,
+                pymarkdownlnt_fix::IS_STDIN,
+            ),
             Self::Pyment => (&pyment::COMMANDS, pyment::set_args, pyment::IS_STDIN),
+            Self::Pyrefly => (&pyrefly::COMMANDS, pyrefly::set_args, pyrefly::IS_STDIN),
             Self::Pyupgrade => (
                 &pyupgrade::COMMANDS,
                 pyupgrade::set_args,
                 pyupgrade::IS_STDIN,
             ),
             Self::Qmlfmt => (&qmlfmt::COMMANDS, qmlfmt::set_args, qmlfmt::IS_STDIN),
+            Self::Qmlformat => (
+                &qmlformat::COMMANDS,
+                qmlformat::set_args,
+                qmlformat::IS_STDIN,
+            ),
+            Self::Qmllint => (&qmllint::COMMANDS, qmllint::set_args, qmllint::IS_STDIN),
             Self::QuickLintJs => (
                 &quick_lint_js::COMMANDS,
                 quick_lint_js::set_args,
@@ -3853,6 +4326,21 @@ impl Tooling {
                 ruff_format::IS_STDIN,
             ),
             Self::Rufo => (&rufo::COMMANDS, rufo::set_args, rufo::IS_STDIN),
+            Self::RumdlCheck => (
+                &rumdl_check::COMMANDS,
+                rumdl_check::set_args,
+                rumdl_check::IS_STDIN,
+            ),
+            Self::RumdlCheckFix => (
+                &rumdl_check_fix::COMMANDS,
+                rumdl_check_fix::set_args,
+                rumdl_check_fix::IS_STDIN,
+            ),
+            Self::RumdlFmt => (
+                &rumdl_fmt::COMMANDS,
+                rumdl_fmt::set_args,
+                rumdl_fmt::IS_STDIN,
+            ),
             Self::RuneFmt => (&rune_fmt::COMMANDS, rune_fmt::set_args, rune_fmt::IS_STDIN),
             Self::Runic => (&runic::COMMANDS, runic::set_args, runic::IS_STDIN),
             Self::Rustfmt => (&rustfmt::COMMANDS, rustfmt::set_args, rustfmt::IS_STDIN),
@@ -3924,7 +4412,9 @@ impl Tooling {
                 sqlfluff_lint::IS_STDIN,
             ),
             Self::Sqlfmt => (&sqlfmt::COMMANDS, sqlfmt::set_args, sqlfmt::IS_STDIN),
+            Self::Sqlint => (&sqlint::COMMANDS, sqlint::set_args, sqlint::IS_STDIN),
             Self::Sqruff => (&sqruff::COMMANDS, sqruff::set_args, sqruff::IS_STDIN),
+            Self::Squawk => (&squawk::COMMANDS, squawk::set_args, squawk::IS_STDIN),
             Self::Standardjs => (
                 &standardjs::COMMANDS,
                 standardjs::set_args,
@@ -3962,6 +4452,7 @@ impl Tooling {
                 superhtml_fmt::set_args,
                 superhtml_fmt::IS_STDIN,
             ),
+            Self::Svlint => (&svlint::COMMANDS, svlint::set_args, svlint::IS_STDIN),
             Self::SwiftFormat => (
                 &swift_format::COMMANDS,
                 swift_format::set_args,
@@ -3973,6 +4464,8 @@ impl Tooling {
                 swiftformat::IS_STDIN,
             ),
             Self::Taplo => (&taplo::COMMANDS, taplo::set_args, taplo::IS_STDIN),
+            Self::Tclfmt => (&tclfmt::COMMANDS, tclfmt::set_args, tclfmt::IS_STDIN),
+            Self::Tclint => (&tclint::COMMANDS, tclint::set_args, tclint::IS_STDIN),
             Self::TemplFmt => (
                 &templ_fmt::COMMANDS,
                 templ_fmt::set_args,
@@ -4001,6 +4494,16 @@ impl Tooling {
                 tlint_format::IS_STDIN,
             ),
             Self::TofuFmt => (&tofu_fmt::COMMANDS, tofu_fmt::set_args, tofu_fmt::IS_STDIN),
+            Self::TombiFormat => (
+                &tombi_format::COMMANDS,
+                tombi_format::set_args,
+                tombi_format::IS_STDIN,
+            ),
+            Self::TombiLint => (
+                &tombi_lint::COMMANDS,
+                tombi_lint::set_args,
+                tombi_lint::IS_STDIN,
+            ),
             Self::TomlSort => (
                 &toml_sort::COMMANDS,
                 toml_sort::set_args,
@@ -4029,6 +4532,7 @@ impl Tooling {
                 twig_cs_fixer_lint::IS_STDIN,
             ),
             Self::Twigcs => (&twigcs::COMMANDS, twigcs::set_args, twigcs::IS_STDIN),
+            Self::Ty => (&ty::COMMANDS, ty::set_args, ty::IS_STDIN),
             Self::Typos => (&typos::COMMANDS, typos::set_args, typos::IS_STDIN),
             Self::Typstfmt => (&typstfmt::COMMANDS, typstfmt::set_args, typstfmt::IS_STDIN),
             Self::Typstyle => (&typstyle::COMMANDS, typstyle::set_args, typstyle::IS_STDIN),
@@ -4042,6 +4546,7 @@ impl Tooling {
                 vacuum_lint::set_args,
                 vacuum_lint::IS_STDIN,
             ),
+            Self::Verusfmt => (&verusfmt::COMMANDS, verusfmt::set_args, verusfmt::IS_STDIN),
             Self::VerylFmt => (
                 &veryl_fmt::COMMANDS,
                 veryl_fmt::set_args,
@@ -4078,6 +4583,11 @@ impl Tooling {
             Self::Yamlfmt => (&yamlfmt::COMMANDS, yamlfmt::set_args, yamlfmt::IS_STDIN),
             Self::Yamllint => (&yamllint::COMMANDS, yamllint::set_args, yamllint::IS_STDIN),
             Self::Yapf => (&yapf::COMMANDS, yapf::set_args, yapf::IS_STDIN),
+            Self::YardLint => (
+                &yard_lint::COMMANDS,
+                yard_lint::set_args,
+                yard_lint::IS_STDIN,
+            ),
             Self::YewFmt => (&yew_fmt::COMMANDS, yew_fmt::set_args, yew_fmt::IS_STDIN),
             Self::Yq => (&yq::COMMANDS, yq::set_args, yq::IS_STDIN),
             Self::ZigFmt => (&zig_fmt::COMMANDS, zig_fmt::set_args, zig_fmt::IS_STDIN),
@@ -4112,6 +4622,7 @@ impl AsRef<str> for Tooling {
             Self::Alex => "alex",
             Self::Ameba => "ameba",
             Self::AnsibleLint => "ansible-lint",
+            Self::ApiLinter => "api-linter",
             Self::Asmfmt => "asmfmt",
             Self::Astyle => "astyle",
             Self::AtlasFmt => "atlas:fmt",
@@ -4142,9 +4653,11 @@ impl AsRef<str> for Tooling {
             Self::Buildifier => "buildifier",
             Self::CabalFmt => "cabal-fmt",
             Self::CabalFormat => "cabal:format",
+            Self::CabalGild => "cabal-gild",
             Self::CabalPrettify => "cabal-prettify",
             Self::CaddyFmt => "caddy:fmt",
             Self::CaramelFmt => "caramel:fmt",
+            Self::CedarFormat => "cedar:format",
             Self::CfnLint => "cfn-lint",
             Self::Checkmake => "checkmake",
             Self::ClangFormat => "clang-format",
@@ -4189,6 +4702,7 @@ impl AsRef<str> for Tooling {
             Self::DprintFmt => "dprint:fmt",
             Self::DscannerFix => "dscanner:fix",
             Self::DscannerLint => "dscanner:lint",
+            Self::DuneFormatDuneFile => "dune:format-dune-file",
             Self::DusterFix => "duster:fix",
             Self::DusterLint => "duster:lint",
             Self::DxFmt => "dx:fmt",
@@ -4197,6 +4711,7 @@ impl AsRef<str> for Tooling {
             Self::ElmFormat => "elm-format",
             Self::Eradicate => "eradicate",
             Self::ErbFormatter => "erb-formatter",
+            Self::ErgLint => "erg:lint",
             Self::Erlfmt => "erlfmt",
             Self::Eslint => "eslint",
             Self::Fantomas => "fantomas",
@@ -4213,10 +4728,13 @@ impl AsRef<str> for Tooling {
             Self::Fourmolu => "fourmolu",
             Self::Fprettify => "fprettify",
             Self::FutharkFmt => "futhark:fmt",
+            Self::FvmDartFix => "fvm:dart:fix",
+            Self::FvmDartFormat => "fvm:dart:format",
             Self::Gci => "gci",
             Self::Gdformat => "gdformat",
             Self::Gdlint => "gdlint",
             Self::Gersemi => "gersemi",
+            Self::GhokinFmt => "ghokin:fmt",
             Self::GleamFormat => "gleam:format",
             Self::GluonFmt => "gluon:fmt",
             Self::Gofmt => "gofmt",
@@ -4229,6 +4747,7 @@ impl AsRef<str> for Tooling {
             Self::Golines => "golines",
             Self::GoogleJavaFormat => "google-java-format",
             Self::Gospel => "gospel",
+            Self::GrafbaseLint => "grafbase:lint",
             Self::GrainFormat => "grain:format",
             Self::Hadolint => "hadolint",
             Self::HamlLint => "haml-lint",
@@ -4243,14 +4762,17 @@ impl AsRef<str> for Tooling {
             Self::ImbaFmt => "imba:fmt",
             Self::InkoFmt => "inko:fmt",
             Self::Isort => "isort",
+            Self::JanetFormat => "janet-format",
             Self::Joker => "joker",
             Self::Jq => "jq",
             Self::Jqfmt => "jqfmt",
             Self::JsBeautify => "js-beautify",
             Self::Json5Format => "json5format",
+            Self::JsonRepair => "json_repair",
             Self::JsonaFormat => "jsona:format",
             Self::JsonaLint => "jsona:lint",
             Self::Jsonlint => "jsonlint",
+            Self::JsonlintSort => "jsonlint:sort",
             Self::JsonnetLint => "jsonnet-lint",
             Self::Jsonnetfmt => "jsonnetfmt",
             Self::Jsonpp => "jsonpp",
@@ -4259,7 +4781,10 @@ impl AsRef<str> for Tooling {
             Self::KclFmt => "kcl:fmt",
             Self::KclLint => "kcl:lint",
             Self::Kdlfmt => "kdlfmt",
+            Self::KdlfmtV1 => "kdlfmt:v1",
+            Self::KdlfmtV2 => "kdlfmt:v2",
             Self::KdocFormatter => "kdoc-formatter",
+            Self::KeepSorted => "keep-sorted",
             Self::Ktfmt => "ktfmt",
             Self::Ktlint => "ktlint",
             Self::KulalaFmtCheck => "kulala-fmt:check",
@@ -4268,6 +4793,7 @@ impl AsRef<str> for Tooling {
             Self::LiquidsoapPrettier => "liquidsoap-prettier",
             Self::Luacheck => "luacheck",
             Self::Luaformatter => "luaformatter",
+            Self::LuauAnalyze => "luau-analyze",
             Self::MadoCheck => "mado:check",
             Self::MagoFormat => "mago:format",
             Self::MagoLint => "mago:lint",
@@ -4277,12 +4803,16 @@ impl AsRef<str> for Tooling {
             Self::Markdownlint => "markdownlint",
             Self::MarkdownlintCli2 => "markdownlint-cli2",
             Self::Markuplint => "markuplint",
+            Self::MbakeFormat => "mbake:format",
+            Self::MbakeValidate => "mbake:validate",
             Self::MdPadding => "md-padding",
             Self::Mdformat => "mdformat",
             Self::MdsfFormat => "mdsf:format",
             Self::MdsfVerify => "mdsf:verify",
             Self::Mdslw => "mdslw",
             Self::MesonFmt => "meson:fmt",
+            Self::MhLint => "mh_lint",
+            Self::MhStyle => "mh_style",
             Self::MiseFmt => "mise:fmt",
             Self::Misspell => "misspell",
             Self::MixFormat => "mix:format",
@@ -4307,6 +4837,7 @@ impl AsRef<str> for Tooling {
             Self::OelintAdv => "oelint-adv",
             Self::OpaFmt => "opa:fmt",
             Self::Ormolu => "ormolu",
+            Self::Oxfmt => "oxfmt",
             Self::Oxlint => "oxlint",
             Self::PackerFix => "packer:fix",
             Self::PackerFmt => "packer:fmt",
@@ -4319,7 +4850,9 @@ impl AsRef<str> for Tooling {
             Self::Phpcbf => "phpcbf",
             Self::PhpinsightsFix => "phpinsights:fix",
             Self::Pint => "pint",
+            Self::PklFormat => "pkl:format",
             Self::Prettier => "prettier",
+            Self::Prettierd => "prettierd",
             Self::PrettyPhp => "pretty-php",
             Self::Prettypst => "prettypst",
             Self::PrismaFormat => "prisma:format",
@@ -4338,9 +4871,13 @@ impl AsRef<str> for Tooling {
             Self::Pyflakes => "pyflakes",
             Self::Pyink => "pyink",
             Self::Pylint => "pylint",
+            Self::PymarkdownlntFix => "pymarkdownlnt:fix",
             Self::Pyment => "pyment",
+            Self::Pyrefly => "pyrefly",
             Self::Pyupgrade => "pyupgrade",
             Self::Qmlfmt => "qmlfmt",
+            Self::Qmlformat => "qmlformat",
+            Self::Qmllint => "qmllint",
             Self::QuickLintJs => "quick-lint-js",
             Self::RacoFmt => "raco:fmt",
             Self::Reek => "reek",
@@ -4359,6 +4896,9 @@ impl AsRef<str> for Tooling {
             Self::RuffCheck => "ruff:check",
             Self::RuffFormat => "ruff:format",
             Self::Rufo => "rufo",
+            Self::RumdlCheck => "rumdl:check",
+            Self::RumdlCheckFix => "rumdl:check:fix",
+            Self::RumdlFmt => "rumdl:fmt",
             Self::RuneFmt => "rune:fmt",
             Self::Runic => "runic",
             Self::Rustfmt => "rustfmt",
@@ -4382,7 +4922,9 @@ impl AsRef<str> for Tooling {
             Self::SqlfluffFormat => "sqlfluff:format",
             Self::SqlfluffLint => "sqlfluff:lint",
             Self::Sqlfmt => "sqlfmt",
+            Self::Sqlint => "sqlint",
             Self::Sqruff => "sqruff",
+            Self::Squawk => "squawk",
             Self::Standardjs => "standardjs",
             Self::Standardrb => "standardrb",
             Self::StatixCheck => "statix:check",
@@ -4392,9 +4934,12 @@ impl AsRef<str> for Tooling {
             Self::StylishHaskell => "stylish-haskell",
             Self::Stylua => "stylua",
             Self::SuperhtmlFmt => "superhtml:fmt",
+            Self::Svlint => "svlint",
             Self::SwiftFormat => "swift-format",
             Self::Swiftformat => "swiftformat",
             Self::Taplo => "taplo",
+            Self::Tclfmt => "tclfmt",
+            Self::Tclint => "tclint",
             Self::TemplFmt => "templ:fmt",
             Self::TerraformFmt => "terraform:fmt",
             Self::TerragruntHclfmt => "terragrunt:hclfmt",
@@ -4403,6 +4948,8 @@ impl AsRef<str> for Tooling {
             Self::TextlintFix => "textlint:fix",
             Self::TlintFormat => "tlint:format",
             Self::TofuFmt => "tofu:fmt",
+            Self::TombiFormat => "tombi:format",
+            Self::TombiLint => "tombi:lint",
             Self::TomlSort => "toml-sort",
             Self::Topiary => "topiary",
             Self::Tryceratops => "tryceratops",
@@ -4411,6 +4958,7 @@ impl AsRef<str> for Tooling {
             Self::Tsqllint => "tsqllint",
             Self::TwigCsFixerLint => "twig-cs-fixer:lint",
             Self::Twigcs => "twigcs",
+            Self::Ty => "ty",
             Self::Typos => "typos",
             Self::Typstfmt => "typstfmt",
             Self::Typstyle => "typstyle",
@@ -4420,6 +4968,7 @@ impl AsRef<str> for Tooling {
             Self::Usort => "usort",
             Self::VFmt => "v:fmt",
             Self::VacuumLint => "vacuum:lint",
+            Self::Verusfmt => "verusfmt",
             Self::VerylFmt => "veryl:fmt",
             Self::VhdlStyleGuide => "vhdl-style-guide",
             Self::Vint => "vint",
@@ -4436,6 +4985,7 @@ impl AsRef<str> for Tooling {
             Self::Yamlfmt => "yamlfmt",
             Self::Yamllint => "yamllint",
             Self::Yapf => "yapf",
+            Self::YardLint => "yard-lint",
             Self::YewFmt => "yew-fmt",
             Self::Yq => "yq",
             Self::ZigFmt => "zig:fmt",
@@ -4463,6 +5013,7 @@ mod test_tooling {
         assert_eq!(Tooling::Alex, reverse(Tooling::Alex)?);
         assert_eq!(Tooling::Ameba, reverse(Tooling::Ameba)?);
         assert_eq!(Tooling::AnsibleLint, reverse(Tooling::AnsibleLint)?);
+        assert_eq!(Tooling::ApiLinter, reverse(Tooling::ApiLinter)?);
         assert_eq!(Tooling::Asmfmt, reverse(Tooling::Asmfmt)?);
         assert_eq!(Tooling::Astyle, reverse(Tooling::Astyle)?);
         assert_eq!(Tooling::AtlasFmt, reverse(Tooling::AtlasFmt)?);
@@ -4496,9 +5047,11 @@ mod test_tooling {
         assert_eq!(Tooling::Buildifier, reverse(Tooling::Buildifier)?);
         assert_eq!(Tooling::CabalFmt, reverse(Tooling::CabalFmt)?);
         assert_eq!(Tooling::CabalFormat, reverse(Tooling::CabalFormat)?);
+        assert_eq!(Tooling::CabalGild, reverse(Tooling::CabalGild)?);
         assert_eq!(Tooling::CabalPrettify, reverse(Tooling::CabalPrettify)?);
         assert_eq!(Tooling::CaddyFmt, reverse(Tooling::CaddyFmt)?);
         assert_eq!(Tooling::CaramelFmt, reverse(Tooling::CaramelFmt)?);
+        assert_eq!(Tooling::CedarFormat, reverse(Tooling::CedarFormat)?);
         assert_eq!(Tooling::CfnLint, reverse(Tooling::CfnLint)?);
         assert_eq!(Tooling::Checkmake, reverse(Tooling::Checkmake)?);
         assert_eq!(Tooling::ClangFormat, reverse(Tooling::ClangFormat)?);
@@ -4546,6 +5099,10 @@ mod test_tooling {
         assert_eq!(Tooling::DprintFmt, reverse(Tooling::DprintFmt)?);
         assert_eq!(Tooling::DscannerFix, reverse(Tooling::DscannerFix)?);
         assert_eq!(Tooling::DscannerLint, reverse(Tooling::DscannerLint)?);
+        assert_eq!(
+            Tooling::DuneFormatDuneFile,
+            reverse(Tooling::DuneFormatDuneFile)?
+        );
         assert_eq!(Tooling::DusterFix, reverse(Tooling::DusterFix)?);
         assert_eq!(Tooling::DusterLint, reverse(Tooling::DusterLint)?);
         assert_eq!(Tooling::DxFmt, reverse(Tooling::DxFmt)?);
@@ -4557,6 +5114,7 @@ mod test_tooling {
         assert_eq!(Tooling::ElmFormat, reverse(Tooling::ElmFormat)?);
         assert_eq!(Tooling::Eradicate, reverse(Tooling::Eradicate)?);
         assert_eq!(Tooling::ErbFormatter, reverse(Tooling::ErbFormatter)?);
+        assert_eq!(Tooling::ErgLint, reverse(Tooling::ErgLint)?);
         assert_eq!(Tooling::Erlfmt, reverse(Tooling::Erlfmt)?);
         assert_eq!(Tooling::Eslint, reverse(Tooling::Eslint)?);
         assert_eq!(Tooling::Fantomas, reverse(Tooling::Fantomas)?);
@@ -4579,10 +5137,13 @@ mod test_tooling {
         assert_eq!(Tooling::Fourmolu, reverse(Tooling::Fourmolu)?);
         assert_eq!(Tooling::Fprettify, reverse(Tooling::Fprettify)?);
         assert_eq!(Tooling::FutharkFmt, reverse(Tooling::FutharkFmt)?);
+        assert_eq!(Tooling::FvmDartFix, reverse(Tooling::FvmDartFix)?);
+        assert_eq!(Tooling::FvmDartFormat, reverse(Tooling::FvmDartFormat)?);
         assert_eq!(Tooling::Gci, reverse(Tooling::Gci)?);
         assert_eq!(Tooling::Gdformat, reverse(Tooling::Gdformat)?);
         assert_eq!(Tooling::Gdlint, reverse(Tooling::Gdlint)?);
         assert_eq!(Tooling::Gersemi, reverse(Tooling::Gersemi)?);
+        assert_eq!(Tooling::GhokinFmt, reverse(Tooling::GhokinFmt)?);
         assert_eq!(Tooling::GleamFormat, reverse(Tooling::GleamFormat)?);
         assert_eq!(Tooling::GluonFmt, reverse(Tooling::GluonFmt)?);
         assert_eq!(Tooling::Gofmt, reverse(Tooling::Gofmt)?);
@@ -4604,6 +5165,7 @@ mod test_tooling {
             reverse(Tooling::GoogleJavaFormat)?
         );
         assert_eq!(Tooling::Gospel, reverse(Tooling::Gospel)?);
+        assert_eq!(Tooling::GrafbaseLint, reverse(Tooling::GrafbaseLint)?);
         assert_eq!(Tooling::GrainFormat, reverse(Tooling::GrainFormat)?);
         assert_eq!(Tooling::Hadolint, reverse(Tooling::Hadolint)?);
         assert_eq!(Tooling::HamlLint, reverse(Tooling::HamlLint)?);
@@ -4618,14 +5180,17 @@ mod test_tooling {
         assert_eq!(Tooling::ImbaFmt, reverse(Tooling::ImbaFmt)?);
         assert_eq!(Tooling::InkoFmt, reverse(Tooling::InkoFmt)?);
         assert_eq!(Tooling::Isort, reverse(Tooling::Isort)?);
+        assert_eq!(Tooling::JanetFormat, reverse(Tooling::JanetFormat)?);
         assert_eq!(Tooling::Joker, reverse(Tooling::Joker)?);
         assert_eq!(Tooling::Jq, reverse(Tooling::Jq)?);
         assert_eq!(Tooling::Jqfmt, reverse(Tooling::Jqfmt)?);
         assert_eq!(Tooling::JsBeautify, reverse(Tooling::JsBeautify)?);
         assert_eq!(Tooling::Json5Format, reverse(Tooling::Json5Format)?);
+        assert_eq!(Tooling::JsonRepair, reverse(Tooling::JsonRepair)?);
         assert_eq!(Tooling::JsonaFormat, reverse(Tooling::JsonaFormat)?);
         assert_eq!(Tooling::JsonaLint, reverse(Tooling::JsonaLint)?);
         assert_eq!(Tooling::Jsonlint, reverse(Tooling::Jsonlint)?);
+        assert_eq!(Tooling::JsonlintSort, reverse(Tooling::JsonlintSort)?);
         assert_eq!(Tooling::JsonnetLint, reverse(Tooling::JsonnetLint)?);
         assert_eq!(Tooling::Jsonnetfmt, reverse(Tooling::Jsonnetfmt)?);
         assert_eq!(Tooling::Jsonpp, reverse(Tooling::Jsonpp)?);
@@ -4637,7 +5202,10 @@ mod test_tooling {
         assert_eq!(Tooling::KclFmt, reverse(Tooling::KclFmt)?);
         assert_eq!(Tooling::KclLint, reverse(Tooling::KclLint)?);
         assert_eq!(Tooling::Kdlfmt, reverse(Tooling::Kdlfmt)?);
+        assert_eq!(Tooling::KdlfmtV1, reverse(Tooling::KdlfmtV1)?);
+        assert_eq!(Tooling::KdlfmtV2, reverse(Tooling::KdlfmtV2)?);
         assert_eq!(Tooling::KdocFormatter, reverse(Tooling::KdocFormatter)?);
+        assert_eq!(Tooling::KeepSorted, reverse(Tooling::KeepSorted)?);
         assert_eq!(Tooling::Ktfmt, reverse(Tooling::Ktfmt)?);
         assert_eq!(Tooling::Ktlint, reverse(Tooling::Ktlint)?);
         assert_eq!(Tooling::KulalaFmtCheck, reverse(Tooling::KulalaFmtCheck)?);
@@ -4649,6 +5217,7 @@ mod test_tooling {
         );
         assert_eq!(Tooling::Luacheck, reverse(Tooling::Luacheck)?);
         assert_eq!(Tooling::Luaformatter, reverse(Tooling::Luaformatter)?);
+        assert_eq!(Tooling::LuauAnalyze, reverse(Tooling::LuauAnalyze)?);
         assert_eq!(Tooling::MadoCheck, reverse(Tooling::MadoCheck)?);
         assert_eq!(Tooling::MagoFormat, reverse(Tooling::MagoFormat)?);
         assert_eq!(Tooling::MagoLint, reverse(Tooling::MagoLint)?);
@@ -4664,12 +5233,16 @@ mod test_tooling {
             reverse(Tooling::MarkdownlintCli2)?
         );
         assert_eq!(Tooling::Markuplint, reverse(Tooling::Markuplint)?);
+        assert_eq!(Tooling::MbakeFormat, reverse(Tooling::MbakeFormat)?);
+        assert_eq!(Tooling::MbakeValidate, reverse(Tooling::MbakeValidate)?);
         assert_eq!(Tooling::MdPadding, reverse(Tooling::MdPadding)?);
         assert_eq!(Tooling::Mdformat, reverse(Tooling::Mdformat)?);
         assert_eq!(Tooling::MdsfFormat, reverse(Tooling::MdsfFormat)?);
         assert_eq!(Tooling::MdsfVerify, reverse(Tooling::MdsfVerify)?);
         assert_eq!(Tooling::Mdslw, reverse(Tooling::Mdslw)?);
         assert_eq!(Tooling::MesonFmt, reverse(Tooling::MesonFmt)?);
+        assert_eq!(Tooling::MhLint, reverse(Tooling::MhLint)?);
+        assert_eq!(Tooling::MhStyle, reverse(Tooling::MhStyle)?);
         assert_eq!(Tooling::MiseFmt, reverse(Tooling::MiseFmt)?);
         assert_eq!(Tooling::Misspell, reverse(Tooling::Misspell)?);
         assert_eq!(Tooling::MixFormat, reverse(Tooling::MixFormat)?);
@@ -4694,6 +5267,7 @@ mod test_tooling {
         assert_eq!(Tooling::OelintAdv, reverse(Tooling::OelintAdv)?);
         assert_eq!(Tooling::OpaFmt, reverse(Tooling::OpaFmt)?);
         assert_eq!(Tooling::Ormolu, reverse(Tooling::Ormolu)?);
+        assert_eq!(Tooling::Oxfmt, reverse(Tooling::Oxfmt)?);
         assert_eq!(Tooling::Oxlint, reverse(Tooling::Oxlint)?);
         assert_eq!(Tooling::PackerFix, reverse(Tooling::PackerFix)?);
         assert_eq!(Tooling::PackerFmt, reverse(Tooling::PackerFmt)?);
@@ -4706,7 +5280,9 @@ mod test_tooling {
         assert_eq!(Tooling::Phpcbf, reverse(Tooling::Phpcbf)?);
         assert_eq!(Tooling::PhpinsightsFix, reverse(Tooling::PhpinsightsFix)?);
         assert_eq!(Tooling::Pint, reverse(Tooling::Pint)?);
+        assert_eq!(Tooling::PklFormat, reverse(Tooling::PklFormat)?);
         assert_eq!(Tooling::Prettier, reverse(Tooling::Prettier)?);
+        assert_eq!(Tooling::Prettierd, reverse(Tooling::Prettierd)?);
         assert_eq!(Tooling::PrettyPhp, reverse(Tooling::PrettyPhp)?);
         assert_eq!(Tooling::Prettypst, reverse(Tooling::Prettypst)?);
         assert_eq!(Tooling::PrismaFormat, reverse(Tooling::PrismaFormat)?);
@@ -4728,9 +5304,16 @@ mod test_tooling {
         assert_eq!(Tooling::Pyflakes, reverse(Tooling::Pyflakes)?);
         assert_eq!(Tooling::Pyink, reverse(Tooling::Pyink)?);
         assert_eq!(Tooling::Pylint, reverse(Tooling::Pylint)?);
+        assert_eq!(
+            Tooling::PymarkdownlntFix,
+            reverse(Tooling::PymarkdownlntFix)?
+        );
         assert_eq!(Tooling::Pyment, reverse(Tooling::Pyment)?);
+        assert_eq!(Tooling::Pyrefly, reverse(Tooling::Pyrefly)?);
         assert_eq!(Tooling::Pyupgrade, reverse(Tooling::Pyupgrade)?);
         assert_eq!(Tooling::Qmlfmt, reverse(Tooling::Qmlfmt)?);
+        assert_eq!(Tooling::Qmlformat, reverse(Tooling::Qmlformat)?);
+        assert_eq!(Tooling::Qmllint, reverse(Tooling::Qmllint)?);
         assert_eq!(Tooling::QuickLintJs, reverse(Tooling::QuickLintJs)?);
         assert_eq!(Tooling::RacoFmt, reverse(Tooling::RacoFmt)?);
         assert_eq!(Tooling::Reek, reverse(Tooling::Reek)?);
@@ -4752,6 +5335,9 @@ mod test_tooling {
         assert_eq!(Tooling::RuffCheck, reverse(Tooling::RuffCheck)?);
         assert_eq!(Tooling::RuffFormat, reverse(Tooling::RuffFormat)?);
         assert_eq!(Tooling::Rufo, reverse(Tooling::Rufo)?);
+        assert_eq!(Tooling::RumdlCheck, reverse(Tooling::RumdlCheck)?);
+        assert_eq!(Tooling::RumdlCheckFix, reverse(Tooling::RumdlCheckFix)?);
+        assert_eq!(Tooling::RumdlFmt, reverse(Tooling::RumdlFmt)?);
         assert_eq!(Tooling::RuneFmt, reverse(Tooling::RuneFmt)?);
         assert_eq!(Tooling::Runic, reverse(Tooling::Runic)?);
         assert_eq!(Tooling::Rustfmt, reverse(Tooling::Rustfmt)?);
@@ -4775,7 +5361,9 @@ mod test_tooling {
         assert_eq!(Tooling::SqlfluffFormat, reverse(Tooling::SqlfluffFormat)?);
         assert_eq!(Tooling::SqlfluffLint, reverse(Tooling::SqlfluffLint)?);
         assert_eq!(Tooling::Sqlfmt, reverse(Tooling::Sqlfmt)?);
+        assert_eq!(Tooling::Sqlint, reverse(Tooling::Sqlint)?);
         assert_eq!(Tooling::Sqruff, reverse(Tooling::Sqruff)?);
+        assert_eq!(Tooling::Squawk, reverse(Tooling::Squawk)?);
         assert_eq!(Tooling::Standardjs, reverse(Tooling::Standardjs)?);
         assert_eq!(Tooling::Standardrb, reverse(Tooling::Standardrb)?);
         assert_eq!(Tooling::StatixCheck, reverse(Tooling::StatixCheck)?);
@@ -4785,9 +5373,12 @@ mod test_tooling {
         assert_eq!(Tooling::StylishHaskell, reverse(Tooling::StylishHaskell)?);
         assert_eq!(Tooling::Stylua, reverse(Tooling::Stylua)?);
         assert_eq!(Tooling::SuperhtmlFmt, reverse(Tooling::SuperhtmlFmt)?);
+        assert_eq!(Tooling::Svlint, reverse(Tooling::Svlint)?);
         assert_eq!(Tooling::SwiftFormat, reverse(Tooling::SwiftFormat)?);
         assert_eq!(Tooling::Swiftformat, reverse(Tooling::Swiftformat)?);
         assert_eq!(Tooling::Taplo, reverse(Tooling::Taplo)?);
+        assert_eq!(Tooling::Tclfmt, reverse(Tooling::Tclfmt)?);
+        assert_eq!(Tooling::Tclint, reverse(Tooling::Tclint)?);
         assert_eq!(Tooling::TemplFmt, reverse(Tooling::TemplFmt)?);
         assert_eq!(Tooling::TerraformFmt, reverse(Tooling::TerraformFmt)?);
         assert_eq!(
@@ -4799,6 +5390,8 @@ mod test_tooling {
         assert_eq!(Tooling::TextlintFix, reverse(Tooling::TextlintFix)?);
         assert_eq!(Tooling::TlintFormat, reverse(Tooling::TlintFormat)?);
         assert_eq!(Tooling::TofuFmt, reverse(Tooling::TofuFmt)?);
+        assert_eq!(Tooling::TombiFormat, reverse(Tooling::TombiFormat)?);
+        assert_eq!(Tooling::TombiLint, reverse(Tooling::TombiLint)?);
         assert_eq!(Tooling::TomlSort, reverse(Tooling::TomlSort)?);
         assert_eq!(Tooling::Topiary, reverse(Tooling::Topiary)?);
         assert_eq!(Tooling::Tryceratops, reverse(Tooling::Tryceratops)?);
@@ -4807,6 +5400,7 @@ mod test_tooling {
         assert_eq!(Tooling::Tsqllint, reverse(Tooling::Tsqllint)?);
         assert_eq!(Tooling::TwigCsFixerLint, reverse(Tooling::TwigCsFixerLint)?);
         assert_eq!(Tooling::Twigcs, reverse(Tooling::Twigcs)?);
+        assert_eq!(Tooling::Ty, reverse(Tooling::Ty)?);
         assert_eq!(Tooling::Typos, reverse(Tooling::Typos)?);
         assert_eq!(Tooling::Typstfmt, reverse(Tooling::Typstfmt)?);
         assert_eq!(Tooling::Typstyle, reverse(Tooling::Typstyle)?);
@@ -4816,6 +5410,7 @@ mod test_tooling {
         assert_eq!(Tooling::Usort, reverse(Tooling::Usort)?);
         assert_eq!(Tooling::VFmt, reverse(Tooling::VFmt)?);
         assert_eq!(Tooling::VacuumLint, reverse(Tooling::VacuumLint)?);
+        assert_eq!(Tooling::Verusfmt, reverse(Tooling::Verusfmt)?);
         assert_eq!(Tooling::VerylFmt, reverse(Tooling::VerylFmt)?);
         assert_eq!(Tooling::VhdlStyleGuide, reverse(Tooling::VhdlStyleGuide)?);
         assert_eq!(Tooling::Vint, reverse(Tooling::Vint)?);
@@ -4832,6 +5427,7 @@ mod test_tooling {
         assert_eq!(Tooling::Yamlfmt, reverse(Tooling::Yamlfmt)?);
         assert_eq!(Tooling::Yamllint, reverse(Tooling::Yamllint)?);
         assert_eq!(Tooling::Yapf, reverse(Tooling::Yapf)?);
+        assert_eq!(Tooling::YardLint, reverse(Tooling::YardLint)?);
         assert_eq!(Tooling::YewFmt, reverse(Tooling::YewFmt)?);
         assert_eq!(Tooling::Yq, reverse(Tooling::Yq)?);
         assert_eq!(Tooling::ZigFmt, reverse(Tooling::ZigFmt)?);

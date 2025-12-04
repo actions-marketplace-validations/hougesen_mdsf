@@ -1,6 +1,7 @@
-///
-/// THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
-///
+//!
+//! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
+//!
+
 use crate::runners::CommandType;
 
 #[inline]
@@ -16,7 +17,7 @@ pub fn set_args(
 pub const COMMANDS: [CommandType; 3] = [
     CommandType::Direct("clang-tidy"),
     CommandType::Uv("clang-tidy", "clang-tidy"),
-    CommandType::Pipx("clang-tidy"),
+    CommandType::Pipx("clang-tidy", "clang-tidy"),
 ];
 
 pub const IS_STDIN: bool = false;

@@ -1,21 +1,22 @@
 [package]
 name = "mdsf"
 version = { workspace = true }
+authors = { workspace = true }
 edition = { workspace = true }
 description = "Format, and lint, markdown code snippets using your favorite tools"
-authors = { workspace = true }
-license = { workspace = true }
-repository = { workspace = true }
-keywords = [
-  "markdown",
-  "formatter",
-  "pretty-printing",
-  "code-formatter",
-  "linter",
-]
-homepage = { workspace = true }
+documentation = { workspace = true }
 readme = { workspace = true }
-categories = ["development-tools", "command-line-utilities"]
+homepage = { workspace = true }
+repository = { workspace = true }
+license = { workspace = true }
+keywords = [
+  "code-formatter",
+  "formatter",
+  "linter",
+  "markdown",
+  "pretty-printing",
+]
+categories = ["command-line-utilities", "development-tools"]
 exclude = ["codegen/**"]
 default-run = "mdsf"
 
@@ -25,20 +26,16 @@ path-guid = "500835C2-981A-4C1F-9A6F-36EC4D194212"
 license = false
 eula = false
 
-[features]
-default = []
-json-schema = ["dep:schemars"]
-
 [dependencies]
 clap = { workspace = true }
 clap_complete = { workspace = true }
 clap_complete_nushell = { workspace = true }
-console = { workspace = true }
 directories = { workspace = true }
 env_logger = { workspace = true }
 ignore = { workspace = true }
 json_comments = { workspace = true }
 log = { workspace = true }
+owo-colors = { workspace = true }
 process_control = { workspace = true }
 regex = { workspace = true }
 schemars = { workspace = true, optional = true }
@@ -54,3 +51,7 @@ which = { workspace = true }
 assert_cmd = { workspace = true }
 predicates = { workspace = true }
 test-with = { workspace = true }
+
+[features]
+default = []
+json-schema = ["dep:schemars"]

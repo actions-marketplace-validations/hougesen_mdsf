@@ -16,24 +16,38 @@ jobs:
         os:
           - ubuntu-latest
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: Swatinem/rust-cache@v2
       - uses: erlef/setup-beam@v1
         with:
           elixir-version: 1.16.1
           gleam-version: 1.0.0
           otp-version: "26"
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           cache: pip
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          version: latest
+      - run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{ env.STORE_PATH }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       - uses: jiro4989/setup-nim-action@v2
-      - uses: goto-bus-stop/setup-zig@v2
+      - uses: mlugg/setup-zig@v2
       - uses: uncenter/setup-taplo@v1
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: stable
       - uses: ruby/setup-ruby@v1
@@ -43,14 +57,12 @@ jobs:
       - uses: crystal-lang/install-crystal@v1
       - uses: hasnep/setup-roc@v0.5.0
       - uses: denoland/setup-deno@v2
-        with:
-          deno-version: v1.x
       - uses: taiki-e/install-action@just
       - uses: ocaml/setup-ocaml@v3
         with:
           dune-cache: true
           ocaml-compiler: "5.1"
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
@@ -58,19 +70,25 @@ jobs:
       - uses: julia-actions/cache@v2
       - uses: cargo-bins/cargo-binstall@main
       - uses: Homebrew/actions/setup-homebrew@master
-      - uses: leafo/gh-actions-lua@v11
-      - uses: leafo/gh-actions-luarocks@v5
+      - uses: leafo/gh-actions-lua@v12
+      - uses: leafo/gh-actions-luarocks@v6
         continue-on-error: true
+      - uses: dlang-community/setup-dlang@v2
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
-      - run: rustup toolchain install stable --profile minimal
+      - run: rustup toolchain install stable
       - run: rustup component add rustfmt clippy
       - run: curl -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh
       - name: actionlint
         run: ( ( which actionlint ) || ( ( which brew &&  brew install actionlint ) || ( which go && go install github.com/rhysd/actionlint/cmd/actionlint@latest ) ) || ( echo "Unable to install tool" ) )
+      - name: air
+        run: ( ( which air ) || ( ( which brew &&  brew install air ) ) || ( echo "Unable to install tool" ) )
       - name: alejandra
         run: ( ( which alejandra ) || ( ( which cargo && ( cargo binstall alejandra || cargo install alejandra ) ) ) || ( echo "Unable to install tool" ) )
       - name: alex
@@ -105,24 +123,30 @@ jobs:
         run: ( ( which cppcheck ) || ( ( which brew &&  brew install cppcheck ) || ( which apt-get && sudo apt-get install -y cppcheck ) ) || ( echo "Unable to install tool" ) )
       - name: cpplint
         run: ( ( which cpplint ) || ( ( which brew &&  brew install cpplint ) || ( which apt-get && sudo apt-get install -y cpplint ) || ( which pipx && pipx install cpplint ) ) || ( echo "Unable to install tool" ) )
+      - name: csharpier
+        run: ( ( which csharpier ) || ( ( which dotnet && dotnet tool install -g csharpier ) ) || ( echo "Unable to install tool" ) )
       - name: css-beautify
         run: ( ( which css-beautify ) || ( ( which npm && npm i -g js-beautify ) ) || ( echo "Unable to install tool" ) )
       - name: csscomb
         run: ( ( which csscomb ) || ( ( which npm && npm i -g csscomb ) ) || ( echo "Unable to install tool" ) )
       - name: csslint
         run: ( ( which csslint ) || ( ( which npm && npm i -g csslint ) ) || ( echo "Unable to install tool" ) )
+      - name: deno
+        run: ( ( which deno ) || ( ( which cargo && ( cargo binstall deno || cargo install deno ) ) || ( which brew &&  brew install deno ) ) || ( echo "Unable to install tool" ) )
       - name: dfmt
         run: ( ( which dfmt ) || ( ( which brew &&  brew install dfmt ) ) || ( echo "Unable to install tool" ) )
       - name: dockerfmt
         run: ( ( which dockerfmt ) || ( ( which go && go install github.com/reteps/dockerfmt@latest ) ) || ( echo "Unable to install tool" ) )
-      - name: dotnet
-        run: ( ( which csharpier ) || ( ( which dotnet && dotnet tool install -g csharpier ) ) || ( echo "Unable to install tool" ) )
+      - name: dune
+        run: ( ( which dune ) || ( ( which opam && eval $(opam env) && opam install dune ) ) || ( echo "Unable to install tool" ) )
       - name: dx
         run: ( ( which dx ) || ( ( which cargo && ( cargo binstall dioxus-cli || cargo install dioxus-cli ) ) ) || ( echo "Unable to install tool" ) )
       - name: efmt
         run: ( ( which efmt ) || ( ( which cargo && ( cargo binstall efmt || cargo install efmt ) ) ) || ( echo "Unable to install tool" ) )
       - name: elm-format
         run: ( ( which elm-format ) || ( ( which npm && npm i -g elm-format ) ) || ( echo "Unable to install tool" ) )
+      - name: erg
+        run: ( ( which erg ) || ( ( which cargo && ( cargo binstall erg || cargo install erg ) ) ) || ( echo "Unable to install tool" ) )
       - name: fantomas
         run: ( ( which fantomas ) || ( ( which dotnet && dotnet tool install -g fantomas ) ) || ( echo "Unable to install tool" ) )
       - name: fixjson
@@ -161,6 +185,8 @@ jobs:
         run: ( ( which jqfmt ) || ( ( which go && go install github.com/noperator/jqfmt/cmd/jqfmt@latest ) ) || ( echo "Unable to install tool" ) )
       - name: js-beautify
         run: ( ( which js-beautify ) || ( ( which npm && npm i -g js-beautify ) ) || ( echo "Unable to install tool" ) )
+      - name: json_repair
+        run: ( ( which json_repair ) || ( ( which pipx && pipx install json-repair ) ) || ( echo "Unable to install tool" ) )
       - name: jsonlint
         run: ( ( which jsonlint ) || ( ( which npm && npm i -g jsonlint ) ) || ( echo "Unable to install tool" ) )
       - name: jsonpp
@@ -171,6 +197,8 @@ jobs:
         run: ( ( which just ) || ( ( which npm && npm i -g rust-just ) || ( which cargo && ( cargo binstall just || cargo install just ) ) || ( which brew &&  brew install just ) || ( which pipx && pipx install rust-just ) ) || ( echo "Unable to install tool" ) )
       - name: kcl
         run: ( ( which kcl ) || ( ( which brew &&  brew install kcl-lang/tap/kcl ) || ( which go && go install kcl-lang.io/cli/cmd/kcl@latest ) ) || ( echo "Unable to install tool" ) )
+      - name: kdlfmt
+        run: ( ( which kdlfmt ) || ( ( which npm && npm i -g kdlfmt ) || ( which cargo && ( cargo binstall kdlfmt || cargo install kdlfmt ) ) || ( which brew &&  brew install hougesen/tap/kdlfmt ) ) || ( echo "Unable to install tool" ) )
       - name: ktfmt
         run: ( ( which ktfmt ) || ( ( which brew &&  brew install ktfmt ) ) || ( echo "Unable to install tool" ) )
       - name: ktlint
@@ -189,6 +217,8 @@ jobs:
         run: ( ( which markdownlint ) || ( ( which npm && npm i -g markdownlint-cli ) ) || ( echo "Unable to install tool" ) )
       - name: markdownlint-cli2
         run: ( ( which markdownlint-cli2 ) || ( ( which npm && npm i -g markdownlint-cli2 ) || ( which brew &&  brew install markdownlint-cli2 ) ) || ( echo "Unable to install tool" ) )
+      - name: mbake
+        run: ( ( which mbake ) || ( ( which pipx && pipx install mbake ) ) || ( echo "Unable to install tool" ) )
       - name: mdsf
         run: ( ( which mdsf ) || ( ( which npm && npm i -g mdsf-cli ) || ( which cargo && ( cargo binstall mdsf || cargo install mdsf ) ) || ( which brew &&  brew install hougesen/tap/mdsf ) ) || ( echo "Unable to install tool" ) )
       - name: mise
@@ -203,20 +233,22 @@ jobs:
         run: ( ( which nixpkgs-fmt ) || ( ( which cargo && ( cargo binstall nixpkgs-fmt || cargo install nixpkgs-fmt ) ) ) || ( echo "Unable to install tool" ) )
       - name: nph
         run: ( ( which nph ) || ( ( which nimble && nimble install nph ) ) || ( echo "Unable to install tool" ) )
-      - name: npm-groovy-lint
-        run: ( ( which npm-groovy-lint ) || ( ( which npm && npm i -g npm-groovy-lint ) ) || ( echo "Unable to install tool" ) )
       - name: ocamlformat
         run: ( ( which ocamlformat ) || ( ( which opam && eval $(opam env) && opam install ocamlformat ) ) || ( echo "Unable to install tool" ) )
       - name: ocp-indent
         run: ( ( which ocp-indent ) || ( ( which apt-get && sudo apt-get install -y ocp-indent ) || ( which opam && eval $(opam env) && opam install ocp-indent ) ) || ( echo "Unable to install tool" ) )
       - name: ormolu
         run: ( ( which ormolu ) || ( ( which brew &&  brew install ormolu ) || ( which apt-get && sudo apt-get install -y ormolu ) || ( which stack && stack install ormolu ) || ( which cabal && cabal install ormolu ) ) || ( echo "Unable to install tool" ) )
+      - name: oxfmt
+        run: ( ( which oxfmt ) || ( ( which npm && npm i -g oxfmt ) ) || ( echo "Unable to install tool" ) )
       - name: oxlint
         run: ( ( which oxlint ) || ( ( which npm && npm i -g oxlint ) ) || ( echo "Unable to install tool" ) )
       - name: perflint
         run: ( ( which perflint ) || ( ( which pipx && pipx install perflint ) ) || ( echo "Unable to install tool" ) )
       - name: prettier
         run: ( ( which prettier ) || ( ( which npm && npm i -g prettier ) ) || ( echo "Unable to install tool" ) )
+      - name: prettierd
+        run: ( ( which prettierd ) || ( ( which npm && npm i -g @fsouza/prettierd ) || ( which brew &&  brew install prettierd ) ) || ( echo "Unable to install tool" ) )
       - name: prisma
         run: ( ( which prisma ) || ( ( which npm && npm i -g prisma ) ) || ( echo "Unable to install tool" ) )
       - name: purs-tidy
@@ -231,10 +263,14 @@ jobs:
         run: ( ( which pyink ) || ( ( which pipx && pipx install pyink ) ) || ( echo "Unable to install tool" ) )
       - name: pylint
         run: ( ( which pylint ) || ( ( which pipx && pipx install pylint ) ) || ( echo "Unable to install tool" ) )
+      - name: pymarkdownlnt
+        run: ( ( which pymarkdownlnt ) || ( ( which pipx && pipx install pymarkdownlnt ) ) || ( echo "Unable to install tool" ) )
+      - name: pyrefly
+        run: ( ( which pyrefly ) || ( ( which pipx && pipx install pyrefly ) ) || ( echo "Unable to install tool" ) )
       - name: pyupgrade
-        run: ( ( which pyupgrade ) || ( ( which pipx && pipx install pyupgrade ) ) || ( echo "Unable to install tool" ) )
+        run: ( ( which pyupgrade ) || ( ( which brew &&  brew install pyupgrade ) || ( which pipx && pipx install pyupgrade ) ) || ( echo "Unable to install tool" ) )
       - name: reorder-python-imports
-        run: ( ( which reorder-python-imports ) || ( ( which pipx && pipx install reorder-python-imports ) ) || ( echo "Unable to install tool" ) )
+        run: ( ( which reorder-python-imports ) || ( ( which brew &&  brew install reorder-python-imports ) || ( which pipx && pipx install reorder-python-imports ) ) || ( echo "Unable to install tool" ) )
       - name: rescript
         run: ( ( which rescript ) || ( ( which npm && npm i -g rescript ) ) || ( echo "Unable to install tool" ) )
       - name: rubocop
@@ -269,8 +305,12 @@ jobs:
         run: ( ( which sqlfluff ) || ( ( which pipx && pipx install sqlfluff ) ) || ( echo "Unable to install tool" ) )
       - name: sqlfmt
         run: ( ( which sqlfmt ) || ( ( which pipx && pipx install shandy-sqlfmt[jinjafmt] ) ) || ( echo "Unable to install tool" ) )
+      - name: sqlint
+        run: ( ( which sqlint ) || ( ( which gem && gem install sqlint ) ) || ( echo "Unable to install tool" ) )
       - name: sqruff
         run: ( ( which sqruff ) || ( ( which cargo && ( cargo binstall sqruff || cargo install sqruff ) ) || ( which pipx && pipx install sqruff ) ) || ( echo "Unable to install tool" ) )
+      - name: squawk
+        run: ( ( which squawk ) || ( ( which npm && npm i -g squawk-cli ) || ( which pipx && pipx install squawk-cli ) ) || ( echo "Unable to install tool" ) )
       - name: standard
         run: ( ( which standard ) || ( ( which npm && npm i -g standard ) ) || ( echo "Unable to install tool" ) )
       - name: standardrb
@@ -281,6 +321,8 @@ jobs:
         run: ( ( which stylish-haskell ) || ( ( which brew &&  brew install stylish-haskell ) || ( which stack && stack install stylish-haskell ) || ( which cabal && cabal install stylish-haskell ) ) || ( echo "Unable to install tool" ) )
       - name: stylua
         run: ( ( which stylua ) || ( ( which npm && npm i -g @johnnymorganz/stylua-bin ) || ( which cargo && ( cargo binstall stylua || cargo install stylua ) ) || ( which brew &&  brew install stylua ) ) || ( echo "Unable to install tool" ) )
+      - name: superhtml
+        run: ( ( which superhtml ) || ( ( which brew &&  brew install superhtml ) ) || ( echo "Unable to install tool" ) )
       - name: swiftformat
         run: ( ( which swiftformat ) || ( ( which brew &&  brew install swiftformat ) ) || ( echo "Unable to install tool" ) )
       - name: taplo
@@ -291,10 +333,16 @@ jobs:
         run: ( ( which tex-fmt ) || ( ( which cargo && ( cargo binstall tex-fmt || cargo install tex-fmt ) ) || ( which brew &&  brew install tex-fmt ) || ( which apt-get && sudo apt-get install -y tex-fmt ) ) || ( echo "Unable to install tool" ) )
       - name: tofu
         run: ( ( which tofu ) || ( ( which brew &&  brew install opentofu ) ) || ( echo "Unable to install tool" ) )
+      - name: tombi
+        run: ( ( which tombi ) || ( ( which pipx && pipx install tombi ) ) || ( echo "Unable to install tool" ) )
       - name: toml-sort
         run: ( ( which toml-sort ) || ( ( which pipx && pipx install toml-sort ) ) || ( echo "Unable to install tool" ) )
       - name: topiary
         run: ( ( which topiary ) || ( ( which cargo && ( cargo binstall topiary-cli || cargo install topiary-cli ) ) ) || ( echo "Unable to install tool" ) )
+      - name: tsp
+        run: ( ( which tsp ) || ( ( which npm && npm i -g @typespec/compiler ) ) || ( echo "Unable to install tool" ) )
+      - name: ty
+        run: ( ( which ty ) || ( ( which pipx && pipx install ty ) ) || ( echo "Unable to install tool" ) )
       - name: typos
         run: ( ( which typos ) || ( ( which cargo && ( cargo binstall typos-cli || cargo install typos-cli ) ) || ( which brew &&  brew install typos-cli ) ) || ( echo "Unable to install tool" ) )
       - name: ufmt
@@ -305,6 +353,8 @@ jobs:
         run: ( ( which unimport ) || ( ( which pipx && pipx install unimport ) ) || ( echo "Unable to install tool" ) )
       - name: usort
         run: ( ( which usort ) || ( ( which pipx && pipx install usort ) ) || ( echo "Unable to install tool" ) )
+      - name: verusfmt
+        run: ( ( which verusfmt ) || ( ( which cargo && ( cargo binstall verusfmt || cargo install verusfmt ) ) ) || ( echo "Unable to install tool" ) )
       - name: vsg
         run: ( ( which vsg ) || ( ( which pipx && pipx install vsg ) ) || ( echo "Unable to install tool" ) )
       - name: wfindent
@@ -333,10 +383,10 @@ jobs:
       - name: Run tests
         run: cargo test
       - name: Generate code coverage
-        run: cargo llvm-cov --all-features --all-targets --locked --lcov --output-path lcov.info
+        run: cargo llvm-cov --all-features --all-targets --workspace --codecov --output-path codecov.json
       - name: Upload code coverage
         uses: codecov/codecov-action@v5
         with:
-          files: lcov.info
+          files: codecov.json
           slug: hougesen/mdsf
           token: ${{ secrets.CODECOV_TOKEN }}
