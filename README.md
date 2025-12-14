@@ -838,7 +838,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 
 <!-- START_SECTION:supported-commands -->
 
-`mdsf` currently supports 375 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
+`mdsf` currently supports 382 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
 
 | Name                         | Command                                                                                 |
 | ---------------------------- | --------------------------------------------------------------------------------------- |
@@ -1021,6 +1021,9 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `luaformatter`               | `lua-format -i $PATH`                                                                   |
 | `luau-analyze`               | `luau-analyze $PATH`                                                                    |
 | `mado:check`                 | `mado check $PATH`                                                                      |
+| `mago:analyze:fix:unsafe`    | `mago analyze --fix --potentially-unsafe --unsafe $PATH`                                |
+| `mago:analyze:fix`           | `mago analyze --fix $PATH`                                                              |
+| `mago:analyze`               | `mago analyze $PATH`                                                                    |
 | `mago:format`                | `mago format $PATH`                                                                     |
 | `mago:lint:fix:unsafe`       | `mago lint --fix --potentially-unsafe --unsafe $PATH`                                   |
 | `mago:lint:fix`              | `mago lint --fix $PATH`                                                                 |
@@ -1127,7 +1130,11 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `rumdl:fmt`                  | `rumdl fmt $PATH`                                                                       |
 | `rune:fmt`                   | `rune fmt $PATH`                                                                        |
 | `runic`                      | `runic --inplace $PATH`                                                                 |
-| `rustfmt`                    | `rustfmt --edition 2021 --quiet $PATH`                                                  |
+| `rustfmt:2015`               | `rustfmt --edition 2015 --quiet $PATH`                                                  |
+| `rustfmt:2018`               | `rustfmt --edition 2018 --quiet $PATH`                                                  |
+| `rustfmt:2021`               | `rustfmt --edition 2021 --quiet $PATH`                                                  |
+| `rustfmt:2024`               | `rustfmt --edition 2024 --quiet $PATH`                                                  |
+| `rustfmt`                    | `rustfmt --edition 2024 --quiet $PATH`                                                  |
 | `rustywind`                  | `rustywind --write $PATH`                                                               |
 | `salt-lint`                  | `salt-lint $PATH`                                                                       |
 | `scalafmt`                   | `scalafmt --quiet --mode any $PATH`                                                     |
