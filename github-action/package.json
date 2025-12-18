@@ -1,6 +1,6 @@
 {
   "name": "setup-mdsf",
-  "version": "0.11.0-next",
+  "version": "0.11.1",
   "description": "Setup mdsf cli in GitHub Actions",
   "main": "src/index.mjs",
   "repository": {
@@ -34,10 +34,10 @@
     "@actions/tool-cache": "^2.0.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.9",
+    "@biomejs/biome": "^2.3.10",
     "@eslint/js": "^9.39.2",
     "@types/node": "22.x",
-    "esbuild": "^0.27.1",
+    "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "globals": "^16.5.0"
   }
