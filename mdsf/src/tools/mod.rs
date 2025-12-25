@@ -2,6 +2,7 @@
 //! THIS FILE IS GENERATED USING CODE - DO NOT EDIT MANUALLY
 //!
 
+pub mod action_validator;
 pub mod actionlint;
 pub mod air_format;
 pub mod alejandra;
@@ -173,6 +174,7 @@ pub mod kdoc_formatter;
 pub mod keep_sorted;
 pub mod ktfmt;
 pub mod ktlint;
+pub mod kube_linter_lint;
 pub mod kulala_fmt_check;
 pub mod kulala_fmt_format;
 pub mod leptosfmt;
@@ -330,6 +332,7 @@ pub mod superhtml_fmt;
 pub mod svlint;
 pub mod swift_format;
 pub mod swiftformat;
+pub mod swiftlint;
 pub mod taplo;
 pub mod tclfmt;
 pub mod tclint;
@@ -388,6 +391,14 @@ pub mod zprint;
 #[derive(serde::Serialize, serde::Deserialize, Hash, Clone, Copy, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 pub enum Tooling {
+    #[serde(rename = "action-validator")]
+    /// Tool to validate GitHub Action and Workflow YAML files
+    ///
+    /// [https://github.com/mpalmer/action-validator](https://github.com/mpalmer/action-validator)
+    ///
+    /// `action-validator $PATH`
+    ActionValidator,
+
     #[serde(rename = "actionlint")]
     /// Static checker for GitHub Actions workflow files
     ///
@@ -1605,7 +1616,7 @@ pub enum Tooling {
     Json5Format,
 
     #[serde(rename = "json_repair")]
-    /// A python module to repair invalid JSON from LLMs
+    /// A module to repair invalid JSON from LLMs
     ///
     /// [https://github.com/mangiucugna/json_repair](https://github.com/mangiucugna/json_repair)
     ///
@@ -1755,6 +1766,14 @@ pub enum Tooling {
     ///
     /// `ktlint --format --log-level=error $PATH`
     Ktlint,
+
+    #[serde(rename = "kube-linter:lint")]
+    /// KubeLinter is a static analysis tool that checks Kubernetes YAML files and Helm charts to ensure the applications represented in them adhere to best practices
+    ///
+    /// [https://github.com/stackrox/kube-linter](https://github.com/stackrox/kube-linter)
+    ///
+    /// `kube-linter lint $PATH`
+    KubeLinterLint,
 
     #[serde(rename = "kulala-fmt:check")]
     /// Check if .http and .rest code is formatted
@@ -3012,6 +3031,14 @@ pub enum Tooling {
     /// `swiftformat --quiet $PATH`
     Swiftformat,
 
+    #[serde(rename = "swiftlint")]
+    /// A tool to enforce Swift style and conventions
+    ///
+    /// [https://github.com/realm/swiftlint](https://github.com/realm/swiftlint)
+    ///
+    /// `swiftlint $PATH`
+    Swiftlint,
+
     #[serde(rename = "taplo")]
     /// A TOML toolkit written in Rust
     ///
@@ -3461,6 +3488,11 @@ impl Tooling {
             fn(std::process::Command, &std::path::Path) -> std::process::Command,
             bool,
         ) = match self {
+            Self::ActionValidator => (
+                &action_validator::COMMANDS,
+                action_validator::set_args,
+                action_validator::IS_STDIN,
+            ),
             Self::Actionlint => (
                 &actionlint::COMMANDS,
                 actionlint::set_args,
@@ -4024,6 +4056,11 @@ impl Tooling {
             ),
             Self::Ktfmt => (&ktfmt::COMMANDS, ktfmt::set_args, ktfmt::IS_STDIN),
             Self::Ktlint => (&ktlint::COMMANDS, ktlint::set_args, ktlint::IS_STDIN),
+            Self::KubeLinterLint => (
+                &kube_linter_lint::COMMANDS,
+                kube_linter_lint::set_args,
+                kube_linter_lint::IS_STDIN,
+            ),
             Self::KulalaFmtCheck => (
                 &kulala_fmt_check::COMMANDS,
                 kulala_fmt_check::set_args,
@@ -4561,6 +4598,11 @@ impl Tooling {
                 swiftformat::set_args,
                 swiftformat::IS_STDIN,
             ),
+            Self::Swiftlint => (
+                &swiftlint::COMMANDS,
+                swiftlint::set_args,
+                swiftlint::IS_STDIN,
+            ),
             Self::Taplo => (&taplo::COMMANDS, taplo::set_args, taplo::IS_STDIN),
             Self::Tclfmt => (&tclfmt::COMMANDS, tclfmt::set_args, tclfmt::IS_STDIN),
             Self::Tclint => (&tclint::COMMANDS, tclint::set_args, tclint::IS_STDIN),
@@ -4714,6 +4756,7 @@ impl AsRef<str> for Tooling {
     #[inline]
     fn as_ref(&self) -> &str {
         match self {
+            Self::ActionValidator => "action-validator",
             Self::Actionlint => "actionlint",
             Self::AirFormat => "air:format",
             Self::Alejandra => "alejandra",
@@ -4885,6 +4928,7 @@ impl AsRef<str> for Tooling {
             Self::KeepSorted => "keep-sorted",
             Self::Ktfmt => "ktfmt",
             Self::Ktlint => "ktlint",
+            Self::KubeLinterLint => "kube-linter:lint",
             Self::KulalaFmtCheck => "kulala-fmt:check",
             Self::KulalaFmtFormat => "kulala-fmt:format",
             Self::Leptosfmt => "leptosfmt",
@@ -5042,6 +5086,7 @@ impl AsRef<str> for Tooling {
             Self::Svlint => "svlint",
             Self::SwiftFormat => "swift-format",
             Self::Swiftformat => "swiftformat",
+            Self::Swiftlint => "swiftlint",
             Self::Taplo => "taplo",
             Self::Tclfmt => "tclfmt",
             Self::Tclint => "tclint",
@@ -5112,6 +5157,7 @@ mod test_tooling {
     #[allow(clippy::too_many_lines)]
     #[test]
     fn value_is_reversible() -> Result<(), serde_json::Error> {
+        assert_eq!(Tooling::ActionValidator, reverse(Tooling::ActionValidator)?);
         assert_eq!(Tooling::Actionlint, reverse(Tooling::Actionlint)?);
         assert_eq!(Tooling::AirFormat, reverse(Tooling::AirFormat)?);
         assert_eq!(Tooling::Alejandra, reverse(Tooling::Alejandra)?);
@@ -5313,6 +5359,7 @@ mod test_tooling {
         assert_eq!(Tooling::KeepSorted, reverse(Tooling::KeepSorted)?);
         assert_eq!(Tooling::Ktfmt, reverse(Tooling::Ktfmt)?);
         assert_eq!(Tooling::Ktlint, reverse(Tooling::Ktlint)?);
+        assert_eq!(Tooling::KubeLinterLint, reverse(Tooling::KubeLinterLint)?);
         assert_eq!(Tooling::KulalaFmtCheck, reverse(Tooling::KulalaFmtCheck)?);
         assert_eq!(Tooling::KulalaFmtFormat, reverse(Tooling::KulalaFmtFormat)?);
         assert_eq!(Tooling::Leptosfmt, reverse(Tooling::Leptosfmt)?);
@@ -5491,6 +5538,7 @@ mod test_tooling {
         assert_eq!(Tooling::Svlint, reverse(Tooling::Svlint)?);
         assert_eq!(Tooling::SwiftFormat, reverse(Tooling::SwiftFormat)?);
         assert_eq!(Tooling::Swiftformat, reverse(Tooling::Swiftformat)?);
+        assert_eq!(Tooling::Swiftlint, reverse(Tooling::Swiftlint)?);
         assert_eq!(Tooling::Taplo, reverse(Tooling::Taplo)?);
         assert_eq!(Tooling::Tclfmt, reverse(Tooling::Tclfmt)?);
         assert_eq!(Tooling::Tclint, reverse(Tooling::Tclint)?);

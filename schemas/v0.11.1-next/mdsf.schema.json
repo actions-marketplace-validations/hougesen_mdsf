@@ -197,6 +197,11 @@
     "Tooling": {
       "oneOf": [
         {
+          "description": "Tool to validate GitHub Action and Workflow YAML files\n\n[https://github.com/mpalmer/action-validator](https://github.com/mpalmer/action-validator)\n\n`action-validator $PATH`",
+          "type": "string",
+          "const": "action-validator"
+        },
+        {
           "description": "Static checker for GitHub Actions workflow files\n\n[https://github.com/rhysd/actionlint](https://github.com/rhysd/actionlint)\n\n`actionlint $PATH`",
           "type": "string",
           "const": "actionlint"
@@ -957,7 +962,7 @@
           "const": "json5format"
         },
         {
-          "description": "A python module to repair invalid JSON from LLMs\n\n[https://github.com/mangiucugna/json_repair](https://github.com/mangiucugna/json_repair)\n\n`json_repair -i $PATH`",
+          "description": "A module to repair invalid JSON from LLMs\n\n[https://github.com/mangiucugna/json_repair](https://github.com/mangiucugna/json_repair)\n\n`json_repair -i $PATH`",
           "type": "string",
           "const": "json_repair"
         },
@@ -1050,6 +1055,11 @@
           "description": "An anti-bikeshedding Kotlin linter with built-in formatter\n\n[https://github.com/pinterest/ktlint](https://github.com/pinterest/ktlint)\n\n`ktlint --format --log-level=error $PATH`",
           "type": "string",
           "const": "ktlint"
+        },
+        {
+          "description": "KubeLinter is a static analysis tool that checks Kubernetes YAML files and Helm charts to ensure the applications represented in them adhere to best practices\n\n[https://github.com/stackrox/kube-linter](https://github.com/stackrox/kube-linter)\n\n`kube-linter lint $PATH`",
+          "type": "string",
+          "const": "kube-linter:lint"
         },
         {
           "description": "Check if .http and .rest code is formatted\n\n[https://github.com/mistweaverco/kulala-fmt](https://github.com/mistweaverco/kulala-fmt)\n\n`kulala-fmt check $PATH`",
@@ -1835,6 +1845,11 @@
           "description": "A command-line tool and Xcode Extension for formatting Swift code\n\n[https://github.com/nicklockwood/swiftformat](https://github.com/nicklockwood/swiftformat)\n\n`swiftformat --quiet $PATH`",
           "type": "string",
           "const": "swiftformat"
+        },
+        {
+          "description": "A tool to enforce Swift style and conventions\n\n[https://github.com/realm/swiftlint](https://github.com/realm/swiftlint)\n\n`swiftlint $PATH`",
+          "type": "string",
+          "const": "swiftlint"
         },
         {
           "description": "A TOML toolkit written in Rust\n\n[https://github.com/tamasfe/taplo](https://github.com/tamasfe/taplo)\n\n`taplo format $PATH`",
