@@ -13,6 +13,7 @@ pub mod api_linter;
 pub mod asmfmt;
 pub mod astyle;
 pub mod atlas_fmt;
+pub mod atlas_lint;
 pub mod auto_optional;
 pub mod autocorrect;
 pub mod autoflake;
@@ -77,7 +78,8 @@ pub mod deadnix;
 pub mod deno_fmt;
 pub mod deno_lint;
 pub mod dfmt;
-pub mod dhall;
+pub mod dhall_format;
+pub mod dhall_lint;
 pub mod djade;
 pub mod djlint;
 pub mod docformatter;
@@ -121,6 +123,7 @@ pub mod gci;
 pub mod gdformat;
 pub mod gdlint;
 pub mod gersemi;
+pub mod ghokin_check;
 pub mod ghokin_fmt;
 pub mod gleam_format;
 pub mod gluon_fmt;
@@ -353,6 +356,8 @@ pub mod tryceratops;
 pub mod ts_standard;
 pub mod tsp_format;
 pub mod tsqllint;
+pub mod twig_cs_fixer_check;
+pub mod twig_cs_fixer_fix;
 pub mod twig_cs_fixer_lint;
 pub mod twigcs;
 pub mod ty;
@@ -386,6 +391,7 @@ pub mod yard_lint;
 pub mod yew_fmt;
 pub mod yq;
 pub mod zig_fmt;
+pub mod ziggy_check;
 pub mod ziggy_fmt;
 pub mod zprint;
 
@@ -479,6 +485,14 @@ pub enum Tooling {
     ///
     /// `atlas schema fmt $PATH`
     AtlasFmt,
+
+    #[serde(rename = "atlas:lint")]
+    /// Lints Atlas HCL files
+    ///
+    /// [https://atlasgo.io/cli-reference#atlas-migrate-lint](https://atlasgo.io/cli-reference#atlas-migrate-lint)
+    ///
+    /// `atlas schema lint $PATH`
+    AtlasLint,
 
     #[serde(rename = "auto-optional")]
     /// Makes typed arguments Optional when the default argument is None
@@ -992,13 +1006,21 @@ pub enum Tooling {
     /// `dfmt -i $PATH`
     Dfmt,
 
-    #[serde(rename = "dhall")]
+    #[serde(rename = "dhall:format")]
     /// Format Dhall files
     ///
     /// [https://dhall-lang.org](https://dhall-lang.org)
     ///
     /// `dhall format $PATH`
-    Dhall,
+    DhallFormat,
+
+    #[serde(rename = "dhall:lint")]
+    /// Lint Dhall files
+    ///
+    /// [https://dhall-lang.org](https://dhall-lang.org)
+    ///
+    /// `dhall lint $PATH`
+    DhallLint,
 
     #[serde(rename = "djade")]
     /// A Django template formatter
@@ -1343,6 +1365,14 @@ pub enum Tooling {
     ///
     /// `gersemi -i -q $PATH`
     Gersemi,
+
+    #[serde(rename = "ghokin:check")]
+    /// Parallelized formatter with no external dependencies for gherkin (cucumber, behat...)
+    ///
+    /// [https://github.com/antham/ghokin](https://github.com/antham/ghokin)
+    ///
+    /// `ghokin check $PATH`
+    GhokinCheck,
 
     #[serde(rename = "ghokin:fmt")]
     /// Parallelized formatter with no external dependencies for gherkin (cucumber, behat...)
@@ -3200,12 +3230,28 @@ pub enum Tooling {
     /// `tsqllint --fix $PATH`
     Tsqllint,
 
+    #[serde(rename = "twig-cs-fixer:check")]
+    /// A tool to automatically fix Twig Coding Standards issues
+    ///
+    /// [https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)
+    ///
+    /// `twig-cs-fixer check $PATH --no-interaction`
+    TwigCsFixerCheck,
+
+    #[serde(rename = "twig-cs-fixer:fix")]
+    /// A tool to automatically fix Twig Coding Standards issues
+    ///
+    /// [https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)
+    ///
+    /// `twig-cs-fixer fix $PATH --no-interaction`
+    TwigCsFixerFix,
+
     #[serde(rename = "twig-cs-fixer:lint")]
     /// A tool to automatically fix Twig Coding Standards issues
     ///
     /// [https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)
     ///
-    /// `twig-cs-fixer lint $PATH --fix --no-interaction --quiet`
+    /// `twig-cs-fixer lint $PATH --no-interaction`
     TwigCsFixerLint,
 
     #[serde(rename = "twigcs")]
@@ -3464,6 +3510,14 @@ pub enum Tooling {
     /// `zig fmt $PATH`
     ZigFmt,
 
+    #[serde(rename = "ziggy:check")]
+    /// Checks Ziggy Documents for schema adherence
+    ///
+    /// [https://ziggy-lang.io/documentation/ziggy-check](https://ziggy-lang.io/documentation/ziggy-check)
+    ///
+    /// `ziggy check $PATH`
+    ZiggyCheck,
+
     #[serde(rename = "ziggy:fmt")]
     /// Formats Ziggy documents and Ziggy schemas
     ///
@@ -3535,6 +3589,11 @@ impl Tooling {
                 &atlas_fmt::COMMANDS,
                 atlas_fmt::set_args,
                 atlas_fmt::IS_STDIN,
+            ),
+            Self::AtlasLint => (
+                &atlas_lint::COMMANDS,
+                atlas_lint::set_args,
+                atlas_lint::IS_STDIN,
             ),
             Self::AutoOptional => (
                 &auto_optional::COMMANDS,
@@ -3760,7 +3819,16 @@ impl Tooling {
                 deno_lint::IS_STDIN,
             ),
             Self::Dfmt => (&dfmt::COMMANDS, dfmt::set_args, dfmt::IS_STDIN),
-            Self::Dhall => (&dhall::COMMANDS, dhall::set_args, dhall::IS_STDIN),
+            Self::DhallFormat => (
+                &dhall_format::COMMANDS,
+                dhall_format::set_args,
+                dhall_format::IS_STDIN,
+            ),
+            Self::DhallLint => (
+                &dhall_lint::COMMANDS,
+                dhall_lint::set_args,
+                dhall_lint::IS_STDIN,
+            ),
             Self::Djade => (&djade::COMMANDS, djade::set_args, djade::IS_STDIN),
             Self::Djlint => (&djlint::COMMANDS, djlint::set_args, djlint::IS_STDIN),
             Self::Docformatter => (
@@ -3900,6 +3968,11 @@ impl Tooling {
             Self::Gdformat => (&gdformat::COMMANDS, gdformat::set_args, gdformat::IS_STDIN),
             Self::Gdlint => (&gdlint::COMMANDS, gdlint::set_args, gdlint::IS_STDIN),
             Self::Gersemi => (&gersemi::COMMANDS, gersemi::set_args, gersemi::IS_STDIN),
+            Self::GhokinCheck => (
+                &ghokin_check::COMMANDS,
+                ghokin_check::set_args,
+                ghokin_check::IS_STDIN,
+            ),
             Self::GhokinFmt => (
                 &ghokin_fmt::COMMANDS,
                 ghokin_fmt::set_args,
@@ -4676,6 +4749,16 @@ impl Tooling {
                 tsp_format::IS_STDIN,
             ),
             Self::Tsqllint => (&tsqllint::COMMANDS, tsqllint::set_args, tsqllint::IS_STDIN),
+            Self::TwigCsFixerCheck => (
+                &twig_cs_fixer_check::COMMANDS,
+                twig_cs_fixer_check::set_args,
+                twig_cs_fixer_check::IS_STDIN,
+            ),
+            Self::TwigCsFixerFix => (
+                &twig_cs_fixer_fix::COMMANDS,
+                twig_cs_fixer_fix::set_args,
+                twig_cs_fixer_fix::IS_STDIN,
+            ),
             Self::TwigCsFixerLint => (
                 &twig_cs_fixer_lint::COMMANDS,
                 twig_cs_fixer_lint::set_args,
@@ -4741,6 +4824,11 @@ impl Tooling {
             Self::YewFmt => (&yew_fmt::COMMANDS, yew_fmt::set_args, yew_fmt::IS_STDIN),
             Self::Yq => (&yq::COMMANDS, yq::set_args, yq::IS_STDIN),
             Self::ZigFmt => (&zig_fmt::COMMANDS, zig_fmt::set_args, zig_fmt::IS_STDIN),
+            Self::ZiggyCheck => (
+                &ziggy_check::COMMANDS,
+                ziggy_check::set_args,
+                ziggy_check::IS_STDIN,
+            ),
             Self::ZiggyFmt => (
                 &ziggy_fmt::COMMANDS,
                 ziggy_fmt::set_args,
@@ -4777,6 +4865,7 @@ impl AsRef<str> for Tooling {
             Self::Asmfmt => "asmfmt",
             Self::Astyle => "astyle",
             Self::AtlasFmt => "atlas:fmt",
+            Self::AtlasLint => "atlas:lint",
             Self::AutoOptional => "auto-optional",
             Self::Autocorrect => "autocorrect",
             Self::Autoflake => "autoflake",
@@ -4841,7 +4930,8 @@ impl AsRef<str> for Tooling {
             Self::DenoFmt => "deno:fmt",
             Self::DenoLint => "deno:lint",
             Self::Dfmt => "dfmt",
-            Self::Dhall => "dhall",
+            Self::DhallFormat => "dhall:format",
+            Self::DhallLint => "dhall:lint",
             Self::Djade => "djade",
             Self::Djlint => "djlint",
             Self::Docformatter => "docformatter",
@@ -4885,6 +4975,7 @@ impl AsRef<str> for Tooling {
             Self::Gdformat => "gdformat",
             Self::Gdlint => "gdlint",
             Self::Gersemi => "gersemi",
+            Self::GhokinCheck => "ghokin:check",
             Self::GhokinFmt => "ghokin:fmt",
             Self::GleamFormat => "gleam:format",
             Self::GluonFmt => "gluon:fmt",
@@ -5117,6 +5208,8 @@ impl AsRef<str> for Tooling {
             Self::TsStandard => "ts-standard",
             Self::TspFormat => "tsp:format",
             Self::Tsqllint => "tsqllint",
+            Self::TwigCsFixerCheck => "twig-cs-fixer:check",
+            Self::TwigCsFixerFix => "twig-cs-fixer:fix",
             Self::TwigCsFixerLint => "twig-cs-fixer:lint",
             Self::Twigcs => "twigcs",
             Self::Ty => "ty",
@@ -5150,6 +5243,7 @@ impl AsRef<str> for Tooling {
             Self::YewFmt => "yew-fmt",
             Self::Yq => "yq",
             Self::ZigFmt => "zig:fmt",
+            Self::ZiggyCheck => "ziggy:check",
             Self::ZiggyFmt => "ziggy:fmt",
             Self::Zprint => "zprint",
         }
@@ -5179,6 +5273,7 @@ mod test_tooling {
         assert_eq!(Tooling::Asmfmt, reverse(Tooling::Asmfmt)?);
         assert_eq!(Tooling::Astyle, reverse(Tooling::Astyle)?);
         assert_eq!(Tooling::AtlasFmt, reverse(Tooling::AtlasFmt)?);
+        assert_eq!(Tooling::AtlasLint, reverse(Tooling::AtlasLint)?);
         assert_eq!(Tooling::AutoOptional, reverse(Tooling::AutoOptional)?);
         assert_eq!(Tooling::Autocorrect, reverse(Tooling::Autocorrect)?);
         assert_eq!(Tooling::Autoflake, reverse(Tooling::Autoflake)?);
@@ -5249,7 +5344,8 @@ mod test_tooling {
         assert_eq!(Tooling::DenoFmt, reverse(Tooling::DenoFmt)?);
         assert_eq!(Tooling::DenoLint, reverse(Tooling::DenoLint)?);
         assert_eq!(Tooling::Dfmt, reverse(Tooling::Dfmt)?);
-        assert_eq!(Tooling::Dhall, reverse(Tooling::Dhall)?);
+        assert_eq!(Tooling::DhallFormat, reverse(Tooling::DhallFormat)?);
+        assert_eq!(Tooling::DhallLint, reverse(Tooling::DhallLint)?);
         assert_eq!(Tooling::Djade, reverse(Tooling::Djade)?);
         assert_eq!(Tooling::Djlint, reverse(Tooling::Djlint)?);
         assert_eq!(Tooling::Docformatter, reverse(Tooling::Docformatter)?);
@@ -5305,6 +5401,7 @@ mod test_tooling {
         assert_eq!(Tooling::Gdformat, reverse(Tooling::Gdformat)?);
         assert_eq!(Tooling::Gdlint, reverse(Tooling::Gdlint)?);
         assert_eq!(Tooling::Gersemi, reverse(Tooling::Gersemi)?);
+        assert_eq!(Tooling::GhokinCheck, reverse(Tooling::GhokinCheck)?);
         assert_eq!(Tooling::GhokinFmt, reverse(Tooling::GhokinFmt)?);
         assert_eq!(Tooling::GleamFormat, reverse(Tooling::GleamFormat)?);
         assert_eq!(Tooling::GluonFmt, reverse(Tooling::GluonFmt)?);
@@ -5573,6 +5670,11 @@ mod test_tooling {
         assert_eq!(Tooling::TsStandard, reverse(Tooling::TsStandard)?);
         assert_eq!(Tooling::TspFormat, reverse(Tooling::TspFormat)?);
         assert_eq!(Tooling::Tsqllint, reverse(Tooling::Tsqllint)?);
+        assert_eq!(
+            Tooling::TwigCsFixerCheck,
+            reverse(Tooling::TwigCsFixerCheck)?
+        );
+        assert_eq!(Tooling::TwigCsFixerFix, reverse(Tooling::TwigCsFixerFix)?);
         assert_eq!(Tooling::TwigCsFixerLint, reverse(Tooling::TwigCsFixerLint)?);
         assert_eq!(Tooling::Twigcs, reverse(Tooling::Twigcs)?);
         assert_eq!(Tooling::Ty, reverse(Tooling::Ty)?);
@@ -5606,6 +5708,7 @@ mod test_tooling {
         assert_eq!(Tooling::YewFmt, reverse(Tooling::YewFmt)?);
         assert_eq!(Tooling::Yq, reverse(Tooling::Yq)?);
         assert_eq!(Tooling::ZigFmt, reverse(Tooling::ZigFmt)?);
+        assert_eq!(Tooling::ZiggyCheck, reverse(Tooling::ZiggyCheck)?);
         assert_eq!(Tooling::ZiggyFmt, reverse(Tooling::ZiggyFmt)?);
         assert_eq!(Tooling::Zprint, reverse(Tooling::Zprint)?);
 

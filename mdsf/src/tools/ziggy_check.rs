@@ -9,15 +9,11 @@ pub fn set_args(
     mut cmd: std::process::Command,
     file_path: &std::path::Path,
 ) -> std::process::Command {
-    cmd.arg("lint");
+    cmd.arg("check");
     cmd.arg(file_path);
-    cmd.arg("--no-interaction");
     cmd
 }
 
-pub const COMMANDS: [CommandType; 2] = [
-    CommandType::PhpVendor("twig-cs-fixer"),
-    CommandType::Direct("twig-cs-fixer"),
-];
+pub const COMMANDS: [CommandType; 1] = [CommandType::Direct("ziggy")];
 
 pub const IS_STDIN: bool = false;

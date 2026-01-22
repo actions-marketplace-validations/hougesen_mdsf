@@ -563,7 +563,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [deadnix](https://github.com/astro/deadnix)                                          | Scan Nix files for dead code                                                                                                                                   | `linter`              | `nix`                                                                                                                             |
 | [deno](https://docs.deno.com/runtime/reference/cli)                                  | Formatter and linter for JavaScript and TypeScript                                                                                                             | `formatter`, `linter` | `javascript`, `json`, `typescript`                                                                                                |
 | [dfmt](https://github.com/dlang-community/dfmt)                                      | Dfmt is a formatter for D source code                                                                                                                          | `formatter`           | `d`                                                                                                                               |
-| [dhall](https://dhall-lang.org)                                                      | Format Dhall files                                                                                                                                             | `formatter`           | `dhall`                                                                                                                           |
+| [dhall](https://dhall-lang.org)                                                      | Tools for the Dhall configuration language                                                                                                                     | `formatter`           | `dhall`                                                                                                                           |
 | [djade](https://github.com/adamchainz/djade)                                         | A Django template formatter                                                                                                                                    | `formatter`           | `django`, `python`                                                                                                                |
 | [djlint](https://www.djlint.com)                                                     | Lint & Format HTML Templates                                                                                                                                   | `formatter`, `linter` | `handlebars`, `html`, `jinja`, `mustache`, `nunjucks`, `twig`                                                                     |
 | [docformatter](https://github.com/pycqa/docformatter)                                | Formats docstrings to follow PEP 257                                                                                                                           | `formatter`           | `python`                                                                                                                          |
@@ -592,7 +592,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [flynt](https://github.com/ikamensh/flynt)                                           | A tool to automatically convert old string literal formatting to f-strings                                                                                     | `formatter`           | `python`                                                                                                                          |
 | [fnlfmt](https://git.sr.ht/~technomancy/fnlfmt)                                      | A formatter for Fennel code                                                                                                                                    | `formatter`           | `fennel`                                                                                                                          |
 | [forge](https://github.com/foundry-rs/foundry)                                       | Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust                                                   | `formatter`           | `solidity`                                                                                                                        |
-| [fortitude](https://github.com/plasmafair/fortitude)                                 | A Fortran linter                                                                                                                                               | `linter`              |                                                                                                                                   |
+| [fortitude](https://github.com/plasmafair/fortitude)                                 | A Fortran linter                                                                                                                                               | `linter`              | `fortran`                                                                                                                         |
 | [fortran-linter](https://github.com/cphyc/fortran-linter)                            | A simple fortran syntax checker, including automatic fixing of the code                                                                                        | `formatter`, `linter` | `fortran`                                                                                                                         |
 | [fourmolu](https://github.com/fourmolu/fourmolu)                                     | A fourk of ormolu that uses four space indentation and allows arbitrary configuration                                                                          | `formatter`           | `haskell`                                                                                                                         |
 | [fprettify](https://github.com/fortran-lang/fprettify)                               | Auto-formatter for modern Fortran source code                                                                                                                  | `formatter`           | `fortran`                                                                                                                         |
@@ -842,7 +842,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 
 <!-- START_SECTION:supported-commands -->
 
-`mdsf` currently supports 386 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
+`mdsf` currently supports 392 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
 
 | Name                         | Command                                                                                 |
 | ---------------------------- | --------------------------------------------------------------------------------------- |
@@ -857,6 +857,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `asmfmt`                     | `asmfmt -w $PATH`                                                                       |
 | `astyle`                     | `astyle --quiet $PATH`                                                                  |
 | `atlas:fmt`                  | `atlas schema fmt $PATH`                                                                |
+| `atlas:lint`                 | `atlas schema lint $PATH`                                                               |
 | `auto-optional`              | `auto-optional $PATH`                                                                   |
 | `autocorrect`                | `autocorrect --fix $PATH`                                                               |
 | `autoflake`                  | `autoflake --quiet --in-place $PATH`                                                    |
@@ -921,7 +922,8 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `deno:fmt`                   | `deno fmt --quiet $PATH`                                                                |
 | `deno:lint`                  | `deno lint --fix $PATH`                                                                 |
 | `dfmt`                       | `dfmt -i $PATH`                                                                         |
-| `dhall`                      | `dhall format $PATH`                                                                    |
+| `dhall:format`               | `dhall format $PATH`                                                                    |
+| `dhall:lint`                 | `dhall lint $PATH`                                                                      |
 | `djade`                      | `djade $PATH`                                                                           |
 | `djlint`                     | `djlint $PATH --reformat`                                                               |
 | `docformatter`               | `docformatter --in-place $PATH`                                                         |
@@ -965,6 +967,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `gdformat`                   | `gdformat $PATH`                                                                        |
 | `gdlint`                     | `gdlint $PATH`                                                                          |
 | `gersemi`                    | `gersemi -i -q $PATH`                                                                   |
+| `ghokin:check`               | `ghokin check $PATH`                                                                    |
 | `ghokin:fmt`                 | `ghokin fmt replace $PATH`                                                              |
 | `gleam:format`               | `gleam format $PATH`                                                                    |
 | `gluon:fmt`                  | `gluon fmt $PATH`                                                                       |
@@ -1197,7 +1200,9 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `ts-standard`                | `ts-standard --fix $PATH`                                                               |
 | `tsp:format`                 | `tsp format $PATH`                                                                      |
 | `tsqllint`                   | `tsqllint --fix $PATH`                                                                  |
-| `twig-cs-fixer:lint`         | `twig-cs-fixer lint $PATH --fix --no-interaction --quiet`                               |
+| `twig-cs-fixer:check`        | `twig-cs-fixer check $PATH --no-interaction`                                            |
+| `twig-cs-fixer:fix`          | `twig-cs-fixer fix $PATH --no-interaction`                                              |
+| `twig-cs-fixer:lint`         | `twig-cs-fixer lint $PATH --no-interaction`                                             |
 | `twigcs`                     | `twigcs $PATH`                                                                          |
 | `ty`                         | `ty check $PATH`                                                                        |
 | `typos`                      | `typos -w --no-ignore --hidden $PATH`                                                   |
@@ -1230,6 +1235,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `yew-fmt`                    | `yew-fmt --edition 2021 $PATH`                                                          |
 | `yq`                         | `yq --inplace $PATH`                                                                    |
 | `zig:fmt`                    | `zig fmt $PATH`                                                                         |
+| `ziggy:check`                | `ziggy check $PATH`                                                                     |
 | `ziggy:fmt`                  | `ziggy fmt $PATH`                                                                       |
 | `zprint`                     | `zprint -w $PATH`                                                                       |
 

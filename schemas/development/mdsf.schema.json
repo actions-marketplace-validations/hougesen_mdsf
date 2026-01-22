@@ -252,6 +252,11 @@
           "const": "atlas:fmt"
         },
         {
+          "description": "Lints Atlas HCL files\n\n[https://atlasgo.io/cli-reference#atlas-migrate-lint](https://atlasgo.io/cli-reference#atlas-migrate-lint)\n\n`atlas schema lint $PATH`",
+          "type": "string",
+          "const": "atlas:lint"
+        },
+        {
           "description": "Makes typed arguments Optional when the default argument is None\n\n[https://github.com/luttik/auto-optional](https://github.com/luttik/auto-optional)\n\n`auto-optional $PATH`",
           "type": "string",
           "const": "auto-optional"
@@ -574,7 +579,12 @@
         {
           "description": "Format Dhall files\n\n[https://dhall-lang.org](https://dhall-lang.org)\n\n`dhall format $PATH`",
           "type": "string",
-          "const": "dhall"
+          "const": "dhall:format"
+        },
+        {
+          "description": "Lint Dhall files\n\n[https://dhall-lang.org](https://dhall-lang.org)\n\n`dhall lint $PATH`",
+          "type": "string",
+          "const": "dhall:lint"
         },
         {
           "description": "A Django template formatter\n\n[https://github.com/adamchainz/djade](https://github.com/adamchainz/djade)\n\n`djade $PATH`",
@@ -790,6 +800,11 @@
           "description": "A formatter to make your CMake code the real treasure\n\n[https://github.com/blankspruce/gersemi](https://github.com/blankspruce/gersemi)\n\n`gersemi -i -q $PATH`",
           "type": "string",
           "const": "gersemi"
+        },
+        {
+          "description": "Parallelized formatter with no external dependencies for gherkin (cucumber, behat...)\n\n[https://github.com/antham/ghokin](https://github.com/antham/ghokin)\n\n`ghokin check $PATH`",
+          "type": "string",
+          "const": "ghokin:check"
         },
         {
           "description": "Parallelized formatter with no external dependencies for gherkin (cucumber, behat...)\n\n[https://github.com/antham/ghokin](https://github.com/antham/ghokin)\n\n`ghokin fmt replace $PATH`",
@@ -1952,7 +1967,17 @@
           "const": "tsqllint"
         },
         {
-          "description": "A tool to automatically fix Twig Coding Standards issues\n\n[https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)\n\n`twig-cs-fixer lint $PATH --fix --no-interaction --quiet`",
+          "description": "A tool to automatically fix Twig Coding Standards issues\n\n[https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)\n\n`twig-cs-fixer check $PATH --no-interaction`",
+          "type": "string",
+          "const": "twig-cs-fixer:check"
+        },
+        {
+          "description": "A tool to automatically fix Twig Coding Standards issues\n\n[https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)\n\n`twig-cs-fixer fix $PATH --no-interaction`",
+          "type": "string",
+          "const": "twig-cs-fixer:fix"
+        },
+        {
+          "description": "A tool to automatically fix Twig Coding Standards issues\n\n[https://github.com/vincentlanglet/twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)\n\n`twig-cs-fixer lint $PATH --no-interaction`",
           "type": "string",
           "const": "twig-cs-fixer:lint"
         },
@@ -2115,6 +2140,11 @@
           "description": "Reformat Zig source into canonical form\n\n[https://ziglang.org](https://ziglang.org)\n\n`zig fmt $PATH`",
           "type": "string",
           "const": "zig:fmt"
+        },
+        {
+          "description": "Checks Ziggy Documents for schema adherence\n\n[https://ziggy-lang.io/documentation/ziggy-check](https://ziggy-lang.io/documentation/ziggy-check)\n\n`ziggy check $PATH`",
+          "type": "string",
+          "const": "ziggy:check"
         },
         {
           "description": "Formats Ziggy documents and Ziggy schemas\n\n[https://ziggy-lang.io/documentation/ziggy-fmt](https://ziggy-lang.io/documentation/ziggy-fmt)\n\n`ziggy fmt $PATH`",
