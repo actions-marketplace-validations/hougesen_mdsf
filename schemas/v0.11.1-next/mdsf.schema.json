@@ -14,6 +14,9 @@
         "type": "string"
       }
     },
+    "files": {
+      "$ref": "#/$defs/MdsfConfigFiles"
+    },
     "format_finished_document": {
       "description": "Run the selected markdown tools on the finished output.\n\nDefault: `false`",
       "type": "boolean"
@@ -83,6 +86,20 @@
         }
       },
       "required": ["binary", "arguments"]
+    },
+    "MdsfConfigFiles": {
+      "type": "object",
+      "properties": {
+        "extensions": {
+          "description": "File extensions that should be formatted using `mdsf`",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": ["extensions"]
     },
     "MdsfConfigRunners": {
       "type": "object",
@@ -657,7 +674,7 @@
           "const": "duster:lint"
         },
         {
-          "description": "Format `rsx!` snippets in Rust files.\n\n[https://github.com/dioxuslabs/dioxus](https://github.com/dioxuslabs/dioxus)\n\n`dx fmt --all-code --file $PATH`",
+          "description": "Format `rsx!` snippets in Rust files\n\n[https://github.com/dioxuslabs/dioxus](https://github.com/dioxuslabs/dioxus)\n\n`dx fmt --all-code --file $PATH`",
           "type": "string",
           "const": "dx:fmt"
         },
@@ -947,7 +964,7 @@
           "const": "isort"
         },
         {
-          "description": "A formatter for Janet code.\n\n[https://github.com/janet-lang/spork](https://github.com/janet-lang/spork)\n\n`janet-format`",
+          "description": "A formatter for Janet code\n\n[https://github.com/janet-lang/spork](https://github.com/janet-lang/spork)\n\n`janet-format`",
           "type": "string",
           "const": "janet-format"
         },
@@ -1392,7 +1409,7 @@
           "const": "php-cs-fixer:fix"
         },
         {
-          "description": "PHP Code Beautifier and Fixer fixes violations of a defined coding standard\n\n[https://phpqa.io/projects/phpcbf.html](https://phpqa.io/projects/phpcbf.html)\n\n`phpcbf $PATH`",
+          "description": "PHP Code Beautifier and Fixer fixes violations of a defined coding standard\n\n[https://github.com/phpcsstandards/php_codesniffer](https://github.com/phpcsstandards/php_codesniffer)\n\n`phpcbf $PATH`",
           "type": "string",
           "const": "phpcbf"
         },
@@ -1542,7 +1559,7 @@
           "const": "qmlformat"
         },
         {
-          "description": "qmllint is a tool shipped with Qt, that verifies the syntatic validity of QML files\n\n[https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html](https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html)\n\n`qmllint $PATH`",
+          "description": "qmllint is a tool shipped with Qt, that verifies the syntactic validity of QML files\n\n[https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html](https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html)\n\n`qmllint $PATH`",
           "type": "string",
           "const": "qmllint"
         },
@@ -1987,6 +2004,11 @@
           "const": "twigcs"
         },
         {
+          "description": "txtpbfmt parses, edits and formats text proto files in a way that preserves comments\n\n[https://github.com/protocolbuffers/txtpbfmt](https://github.com/protocolbuffers/txtpbfmt)\n\n`txtpbfmt $PATH`",
+          "type": "string",
+          "const": "txtpbfmt"
+        },
+        {
           "description": "An extremely fast Python type checker written in Rust\n\n[https://github.com/astral-sh/ty](https://github.com/astral-sh/ty)\n\n`ty check $PATH`",
           "type": "string",
           "const": "ty"
@@ -2155,6 +2177,26 @@
           "description": "Beautifully format Clojure and Clojurescript source code and s-expressions\n\n[https://github.com/kkinnear/zprint](https://github.com/kkinnear/zprint)\n\n`zprint -w $PATH`",
           "type": "string",
           "const": "zprint"
+        },
+        {
+          "description": "Linter for Zshell scripting language\n\n[https://github.com/psprint/zsh-sweep](https://github.com/psprint/zsh-sweep)\n\n`zsweep --auto $PATH`",
+          "type": "string",
+          "const": "zsweep"
+        },
+        {
+          "description": "Python Type Checker\n\n[https://github.com/zubanls/zuban](https://github.com/zubanls/zuban)\n\n`zuban $PATH`",
+          "type": "string",
+          "const": "zuban"
+        },
+        {
+          "description": "Python Type Checker\n\n[https://github.com/zubanls/zuban](https://github.com/zubanls/zuban)\n\n`zuban check $PATH`",
+          "type": "string",
+          "const": "zuban:check"
+        },
+        {
+          "description": "Python Type Checker\n\n[https://github.com/zubanls/zuban](https://github.com/zubanls/zuban)\n\n`zuban mypy $PATH`",
+          "type": "string",
+          "const": "zuban:mypy"
         }
       ]
     }

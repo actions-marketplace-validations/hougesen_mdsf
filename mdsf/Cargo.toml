@@ -33,7 +33,7 @@ clap_complete_nushell = { workspace = true }
 directories = { workspace = true }
 env_logger = { workspace = true }
 ignore = { workspace = true }
-json_comments = { workspace = true }
+json5 = { workspace = true }
 log = { workspace = true }
 owo-colors = { workspace = true }
 process_control = { workspace = true }
@@ -41,10 +41,12 @@ regex = { workspace = true }
 schemars = { workspace = true, optional = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+serde_yaml = { workspace = true }
 sha2 = { workspace = true }
 tempfile = { workspace = true }
 terminal_size = { workspace = true }
 threadpool = { workspace = true }
+toml = { workspace = true }
 which = { workspace = true }
 
 [dev-dependencies]

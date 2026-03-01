@@ -1,6 +1,9 @@
-use json_comments::{CommentSettings, StripComments};
+use crate::{
+    cli::InitCommandSchemaVersion, config::files::MdsfConfigFiles, error::MdsfError,
+    terminal::print_config_not_found,
+};
 
-use crate::error::MdsfError;
+mod files;
 
 #[allow(clippy::trivially_copy_pass_by_ref)]
 #[inline]
@@ -177,6 +180,9 @@ pub struct MdsfConfig {
     #[serde(default, skip_serializing_if = "std::collections::BTreeMap::is_empty")]
     pub custom_file_extensions: std::collections::BTreeMap<String, String>,
 
+    #[serde(default, skip_serializing_if = "MdsfConfigFiles::is_default")]
+    pub files: MdsfConfigFiles,
+
     /// Run the selected markdown tools on the finished output.
     ///
     /// Default: `false`
@@ -245,6 +251,7 @@ impl Default for MdsfConfig {
         Self {
             schema: default_schema_location(),
             custom_file_extensions: std::collections::BTreeMap::default(),
+            files: MdsfConfigFiles::default(),
             format_finished_document: false,
             language_aliases: std::collections::BTreeMap::default(),
             languages: crate::languages::default_tools(),
@@ -258,6 +265,45 @@ impl Default for MdsfConfig {
 
 impl MdsfConfig {
     #[inline]
+    pub const fn supported_file_name() -> [&'static str; 12] {
+        [
+            "mdsf.json",
+            ".mdsf.json",
+            "mdsf.jsonc",
+            ".mdsf.jsonc",
+            "mdsf.json5",
+            ".mdsf.json5",
+            "mdsf.toml",
+            ".mdsf.toml",
+            "mdsf.yml",
+            ".mdsf.yml",
+            "mdsf.yaml",
+            ".mdsf.yaml",
+        ]
+    }
+
+    #[inline]
+    pub fn auto_load() -> Result<Self, MdsfError> {
+        let dir = std::env::current_dir()?;
+
+        for name in Self::supported_file_name() {
+            let path = dir.join(name);
+
+            let c = Self::load(path);
+
+            if let Err(MdsfError::ConfigNotFound(_)) = c {
+                continue;
+            }
+
+            return c;
+        }
+
+        print_config_not_found(&dir);
+
+        Ok(Self::default())
+    }
+
+    #[inline]
     pub fn load(path: impl AsRef<std::path::Path>) -> Result<Self, MdsfError> {
         let path = path.as_ref();
 
@@ -269,22 +315,38 @@ impl MdsfConfig {
             }
         })?;
 
-        // TODO: do something with serde error
-        let parsed = Self::parse(&contents)
-            .map_err(|serde_error| MdsfError::ConfigParse((path.to_path_buf(), serde_error)))?;
-
-        if let Some((version, false)) = parsed.parse_schema_version() {
-            crate::terminal::print_config_schema_version_mismatch(version);
-        }
-
-        Ok(parsed)
+        Self::parse(&contents, path)
     }
 
     #[inline]
-    fn parse(input: &str) -> serde_json::Result<Self> {
-        let stripped = StripComments::with_settings(CommentSettings::c_style(), input.as_bytes());
+    fn parse(input: &str, path: &std::path::Path) -> Result<Self, MdsfError> {
+        match path.extension().and_then(|ext| ext.to_str()) {
+            Some("json" | "jsonc" | "json5") => Self::parse_json(input)
+                .map_err(|err| MdsfError::ConfigParseJson((path.to_path_buf(), err))),
+            Some("toml") => Self::parse_toml(input)
+                .map_err(|err| MdsfError::ConfigParseToml((path.to_path_buf(), err))),
+            Some("yml" | "yaml") => Self::parse_yaml(input)
+                .map_err(|err| MdsfError::ConfigParseYaml((path.to_path_buf(), err))),
+            _ => Self::parse_json(input)
+                .map_err(|_| Self::parse_toml(input))
+                .map_err(|_| Self::parse_yaml(input))
+                .map_err(|_| MdsfError::ConfigParseUnknownFormat(path.to_path_buf())),
+        }
+    }
 
-        serde_json::from_reader(stripped)
+    #[inline]
+    fn parse_json(input: &str) -> Result<Self, json5::Error> {
+        json5::from_str(input)
+    }
+
+    #[inline]
+    fn parse_toml(input: &str) -> Result<Self, toml::de::Error> {
+        toml::from_str(input)
+    }
+
+    #[inline]
+    fn parse_yaml(input: &str) -> Result<Self, serde_yaml::Error> {
+        serde_yaml::from_str(input)
     }
 
     #[inline]
@@ -323,7 +385,7 @@ impl MdsfConfig {
     }
 
     #[inline]
-    fn parse_schema_version(&self) -> Option<(&str, bool)> {
+    pub fn parse_schema_version(&self) -> Option<(&str, bool)> {
         let package_version = env!("CARGO_PKG_VERSION");
 
         if self.schema == default_schema_location() {
@@ -349,12 +411,25 @@ impl MdsfConfig {
 }
 
 #[inline]
-fn default_schema_location() -> String {
-    let package_version = env!("CARGO_PKG_VERSION");
-
+pub fn schema_url(v: InitCommandSchemaVersion) -> String {
     format!(
-        "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v{package_version}/mdsf.schema.json"
+        "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/{maybe_v}{package_version}/mdsf.schema.json",
+        maybe_v = if v == InitCommandSchemaVersion::Locked {
+            "v"
+        } else {
+            ""
+        },
+        package_version = match v {
+            InitCommandSchemaVersion::Locked => env!("CARGO_PKG_VERSION"),
+            InitCommandSchemaVersion::Stable => "stable",
+            InitCommandSchemaVersion::Development => "development",
+        }
     )
+}
+
+#[inline]
+fn default_schema_location() -> String {
+    schema_url(InitCommandSchemaVersion::Locked)
 }
 
 #[cfg(test)]
@@ -384,7 +459,7 @@ mod test_config {
     }
 
     #[test]
-    fn it_should_ignore_comments() -> Result<(), serde_json::Error> {
+    fn it_should_ignore_comments() -> Result<(), json5::Error> {
         let r = r#"{
     // this is a slash comment
     "javascript":  ["prettier"],
@@ -398,7 +473,7 @@ mod test_config {
 
 }"#;
 
-        MdsfConfig::parse(r)?;
+        MdsfConfig::parse_json(r)?;
 
         Ok(())
     }
@@ -436,7 +511,7 @@ mod test_config {
 
         let output = MdsfConfig::load(file.path()).expect_err("it should return an error");
 
-        assert!(matches!(output, MdsfError::ConfigParse((_, _))));
+        assert!(matches!(output, MdsfError::ConfigParseJson((_, _))));
 
         Ok(())
     }

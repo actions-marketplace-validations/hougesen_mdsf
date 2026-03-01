@@ -117,7 +117,7 @@ conda install conda-forge::mdsf
 <!-- START_SECTION:base-command-help -->
 
 ```
-mdsf 0.11.1-next
+mdsf 0.12.0-next
 Format, and lint, markdown code snippets using your favorite tools
 Mads Hougesen <mads@mhouge.dk>
 
@@ -132,7 +132,7 @@ Commands:
   help         Print this message or the help of the given subcommand(s)
 
 Options:
-      --log-level <LOG_LEVEL>  [possible values: trace, debug, info, warn, error, off]
+      --log-level <LOG_LEVEL>  [default: debug] [possible values: trace, debug, info, warn, error, off]
   -h, --help                   Print help
   -V, --version                Print version
 ```
@@ -177,6 +177,7 @@ Options:
           Cache results
 
       --log-level <LOG_LEVEL>
+          [default: debug]
           [possible values: trace, debug, info, warn, error, off]
 
       --timeout <TIMEOUT>
@@ -185,12 +186,16 @@ Options:
           Defaults to no timeout.
 
       --on-missing-language-definition <ON_MISSING_LANGUAGE_DEFINITION>
-          What to do when a codeblock language has no tools defined
+          What to do when a codeblock language has no tools defined.
+
+          Falls back to the value defined in your config file, if no argument is provided.
 
           [possible values: ignore, fail, fail-fast]
 
       --on-missing-tool-binary <ON_MISSING_TOOL_BINARY>
-          What to do when the binary of a tool cannot be found
+          What to do when the binary of a tool cannot be found.
+
+          Falls back to the value defined in your config file, if no argument is provided.
 
           [possible values: ignore, fail, fail-fast]
 
@@ -223,7 +228,7 @@ Remove caches
 Usage: mdsf cache-prune [OPTIONS]
 
 Options:
-      --log-level <LOG_LEVEL>  [possible values: trace, debug, info, warn, error, off]
+      --log-level <LOG_LEVEL>  [default: debug] [possible values: trace, debug, info, warn, error, off]
   -h, --help                   Print help
   -V, --version                Print version
 ```
@@ -270,15 +275,20 @@ Options:
           Defaults to no timeout.
 
       --log-level <LOG_LEVEL>
+          [default: debug]
           [possible values: trace, debug, info, warn, error, off]
 
       --on-missing-language-definition <ON_MISSING_LANGUAGE_DEFINITION>
-          What to do when a codeblock language has no tools defined
+          What to do when a codeblock language has no tools defined.
+
+          Falls back to the value defined in your config file, if no argument is provided.
 
           [possible values: ignore, fail, fail-fast]
 
       --on-missing-tool-binary <ON_MISSING_TOOL_BINARY>
-          What to do when the binary of a tool cannot be found
+          What to do when the binary of a tool cannot be found.
+
+          Falls back to the value defined in your config file, if no argument is provided.
 
           [possible values: ignore, fail, fail-fast]
 
@@ -398,10 +408,18 @@ Create a new mdsf config
 Usage: mdsf init [OPTIONS]
 
 Options:
-      --force                  Create config even if one already exists in current directory
-      --log-level <LOG_LEVEL>  [possible values: trace, debug, info, warn, error, off]
-  -h, --help                   Print help
-  -V, --version                Print version
+      --force
+          Create config even if one already exists in current directory
+      --format <FORMAT>
+          [default: json] [possible values: json, toml, yaml]
+      --schema-version <SCHEMA_VERSION>
+          [default: locked] [possible values: locked, stable, development]
+      --log-level <LOG_LEVEL>
+          [default: debug] [possible values: trace, debug, info, warn, error, off]
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
 
 <!-- END_SECTION:init-command-help -->
@@ -492,7 +510,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 
 <!-- START_SECTION:supported-tools -->
 
-`mdsf` currently supports 339 tools. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
+`mdsf` currently supports 346 tools. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
 
 | Name                                                                                 | Description                                                                                                                                                    | Categories            | Languages                                                                                                                         |
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
@@ -527,6 +545,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [bslint](https://github.com/rokucommunity/bslint)                                    | A linter for BrightScript and BrighterScript                                                                                                                   | `linter`              | `brightscript`, `brightscripter`                                                                                                  |
 | [buf](https://buf.build/docs/reference/cli/buf)                                      | The best way of working with Protocol Buffers                                                                                                                  | `formatter`           | `protobuf`                                                                                                                        |
 | [buildifier](https://github.com/bazelbuild/buildtools)                               | A bazel BUILD file formatter and editor                                                                                                                        | `formatter`           | `bazel`                                                                                                                           |
+| [c3fmt](https://github.com/lmichaudel/c3fmt)                                         | A customizable code formatter for the C3 language                                                                                                              | `formatter`           | `c3`                                                                                                                              |
 | [cabal-fmt](https://github.com/phadej/cabal-fmt)                                     | An experiment of formatting .cabal files                                                                                                                       | `formatter`           | `cabal`                                                                                                                           |
 | [cabal-gild](https://github.com/tfausak/cabal-gild)                                  | Format Haskell package descriptions                                                                                                                            | `formatter`           | `cabal`, `haskell`                                                                                                                |
 | [cabal-prettify](https://github.com/kindaro/cabal-prettify)                          | Prettify your Cabal package configuration files                                                                                                                | `formatter`           | `cabal`                                                                                                                           |
@@ -565,6 +584,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [dfmt](https://github.com/dlang-community/dfmt)                                      | Dfmt is a formatter for D source code                                                                                                                          | `formatter`           | `d`                                                                                                                               |
 | [dhall](https://dhall-lang.org)                                                      | Tools for the Dhall configuration language                                                                                                                     | `formatter`           | `dhall`                                                                                                                           |
 | [djade](https://github.com/adamchainz/djade)                                         | A Django template formatter                                                                                                                                    | `formatter`           | `django`, `python`                                                                                                                |
+| [djangofmt](https://github.com/unknownplatypus/djangofmt)                            | A fast, HTML aware, Django template formatter                                                                                                                  | `formatter`           | `django`, `html`, `python`                                                                                                        |
 | [djlint](https://www.djlint.com)                                                     | Lint & Format HTML Templates                                                                                                                                   | `formatter`, `linter` | `handlebars`, `html`, `jinja`, `mustache`, `nunjucks`, `twig`                                                                     |
 | [docformatter](https://github.com/pycqa/docformatter)                                | Formats docstrings to follow PEP 257                                                                                                                           | `formatter`           | `python`                                                                                                                          |
 | [dockerfmt](https://github.com/reteps/dockerfmt)                                     | Dockerfile formatter. a modern dockfmt                                                                                                                         | `formatter`           | `docker`                                                                                                                          |
@@ -621,6 +641,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [hfmt](https://github.com/danstiner/hfmt)                                            | Format Haskell programs. Inspired by the gofmt utility                                                                                                         | `formatter`           | `haskell`                                                                                                                         |
 | [hindent](https://github.com/mihaimaruseac/hindent)                                  | Haskell pretty printer                                                                                                                                         | `formatter`           | `haskell`                                                                                                                         |
 | [hlint](https://github.com/ndmitchell/hlint)                                         | Haskell source code suggestions                                                                                                                                | `linter`              | `haskell`                                                                                                                         |
+| [hongdown](https://github.com/dahlia/hongdown)                                       | Hongdown is a Markdown formatter that enforces Hong Minhee's Markdown style conventions                                                                        | `formatter`           | `markdown`                                                                                                                        |
 | [html-beautify](https://github.com/beautifier/js-beautify)                           | A html formatter                                                                                                                                               | `formatter`           | `html`                                                                                                                            |
 | [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier)                     | A normaliser/beautifier for HTML that also understands embedded Ruby. Ideal for tidying up Rails templates                                                     | `formatter`           | `erb`, `html`, `ruby`                                                                                                             |
 | [htmlhint](https://github.com/htmlhint/htmlhint)                                     | The static code analysis tool you need for your HTML                                                                                                           | `linter`              | `html`                                                                                                                            |
@@ -628,7 +649,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [imba](https://imba.io)                                                              | A formatter for Imba                                                                                                                                           | `formatter`           | `imba`                                                                                                                            |
 | [inko](https://github.com/inko-lang/inko)                                            | A language for building concurrent software with confidence                                                                                                    | `formatter`           | `inko`                                                                                                                            |
 | [isort](https://github.com/timothycrosley/isort)                                     | A Python utility to sort imports                                                                                                                               | `formatter`           | `python`                                                                                                                          |
-| [janet-format](https://github.com/janet-lang/spork)                                  | A formatter for Janet code.                                                                                                                                    | `formatter`           | `janet`                                                                                                                           |
+| [janet-format](https://github.com/janet-lang/spork)                                  | A formatter for Janet code                                                                                                                                     | `formatter`           | `janet`                                                                                                                           |
 | [joker](https://github.com/candid82/joker)                                           | Small Clojure interpreter, linter and formatter                                                                                                                | `formatter`, `linter` | `clojure`                                                                                                                         |
 | [jq](https://github.com/jqlang/jq)                                                   | Command-line JSON processor                                                                                                                                    | `formatter`           | `json`                                                                                                                            |
 | [jqfmt](https://github.com/noperator/jqfmt)                                          | like gofmt, but for jq                                                                                                                                         | `formatter`           | `jq`                                                                                                                              |
@@ -695,12 +716,13 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)                              | Oxfmt a fast JavaScript/TypeScript formatter written in Rust                                                                                                   | `formatter`           | `javascript`, `typescript`                                                                                                        |
 | [oxlint](https://oxc.rs/docs/guide/usage/linter.html)                                | Oxlint is designed to catch erroneous or useless code without requiring any configurations by default                                                          | `linter`              | `javascript`, `typescript`                                                                                                        |
 | [packer](https://developer.hashicorp.com/packer/docs/commands)                       | Packer is used to format HCL2 configuration files                                                                                                              | `formatter`           | `hcl`                                                                                                                             |
+| [panache](https://github.com/jolars/panache)                                         | A formatter and linter for Pandoc markdown, Quarto, and RMarkdown                                                                                              | `formatter`           | `markdown`, `pandoc`, `quarto`, `rmarkdown`                                                                                       |
 | [pasfmt](https://github.com/integrated-application-development/pasfmt)               | Delphi code formatter                                                                                                                                          | `formatter`           | `delphi`, `pascal`                                                                                                                |
 | [perflint](https://github.com/tonybaloney/perflint)                                  | Python Linter for performance anti patterns                                                                                                                    | `linter`              | `python`                                                                                                                          |
 | [perltidy](https://github.com/perltidy/perltidy)                                     | Perl::Tidy, a source code formatter for Perl                                                                                                                   | `formatter`           | `perl`                                                                                                                            |
 | [pg_format](https://github.com/darold/pgformatter)                                   | A PostgreSQL SQL syntax beautifier                                                                                                                             | `formatter`           | `sql`                                                                                                                             |
 | [php-cs-fixer](https://github.com/php-cs-fixer/php-cs-fixer)                         | A tool to automatically fix PHP Coding Standards issues                                                                                                        | `formatter`, `linter` | `php`                                                                                                                             |
-| [phpcbf](https://phpqa.io/projects/phpcbf.html)                                      | PHP Code Beautifier and Fixer fixes violations of a defined coding standard                                                                                    | `formatter`           | `php`                                                                                                                             |
+| [phpcbf](https://github.com/phpcsstandards/php_codesniffer)                          | PHP Code Beautifier and Fixer fixes violations of a defined coding standard                                                                                    | `formatter`           | `php`                                                                                                                             |
 | [phpinsights](https://github.com/nunomaduro/phpinsights)                             | Instant PHP quality checks from your console                                                                                                                   | `linter`              | `php`                                                                                                                             |
 | [pint](https://github.com/laravel/pint)                                              | Laravel Pint is an opinionated PHP code style fixer for minimalists                                                                                            | `formatter`, `linter` | `php`                                                                                                                             |
 | [pkl](https://github.com/apple/pkl)                                                  | A configuration as code language with rich validation and tooling                                                                                              | `formatter`           | `pkl`                                                                                                                             |
@@ -730,7 +752,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [pyupgrade](https://github.com/asottile/pyupgrade)                                   | A tool to automatically upgrade Python syntax to newer versions                                                                                                | `linter`              | `python`                                                                                                                          |
 | [qmlfmt](https://github.com/jesperhh/qmlfmt)                                         | Command line application that formats QML files                                                                                                                | `formatter`           | `qml`                                                                                                                             |
 | [qmlformat](https://doc.qt.io/qt-6/qtqml-tooling-qmlformat.html)                     | qmlformat is a tool that automatically formats QML files in accordance with the QML Coding Conventions                                                         | `formatter`           | `qml`                                                                                                                             |
-| [qmllint](https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html)                         | qmllint is a tool shipped with Qt, that verifies the syntatic validity of QML files                                                                            | `linter`              | `qml`                                                                                                                             |
+| [qmllint](https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html)                         | qmllint is a tool shipped with Qt, that verifies the syntactic validity of QML files                                                                           | `linter`              | `qml`                                                                                                                             |
 | [quick-lint-js](https://github.com/quick-lint/quick-lint-js)                         | quick-lint-js finds bugs in JavaScript programs                                                                                                                | `linter`              | `javascript`                                                                                                                      |
 | [raco](https://docs.racket-lang.org/fmt)                                             | An extensible code formatter for Racket                                                                                                                        | `formatter`           | `racket`                                                                                                                          |
 | [reek](https://github.com/troessner/reek)                                            | Code smell detector for Ruby                                                                                                                                   | `linter`              | `ruby`                                                                                                                            |
@@ -804,6 +826,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [tsqllint](https://github.com/tsqllint/tsqllint)                                     | Configurable linting for TSQL                                                                                                                                  | `linter`              | `sql`                                                                                                                             |
 | [twig-cs-fixer](https://github.com/vincentlanglet/twig-cs-fixer)                     | A tool to automatically fix Twig Coding Standards issues                                                                                                       | `formatter`, `linter` | `twig`                                                                                                                            |
 | [twigcs](https://github.com/friendsoftwig/twigcs)                                    | The missing checkstyle for twig                                                                                                                                | `linter`              | `php`, `twig`                                                                                                                     |
+| [txtpbfmt](https://github.com/protocolbuffers/txtpbfmt)                              | txtpbfmt parses, edits and formats text proto files in a way that preserves comments                                                                           | `formatter`           | `protobuf`                                                                                                                        |
 | [ty](https://github.com/astral-sh/ty)                                                | An extremely fast Python type checker written in Rust                                                                                                          | `linter`              | `python`                                                                                                                          |
 | [typos](https://github.com/crate-ci/typos)                                           | Source code spell checker                                                                                                                                      | `spell-check`         |                                                                                                                                   |
 | [typstfmt](https://github.com/astrale-sharp/typstfmt)                                | Basic formatter for the Typst language                                                                                                                         | `formatter`           | `typst`                                                                                                                           |
@@ -835,6 +858,8 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [zig](https://ziglang.org)                                                           | Reformat Zig source into canonical form                                                                                                                        | `formatter`           | `zig`                                                                                                                             |
 | [ziggy](https://ziggy-lang.io)                                                       | Formats Ziggy documents and Ziggy schemas                                                                                                                      | `formatter`           | `ziggy`                                                                                                                           |
 | [zprint](https://github.com/kkinnear/zprint)                                         | Beautifully format Clojure and Clojurescript source code and s-expressions                                                                                     | `formatter`           | `clojure`, `clojurescript`                                                                                                        |
+| [zsweep](https://github.com/psprint/zsh-sweep)                                       | Linter for Zshell scripting language                                                                                                                           | `linter`              | `zsh`                                                                                                                             |
+| [zuban](https://github.com/zubanls/zuban)                                            | Python Type Checker                                                                                                                                            | `linter`              | `python`                                                                                                                          |
 
 <!-- END_SECTION:supported-tools -->
 
@@ -842,7 +867,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 
 <!-- START_SECTION:supported-commands -->
 
-`mdsf` currently supports 392 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
+`mdsf` currently supports 402 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
 
 | Name                         | Command                                                                                 |
 | ---------------------------- | --------------------------------------------------------------------------------------- |
@@ -883,6 +908,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `buf:format`                 | `buf format --write $PATH`                                                              |
 | `buf:lint`                   | `buf lint $PATH`                                                                        |
 | `buildifier`                 | `buildifier $PATH`                                                                      |
+| `c3fmt`                      | `c3fmt --in-place $PATH`                                                                |
 | `cabal-fmt`                  | `cabal-fmt --inplace $PATH`                                                             |
 | `cabal-gild`                 | `cabal-gild --input $PATH --output $PATH`                                               |
 | `cabal-prettify`             | `cabal-prettify $PATH`                                                                  |
@@ -925,6 +951,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `dhall:format`               | `dhall format $PATH`                                                                    |
 | `dhall:lint`                 | `dhall lint $PATH`                                                                      |
 | `djade`                      | `djade $PATH`                                                                           |
+| `djangofmt`                  | `djangofmt $PATH`                                                                       |
 | `djlint`                     | `djlint $PATH --reformat`                                                               |
 | `docformatter`               | `docformatter --in-place $PATH`                                                         |
 | `dockerfmt`                  | `dockerfmt -w -n $PATH`                                                                 |
@@ -989,6 +1016,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `hfmt`                       | `hfmt -w $PATH`                                                                         |
 | `hindent`                    | `hindent $PATH`                                                                         |
 | `hlint`                      | `hlint $PATH`                                                                           |
+| `hongdown`                   | `hongdown -w $PATH`                                                                     |
 | `html-beautify`              | `html-beautify -r --type html -f $PATH`                                                 |
 | `htmlbeautifier`             | `htmlbeautifier $PATH`                                                                  |
 | `htmlhint`                   | `htmlhint $PATH`                                                                        |
@@ -1080,6 +1108,8 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `packer:fix`                 | `packer fix $PATH`                                                                      |
 | `packer:fmt`                 | `packer fmt $PATH`                                                                      |
 | `packer:validate`            | `packer validate $PATH`                                                                 |
+| `panache:format`             | `panache format $PATH`                                                                  |
+| `panache:lint`               | `panache lint $PATH`                                                                    |
 | `pasfmt`                     | `pasfmt $PATH`                                                                          |
 | `perflint`                   | `perflint $PATH`                                                                        |
 | `perltidy`                   | `perltidy -b $PATH`                                                                     |
@@ -1204,6 +1234,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `twig-cs-fixer:fix`          | `twig-cs-fixer fix $PATH --no-interaction`                                              |
 | `twig-cs-fixer:lint`         | `twig-cs-fixer lint $PATH --no-interaction`                                             |
 | `twigcs`                     | `twigcs $PATH`                                                                          |
+| `txtpbfmt`                   | `txtpbfmt $PATH`                                                                        |
 | `ty`                         | `ty check $PATH`                                                                        |
 | `typos`                      | `typos -w --no-ignore --hidden $PATH`                                                   |
 | `typstfmt`                   | `typstfmt $PATH`                                                                        |
@@ -1238,6 +1269,10 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `ziggy:check`                | `ziggy check $PATH`                                                                     |
 | `ziggy:fmt`                  | `ziggy fmt $PATH`                                                                       |
 | `zprint`                     | `zprint -w $PATH`                                                                       |
+| `zsweep`                     | `zsweep --auto $PATH`                                                                   |
+| `zuban:check`                | `zuban check $PATH`                                                                     |
+| `zuban:mypy`                 | `zuban mypy $PATH`                                                                      |
+| `zuban`                      | `zuban $PATH`                                                                           |
 
 <!-- END_SECTION:supported-commands -->
 
@@ -1256,7 +1291,7 @@ Arguments:
   <SHELL>  [possible values: bash, elvish, fish, nushell, powershell, zsh]
 
 Options:
-      --log-level <LOG_LEVEL>  [possible values: trace, debug, info, warn, error, off]
+      --log-level <LOG_LEVEL>  [default: debug] [possible values: trace, debug, info, warn, error, off]
   -h, --help                   Print help
   -V, --version                Print version
 ```

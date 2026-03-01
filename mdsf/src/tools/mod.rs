@@ -39,6 +39,7 @@ pub mod bslint;
 pub mod buf_format;
 pub mod buf_lint;
 pub mod buildifier;
+pub mod c_3_fmt;
 pub mod cabal_fmt;
 pub mod cabal_format;
 pub mod cabal_gild;
@@ -81,6 +82,7 @@ pub mod dfmt;
 pub mod dhall_format;
 pub mod dhall_lint;
 pub mod djade;
+pub mod djangofmt;
 pub mod djlint;
 pub mod docformatter;
 pub mod dockerfmt;
@@ -145,6 +147,7 @@ pub mod hclfmt;
 pub mod hfmt;
 pub mod hindent;
 pub mod hlint;
+pub mod hongdown;
 pub mod html_beautify;
 pub mod htmlbeautifier;
 pub mod htmlhint;
@@ -236,6 +239,8 @@ pub mod oxlint;
 pub mod packer_fix;
 pub mod packer_fmt;
 pub mod packer_validate;
+pub mod panache_format;
+pub mod panache_lint;
 pub mod pasfmt;
 pub mod perflint;
 pub mod perltidy;
@@ -360,6 +365,7 @@ pub mod twig_cs_fixer_check;
 pub mod twig_cs_fixer_fix;
 pub mod twig_cs_fixer_lint;
 pub mod twigcs;
+pub mod txtpbfmt;
 pub mod ty;
 pub mod typos;
 pub mod typstfmt;
@@ -394,6 +400,10 @@ pub mod zig_fmt;
 pub mod ziggy_check;
 pub mod ziggy_fmt;
 pub mod zprint;
+pub mod zsweep;
+pub mod zuban;
+pub mod zuban_check;
+pub mod zuban_mypy;
 
 #[derive(serde::Serialize, serde::Deserialize, Hash, Clone, Copy, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
@@ -693,6 +703,14 @@ pub enum Tooling {
     ///
     /// `buildifier $PATH`
     Buildifier,
+
+    #[serde(rename = "c3fmt")]
+    /// A customizable code formatter for the C3 language
+    ///
+    /// [https://github.com/lmichaudel/c3fmt](https://github.com/lmichaudel/c3fmt)
+    ///
+    /// `c3fmt --in-place $PATH`
+    C3Fmt,
 
     #[serde(rename = "cabal-fmt")]
     /// An experiment of formatting .cabal files
@@ -1030,6 +1048,14 @@ pub enum Tooling {
     /// `djade $PATH`
     Djade,
 
+    #[serde(rename = "djangofmt")]
+    /// A fast, HTML aware, Django template formatter
+    ///
+    /// [https://github.com/unknownplatypus/djangofmt](https://github.com/unknownplatypus/djangofmt)
+    ///
+    /// `djangofmt $PATH`
+    Djangofmt,
+
     #[serde(rename = "djlint")]
     /// Lint & Format HTML Templates
     ///
@@ -1135,7 +1161,7 @@ pub enum Tooling {
     DusterLint,
 
     #[serde(rename = "dx:fmt")]
-    /// Format `rsx!` snippets in Rust files.
+    /// Format `rsx!` snippets in Rust files
     ///
     /// [https://github.com/dioxuslabs/dioxus](https://github.com/dioxuslabs/dioxus)
     ///
@@ -1542,6 +1568,14 @@ pub enum Tooling {
     /// `hlint $PATH`
     Hlint,
 
+    #[serde(rename = "hongdown")]
+    /// Hongdown is a Markdown formatter that enforces Hong Minhee's Markdown style conventions
+    ///
+    /// [https://github.com/dahlia/hongdown](https://github.com/dahlia/hongdown)
+    ///
+    /// `hongdown -w $PATH`
+    Hongdown,
+
     #[serde(rename = "html-beautify")]
     /// A html formatter
     ///
@@ -1599,7 +1633,7 @@ pub enum Tooling {
     Isort,
 
     #[serde(rename = "janet-format")]
-    /// A formatter for Janet code.
+    /// A formatter for Janet code
     ///
     /// [https://github.com/janet-lang/spork](https://github.com/janet-lang/spork)
     ///
@@ -2270,6 +2304,22 @@ pub enum Tooling {
     /// `packer validate $PATH`
     PackerValidate,
 
+    #[serde(rename = "panache:format")]
+    /// A formatter and linter for Pandoc markdown, Quarto, and RMarkdown
+    ///
+    /// [https://github.com/jolars/panache](https://github.com/jolars/panache)
+    ///
+    /// `panache format $PATH`
+    PanacheFormat,
+
+    #[serde(rename = "panache:lint")]
+    /// A formatter and linter for Pandoc markdown, Quarto, and RMarkdown
+    ///
+    /// [https://github.com/jolars/panache](https://github.com/jolars/panache)
+    ///
+    /// `panache lint $PATH`
+    PanacheLint,
+
     #[serde(rename = "pasfmt")]
     /// Delphi code formatter
     ///
@@ -2313,7 +2363,7 @@ pub enum Tooling {
     #[serde(rename = "phpcbf")]
     /// PHP Code Beautifier and Fixer fixes violations of a defined coding standard
     ///
-    /// [https://phpqa.io/projects/phpcbf.html](https://phpqa.io/projects/phpcbf.html)
+    /// [https://github.com/phpcsstandards/php_codesniffer](https://github.com/phpcsstandards/php_codesniffer)
     ///
     /// `phpcbf $PATH`
     Phpcbf,
@@ -2551,7 +2601,7 @@ pub enum Tooling {
     Qmlformat,
 
     #[serde(rename = "qmllint")]
-    /// qmllint is a tool shipped with Qt, that verifies the syntatic validity of QML files
+    /// qmllint is a tool shipped with Qt, that verifies the syntactic validity of QML files
     ///
     /// [https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html](https://doc.qt.io/qt-6/qtqml-tooling-qmllint.html)
     ///
@@ -3262,6 +3312,14 @@ pub enum Tooling {
     /// `twigcs $PATH`
     Twigcs,
 
+    #[serde(rename = "txtpbfmt")]
+    /// txtpbfmt parses, edits and formats text proto files in a way that preserves comments
+    ///
+    /// [https://github.com/protocolbuffers/txtpbfmt](https://github.com/protocolbuffers/txtpbfmt)
+    ///
+    /// `txtpbfmt $PATH`
+    Txtpbfmt,
+
     #[serde(rename = "ty")]
     /// An extremely fast Python type checker written in Rust
     ///
@@ -3533,6 +3591,38 @@ pub enum Tooling {
     ///
     /// `zprint -w $PATH`
     Zprint,
+
+    #[serde(rename = "zsweep")]
+    /// Linter for Zshell scripting language
+    ///
+    /// [https://github.com/psprint/zsh-sweep](https://github.com/psprint/zsh-sweep)
+    ///
+    /// `zsweep --auto $PATH`
+    Zsweep,
+
+    #[serde(rename = "zuban")]
+    /// Python Type Checker
+    ///
+    /// [https://github.com/zubanls/zuban](https://github.com/zubanls/zuban)
+    ///
+    /// `zuban $PATH`
+    Zuban,
+
+    #[serde(rename = "zuban:check")]
+    /// Python Type Checker
+    ///
+    /// [https://github.com/zubanls/zuban](https://github.com/zubanls/zuban)
+    ///
+    /// `zuban check $PATH`
+    ZubanCheck,
+
+    #[serde(rename = "zuban:mypy")]
+    /// Python Type Checker
+    ///
+    /// [https://github.com/zubanls/zuban](https://github.com/zubanls/zuban)
+    ///
+    /// `zuban mypy $PATH`
+    ZubanMypy,
 }
 
 impl Tooling {
@@ -3680,6 +3770,7 @@ impl Tooling {
                 buildifier::set_args,
                 buildifier::IS_STDIN,
             ),
+            Self::C3Fmt => (&c_3_fmt::COMMANDS, c_3_fmt::set_args, c_3_fmt::IS_STDIN),
             Self::CabalFmt => (
                 &cabal_fmt::COMMANDS,
                 cabal_fmt::set_args,
@@ -3830,6 +3921,11 @@ impl Tooling {
                 dhall_lint::IS_STDIN,
             ),
             Self::Djade => (&djade::COMMANDS, djade::set_args, djade::IS_STDIN),
+            Self::Djangofmt => (
+                &djangofmt::COMMANDS,
+                djangofmt::set_args,
+                djangofmt::IS_STDIN,
+            ),
             Self::Djlint => (&djlint::COMMANDS, djlint::set_args, djlint::IS_STDIN),
             Self::Docformatter => (
                 &docformatter::COMMANDS,
@@ -4042,6 +4138,7 @@ impl Tooling {
             Self::Hfmt => (&hfmt::COMMANDS, hfmt::set_args, hfmt::IS_STDIN),
             Self::Hindent => (&hindent::COMMANDS, hindent::set_args, hindent::IS_STDIN),
             Self::Hlint => (&hlint::COMMANDS, hlint::set_args, hlint::IS_STDIN),
+            Self::Hongdown => (&hongdown::COMMANDS, hongdown::set_args, hongdown::IS_STDIN),
             Self::HtmlBeautify => (
                 &html_beautify::COMMANDS,
                 html_beautify::set_args,
@@ -4356,6 +4453,16 @@ impl Tooling {
                 &packer_validate::COMMANDS,
                 packer_validate::set_args,
                 packer_validate::IS_STDIN,
+            ),
+            Self::PanacheFormat => (
+                &panache_format::COMMANDS,
+                panache_format::set_args,
+                panache_format::IS_STDIN,
+            ),
+            Self::PanacheLint => (
+                &panache_lint::COMMANDS,
+                panache_lint::set_args,
+                panache_lint::IS_STDIN,
             ),
             Self::Pasfmt => (&pasfmt::COMMANDS, pasfmt::set_args, pasfmt::IS_STDIN),
             Self::Perflint => (&perflint::COMMANDS, perflint::set_args, perflint::IS_STDIN),
@@ -4765,6 +4872,7 @@ impl Tooling {
                 twig_cs_fixer_lint::IS_STDIN,
             ),
             Self::Twigcs => (&twigcs::COMMANDS, twigcs::set_args, twigcs::IS_STDIN),
+            Self::Txtpbfmt => (&txtpbfmt::COMMANDS, txtpbfmt::set_args, txtpbfmt::IS_STDIN),
             Self::Ty => (&ty::COMMANDS, ty::set_args, ty::IS_STDIN),
             Self::Typos => (&typos::COMMANDS, typos::set_args, typos::IS_STDIN),
             Self::Typstfmt => (&typstfmt::COMMANDS, typstfmt::set_args, typstfmt::IS_STDIN),
@@ -4835,6 +4943,18 @@ impl Tooling {
                 ziggy_fmt::IS_STDIN,
             ),
             Self::Zprint => (&zprint::COMMANDS, zprint::set_args, zprint::IS_STDIN),
+            Self::Zsweep => (&zsweep::COMMANDS, zsweep::set_args, zsweep::IS_STDIN),
+            Self::Zuban => (&zuban::COMMANDS, zuban::set_args, zuban::IS_STDIN),
+            Self::ZubanCheck => (
+                &zuban_check::COMMANDS,
+                zuban_check::set_args,
+                zuban_check::IS_STDIN,
+            ),
+            Self::ZubanMypy => (
+                &zuban_mypy::COMMANDS,
+                zuban_mypy::set_args,
+                zuban_mypy::IS_STDIN,
+            ),
         };
 
         crate::execution::run_tools(
@@ -4891,6 +5011,7 @@ impl AsRef<str> for Tooling {
             Self::BufFormat => "buf:format",
             Self::BufLint => "buf:lint",
             Self::Buildifier => "buildifier",
+            Self::C3Fmt => "c3fmt",
             Self::CabalFmt => "cabal-fmt",
             Self::CabalFormat => "cabal:format",
             Self::CabalGild => "cabal-gild",
@@ -4933,6 +5054,7 @@ impl AsRef<str> for Tooling {
             Self::DhallFormat => "dhall:format",
             Self::DhallLint => "dhall:lint",
             Self::Djade => "djade",
+            Self::Djangofmt => "djangofmt",
             Self::Djlint => "djlint",
             Self::Docformatter => "docformatter",
             Self::Dockerfmt => "dockerfmt",
@@ -4997,6 +5119,7 @@ impl AsRef<str> for Tooling {
             Self::Hfmt => "hfmt",
             Self::Hindent => "hindent",
             Self::Hlint => "hlint",
+            Self::Hongdown => "hongdown",
             Self::HtmlBeautify => "html-beautify",
             Self::Htmlbeautifier => "htmlbeautifier",
             Self::Htmlhint => "htmlhint",
@@ -5088,6 +5211,8 @@ impl AsRef<str> for Tooling {
             Self::PackerFix => "packer:fix",
             Self::PackerFmt => "packer:fmt",
             Self::PackerValidate => "packer:validate",
+            Self::PanacheFormat => "panache:format",
+            Self::PanacheLint => "panache:lint",
             Self::Pasfmt => "pasfmt",
             Self::Perflint => "perflint",
             Self::Perltidy => "perltidy",
@@ -5212,6 +5337,7 @@ impl AsRef<str> for Tooling {
             Self::TwigCsFixerFix => "twig-cs-fixer:fix",
             Self::TwigCsFixerLint => "twig-cs-fixer:lint",
             Self::Twigcs => "twigcs",
+            Self::Txtpbfmt => "txtpbfmt",
             Self::Ty => "ty",
             Self::Typos => "typos",
             Self::Typstfmt => "typstfmt",
@@ -5246,6 +5372,10 @@ impl AsRef<str> for Tooling {
             Self::ZiggyCheck => "ziggy:check",
             Self::ZiggyFmt => "ziggy:fmt",
             Self::Zprint => "zprint",
+            Self::Zsweep => "zsweep",
+            Self::Zuban => "zuban",
+            Self::ZubanCheck => "zuban:check",
+            Self::ZubanMypy => "zuban:mypy",
         }
     }
 }
@@ -5302,6 +5432,7 @@ mod test_tooling {
         assert_eq!(Tooling::BufFormat, reverse(Tooling::BufFormat)?);
         assert_eq!(Tooling::BufLint, reverse(Tooling::BufLint)?);
         assert_eq!(Tooling::Buildifier, reverse(Tooling::Buildifier)?);
+        assert_eq!(Tooling::C3Fmt, reverse(Tooling::C3Fmt)?);
         assert_eq!(Tooling::CabalFmt, reverse(Tooling::CabalFmt)?);
         assert_eq!(Tooling::CabalFormat, reverse(Tooling::CabalFormat)?);
         assert_eq!(Tooling::CabalGild, reverse(Tooling::CabalGild)?);
@@ -5347,6 +5478,7 @@ mod test_tooling {
         assert_eq!(Tooling::DhallFormat, reverse(Tooling::DhallFormat)?);
         assert_eq!(Tooling::DhallLint, reverse(Tooling::DhallLint)?);
         assert_eq!(Tooling::Djade, reverse(Tooling::Djade)?);
+        assert_eq!(Tooling::Djangofmt, reverse(Tooling::Djangofmt)?);
         assert_eq!(Tooling::Djlint, reverse(Tooling::Djlint)?);
         assert_eq!(Tooling::Docformatter, reverse(Tooling::Docformatter)?);
         assert_eq!(Tooling::Dockerfmt, reverse(Tooling::Dockerfmt)?);
@@ -5432,6 +5564,7 @@ mod test_tooling {
         assert_eq!(Tooling::Hfmt, reverse(Tooling::Hfmt)?);
         assert_eq!(Tooling::Hindent, reverse(Tooling::Hindent)?);
         assert_eq!(Tooling::Hlint, reverse(Tooling::Hlint)?);
+        assert_eq!(Tooling::Hongdown, reverse(Tooling::Hongdown)?);
         assert_eq!(Tooling::HtmlBeautify, reverse(Tooling::HtmlBeautify)?);
         assert_eq!(Tooling::Htmlbeautifier, reverse(Tooling::Htmlbeautifier)?);
         assert_eq!(Tooling::Htmlhint, reverse(Tooling::Htmlhint)?);
@@ -5538,6 +5671,8 @@ mod test_tooling {
         assert_eq!(Tooling::PackerFix, reverse(Tooling::PackerFix)?);
         assert_eq!(Tooling::PackerFmt, reverse(Tooling::PackerFmt)?);
         assert_eq!(Tooling::PackerValidate, reverse(Tooling::PackerValidate)?);
+        assert_eq!(Tooling::PanacheFormat, reverse(Tooling::PanacheFormat)?);
+        assert_eq!(Tooling::PanacheLint, reverse(Tooling::PanacheLint)?);
         assert_eq!(Tooling::Pasfmt, reverse(Tooling::Pasfmt)?);
         assert_eq!(Tooling::Perflint, reverse(Tooling::Perflint)?);
         assert_eq!(Tooling::Perltidy, reverse(Tooling::Perltidy)?);
@@ -5677,6 +5812,7 @@ mod test_tooling {
         assert_eq!(Tooling::TwigCsFixerFix, reverse(Tooling::TwigCsFixerFix)?);
         assert_eq!(Tooling::TwigCsFixerLint, reverse(Tooling::TwigCsFixerLint)?);
         assert_eq!(Tooling::Twigcs, reverse(Tooling::Twigcs)?);
+        assert_eq!(Tooling::Txtpbfmt, reverse(Tooling::Txtpbfmt)?);
         assert_eq!(Tooling::Ty, reverse(Tooling::Ty)?);
         assert_eq!(Tooling::Typos, reverse(Tooling::Typos)?);
         assert_eq!(Tooling::Typstfmt, reverse(Tooling::Typstfmt)?);
@@ -5711,6 +5847,10 @@ mod test_tooling {
         assert_eq!(Tooling::ZiggyCheck, reverse(Tooling::ZiggyCheck)?);
         assert_eq!(Tooling::ZiggyFmt, reverse(Tooling::ZiggyFmt)?);
         assert_eq!(Tooling::Zprint, reverse(Tooling::Zprint)?);
+        assert_eq!(Tooling::Zsweep, reverse(Tooling::Zsweep)?);
+        assert_eq!(Tooling::Zuban, reverse(Tooling::Zuban)?);
+        assert_eq!(Tooling::ZubanCheck, reverse(Tooling::ZubanCheck)?);
+        assert_eq!(Tooling::ZubanMypy, reverse(Tooling::ZubanMypy)?);
 
         Ok(())
     }

@@ -18,7 +18,11 @@ pub enum MdsfError {
     ConfigAlreadyExist,
     ConfigNotFound(std::path::PathBuf),
     // TODO: use &std::path::Path
-    ConfigParse((std::path::PathBuf, serde_json::Error)),
+    ConfigParseJson((std::path::PathBuf, json5::Error)),
+    ConfigParseToml((std::path::PathBuf, toml::de::Error)),
+    ConfigParseYaml((std::path::PathBuf, serde_yaml::Error)),
+    ConfigParseUnknownFormat(std::path::PathBuf),
+    EmptyFilesExtensions,
     Io(std::io::Error),
     /// Another alias clashes
     LanguageAliasClash(String, String, String),
@@ -30,10 +34,12 @@ pub enum MdsfError {
     MissingBinary(String),
     MissingLanguageDefinition(std::path::PathBuf, String),
     MissingInput,
-    ReadStdinError(std::io::Error),
-    SerializeConfig(serde_json::Error),
-    StdinWriteError,
-    ToolError(String),
+    ReadStdin(std::io::Error),
+    SerializeConfigJson(serde_json::Error),
+    SerializeConfigToml(toml::ser::Error),
+    SerializeConfigYaml(serde_yaml::Error),
+    StdinWrite,
+    Tool(String),
 }
 
 impl core::error::Error for MdsfError {}
@@ -49,20 +55,32 @@ impl core::fmt::Display for MdsfError {
             ),
             Self::ConfigAlreadyExist => write!(f, "A config already exists in this directory"),
             Self::ConfigNotFound(path) => write!(f, "No config found at: '{}'", path.display()),
-            Self::ConfigParse((path, error)) => {
-                write!(
-                    f,
-                    "Error parsing config found at '{}' - {error}",
-                    path.display()
-                )
-            }
+            Self::ConfigParseJson((path, error)) => write!(
+                f,
+                "Error parsing config found at '{}' - {error}",
+                path.display()
+            ),
+            Self::ConfigParseToml((path, error)) => write!(
+                f,
+                "Error parsing config found at '{}' - {error}",
+                path.display()
+            ),
+            Self::ConfigParseYaml((path, error)) => write!(
+                f,
+                "Error parsing config found at '{}' - {error}",
+                path.display()
+            ),
+            Self::ConfigParseUnknownFormat(path) => write!(
+                f,
+                "Error parsing config found at '{}' - no suitable parser found",
+                path.display()
+            ),
+            Self::EmptyFilesExtensions => write!(f, "No file extensions defined in mdsf.json"),
             Self::Io(e) => e.fmt(f),
-            Self::LanguageAliasClash(language, alias, already_set_by) => {
-                write!(
-                    f,
-                    "'{language}' cannot be aliases to '{alias}' since it is already an alias of '{already_set_by}'"
-                )
-            }
+            Self::LanguageAliasClash(language, alias, already_set_by) => write!(
+                f,
+                "'{language}' cannot be aliases to '{alias}' since it is already an alias of '{already_set_by}'"
+            ),
             Self::LanguageAliasLanguagesContainsLanguage(language) => write!(
                 f,
                 "'{language}' cannot be used with an alias since it already has tools specified"
@@ -76,10 +94,12 @@ impl core::fmt::Display for MdsfError {
                 write!(f, "{} no tool configured for '{language}'", path.display())
             }
             Self::MissingInput => write!(f, "No input was provided to mdsf"),
-            Self::ReadStdinError(error) => write!(f, "Error reading from stdin: {error}"),
-            Self::SerializeConfig(e) => write!(f, "Error serializing config: {e}"),
-            Self::StdinWriteError => write!(f, "Error writing to stdin"),
-            Self::ToolError(stderr) => {
+            Self::ReadStdin(error) => write!(f, "Error reading from stdin: {error}"),
+            Self::SerializeConfigJson(e) => write!(f, "Error serializing config: {e}"),
+            Self::SerializeConfigToml(e) => write!(f, "Error serializing config: {e}"),
+            Self::SerializeConfigYaml(e) => write!(f, "Error serializing config: {e}"),
+            Self::StdinWrite => write!(f, "Error writing to stdin"),
+            Self::Tool(stderr) => {
                 let trimmed_stderr = stderr.trim();
 
                 if trimmed_stderr.is_empty() {
