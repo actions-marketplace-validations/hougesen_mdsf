@@ -5,7 +5,7 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "default": "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.12.0-next/mdsf.schema.json"
+      "default": "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.12.1/mdsf.schema.json"
     },
     "custom_file_extensions": {
       "description": "Used for settings custom file extensions for a given language.\n\n```json\n{\n  \"custom_file_extensions\": {\n    \"rust\": \".rust\"\n  }\n}\n```",
@@ -734,6 +734,21 @@
           "const": "fantomas"
         },
         {
+          "description": "Julia formatter and linter built in Rust\n\n[https://github.com/jolars/fatou](https://github.com/jolars/fatou)\n\n`fatou format $PATH`",
+          "type": "string",
+          "const": "fatou:format"
+        },
+        {
+          "description": "Julia formatter and linter built in Rust\n\n[https://github.com/jolars/fatou](https://github.com/jolars/fatou)\n\n`fatou lint $PATH`",
+          "type": "string",
+          "const": "fatou:lint"
+        },
+        {
+          "description": "Julia formatter and linter built in Rust\n\n[https://github.com/jolars/fatou](https://github.com/jolars/fatou)\n\n`fatou lint --fix $PATH`",
+          "type": "string",
+          "const": "fatou:lint:fix"
+        },
+        {
           "description": "Fish indenter and prettifier\n\n[https://fishshell.com/docs/current/cmds/fish_indent.html](https://fishshell.com/docs/current/cmds/fish_indent.html)\n\n`fish_indent -w $PATH`",
           "type": "string",
           "const": "fish_indent"
@@ -1374,6 +1389,11 @@
           "const": "opa:fmt"
         },
         {
+          "description": "Format an OpenAPI document by ordering, formatting and filtering fields\n\n[https://github.com/thim81/openapi-format](https://github.com/thim81/openapi-format)\n\n`openapi-format $PATH --output $PATH`",
+          "type": "string",
+          "const": "openapi-format"
+        },
+        {
           "description": "A formatter for Haskell source code\n\n[https://github.com/tweag/ormolu](https://github.com/tweag/ormolu)\n\n`ormolu --mode inplace $PATH`",
           "type": "string",
           "const": "ormolu"
@@ -1892,6 +1912,11 @@
           "description": "A Lua code formatter\n\n[https://github.com/johnnymorganz/stylua](https://github.com/johnnymorganz/stylua)\n\n`stylua --verify $PATH`",
           "type": "string",
           "const": "stylua"
+        },
+        {
+          "description": "HTML Validator, Formatter, LSP, and Templating Language Library\n\n[https://github.com/kristoff-it/superhtml](https://github.com/kristoff-it/superhtml)\n\n`superhtml check $PATH`",
+          "type": "string",
+          "const": "superhtml:check"
         },
         {
           "description": "HTML Validator, Formatter, LSP, and Templating Language Library\n\n[https://github.com/kristoff-it/superhtml](https://github.com/kristoff-it/superhtml)\n\n`superhtml fmt $PATH`",

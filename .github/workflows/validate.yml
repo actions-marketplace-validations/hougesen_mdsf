@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: rustup toolchain install stable --profile minimal
       - run: rustup component add rustfmt clippy
       - uses: Swatinem/rust-cache@v2
@@ -39,12 +39,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -66,12 +66,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -81,3 +81,4 @@ jobs:
       - run: npm run lint:biome
       - run: npm run lint:eslint
       - run: npm run compile
+      - run: xvfb-run -a npm run test

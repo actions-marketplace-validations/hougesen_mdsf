@@ -117,7 +117,7 @@ conda install conda-forge::mdsf
 <!-- START_SECTION:base-command-help -->
 
 ```
-mdsf 0.12.0-next
+mdsf 0.12.1
 Format, and lint, markdown code snippets using your favorite tools
 Mads Hougesen <mads@mhouge.dk>
 
@@ -510,7 +510,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 
 <!-- START_SECTION:supported-tools -->
 
-`mdsf` currently supports 347 tools. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
+`mdsf` currently supports 349 tools. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
 
 | Name                                                                                 | Description                                                                                                                                                    | Categories            | Languages                                                                                                                         |
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
@@ -606,6 +606,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [erlfmt](https://github.com/whatsapp/erlfmt)                                         | An automated code formatter for Erlang                                                                                                                         | `formatter`           | `erlang`                                                                                                                          |
 | [eslint](https://github.com/eslint/eslint)                                           | Find and fix problems in your JavaScript code                                                                                                                  | `linter`              | `javascript`, `typescript`                                                                                                        |
 | [fantomas](https://github.com/fsprojects/fantomas)                                   | FSharp source code formatter                                                                                                                                   | `formatter`           | `f#`                                                                                                                              |
+| [fatou](https://github.com/jolars/fatou)                                             | Julia formatter and linter built in Rust                                                                                                                       | `formatter`, `linter` | `julia`                                                                                                                           |
 | [fish_indent](https://fishshell.com/docs/current/cmds/fish_indent.html)              | Fish indenter and prettifier                                                                                                                                   | `formatter`           | `fish`                                                                                                                            |
 | [fixjson](https://github.com/rhysd/fixjson)                                          | JSON Fixer for Humans using (relaxed) JSON5                                                                                                                    | `formatter`, `linter` | `json5`, `json`                                                                                                                   |
 | [floskell](https://github.com/ennocramer/floskell)                                   | Floskell is a flexible Haskell source code pretty printer                                                                                                      | `formatter`           | `haskell`                                                                                                                         |
@@ -713,6 +714,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | [odinfmt](https://github.com/danielgavin/ols)                                        | Formatter for the Odin programming language                                                                                                                    | `formatter`           | `odin`                                                                                                                            |
 | [oelint-adv](https://github.com/priv-kweihmann/oelint-adv)                           | Advanced oelint                                                                                                                                                | `linter`              | `bitbake`                                                                                                                         |
 | [opa](https://www.openpolicyagent.org/docs/latest/cli)                               | Format Rego source files                                                                                                                                       | `formatter`           | `rego`                                                                                                                            |
+| [openapi-format](https://github.com/thim81/openapi-format)                           | Format an OpenAPI document by ordering, formatting and filtering fields                                                                                        | `formatter`           | `json`, `openapi`, `yaml`                                                                                                         |
 | [ormolu](https://github.com/tweag/ormolu)                                            | A formatter for Haskell source code                                                                                                                            | `formatter`           | `haskell`                                                                                                                         |
 | [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)                              | Oxfmt a fast JavaScript/TypeScript formatter written in Rust                                                                                                   | `formatter`           | `javascript`, `typescript`                                                                                                        |
 | [oxlint](https://oxc.rs/docs/guide/usage/linter.html)                                | Oxlint is designed to catch erroneous or useless code without requiring any configurations by default                                                          | `linter`              | `javascript`, `typescript`                                                                                                        |
@@ -868,7 +870,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 
 <!-- START_SECTION:supported-commands -->
 
-`mdsf` currently supports 403 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
+`mdsf` currently supports 408 commands. Feel free to open an issue/pull-request if your favorite tool/command is missing! 😃
 
 | Name                         | Command                                                                                 |
 | ---------------------------- | --------------------------------------------------------------------------------------- |
@@ -976,6 +978,9 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `erlfmt`                     | `erlfmt -w '$PATH'`                                                                     |
 | `eslint`                     | `eslint --fix $PATH`                                                                    |
 | `fantomas`                   | `fantomas $PATH`                                                                        |
+| `fatou:format`               | `fatou format $PATH`                                                                    |
+| `fatou:lint:fix`             | `fatou lint --fix $PATH`                                                                |
+| `fatou:lint`                 | `fatou lint $PATH`                                                                      |
 | `fish_indent`                | `fish_indent -w $PATH`                                                                  |
 | `fixjson`                    | `fixjson -w $PATH`                                                                      |
 | `floskell`                   | `floskell $PATH`                                                                        |
@@ -1104,6 +1109,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `odinfmt`                    | `odinfmt -w $PATH`                                                                      |
 | `oelint-adv`                 | `oelint-adv --fix --nobackup --quiet $PATH`                                             |
 | `opa:fmt`                    | `opa fmt $PATH -w`                                                                      |
+| `openapi-format`             | `openapi-format $PATH --output $PATH`                                                   |
 | `ormolu`                     | `ormolu --mode inplace $PATH`                                                           |
 | `oxfmt`                      | `oxfmt $PATH`                                                                           |
 | `oxlint`                     | `oxlint --fix $PATH`                                                                    |
@@ -1208,6 +1214,7 @@ When defining the arguments the variable `$PATH` will automatically be replaced 
 | `stylelint`                  | `stylelint --fix $PATH`                                                                 |
 | `stylish-haskell`            | `stylish-haskell --inplace $PATH`                                                       |
 | `stylua`                     | `stylua --verify $PATH`                                                                 |
+| `superhtml:check`            | `superhtml check $PATH`                                                                 |
 | `superhtml:fmt`              | `superhtml fmt $PATH`                                                                   |
 | `svlint`                     | `svlint $PATH`                                                                          |
 | `swift-format`               | `swift-format --in-place $PATH`                                                         |

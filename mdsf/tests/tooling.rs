@@ -1464,50 +1464,6 @@ mod test_blue {
 }
 
 #[cfg(test)]
-mod test_brunette {
-    #[test_with::executable(brunette || uv)]
-    fn test_brunette_python_229ec2b01c2bfe3c() -> Result<(), Box<dyn core::error::Error>> {
-        let input = r#"def add( a: int ,  b:int)->int: return a+b"#;
-
-        let output = r#"def add(a: int, b: int) -> int:
-    return a + b
-"#;
-
-        let ft = "python";
-
-        crate::common::run_tooling_test(
-            mdsf::config::MdsfTool::Preset(mdsf::tools::Tooling::Brunette),
-            input,
-            output,
-            ft,
-        )
-    }
-
-    #[test_with::executable(brunette)]
-    fn test_custom_tool_brunette_python_229ec2b01c2bfe3c() -> Result<(), Box<dyn core::error::Error>>
-    {
-        let input = r#"def add( a: int ,  b:int)->int: return a+b"#;
-
-        let output = r#"def add(a: int, b: int) -> int:
-    return a + b
-"#;
-
-        let ft = "python";
-
-        crate::common::run_tooling_test(
-            mdsf::config::MdsfTool::Custom(mdsf::custom::CustomTool {
-                binary: "brunette".to_owned(),
-                arguments: vec!["--quiet".to_owned(), "$PATH".to_owned()],
-                stdin: false,
-            }),
-            input,
-            output,
-            ft,
-        )
-    }
-}
-
-#[cfg(test)]
 mod test_buf_format {
     #[test_with::executable(buf || bunx || deno || npx || pnpm || yarn)]
     fn test_buf_format_protobuf_10af516c8a015ab5() -> Result<(), Box<dyn core::error::Error>> {
@@ -7140,46 +7096,6 @@ mod test_oxfmt {
 }
 
 #[cfg(test)]
-mod test_oxlint {
-    #[test_with::executable(oxlint || bunx || deno || npx || pnpm || yarn)]
-    fn test_oxlint_typescript_a2154a11ef1c153b() -> Result<(), Box<dyn core::error::Error>> {
-        let input = r#"debugger;"#;
-
-        let output = r#""#;
-
-        let ft = "typescript";
-
-        crate::common::run_tooling_test(
-            mdsf::config::MdsfTool::Preset(mdsf::tools::Tooling::Oxlint),
-            input,
-            output,
-            ft,
-        )
-    }
-
-    #[test_with::executable(oxlint)]
-    fn test_custom_tool_oxlint_typescript_a2154a11ef1c153b()
-    -> Result<(), Box<dyn core::error::Error>> {
-        let input = r#"debugger;"#;
-
-        let output = r#""#;
-
-        let ft = "typescript";
-
-        crate::common::run_tooling_test(
-            mdsf::config::MdsfTool::Custom(mdsf::custom::CustomTool {
-                binary: "oxlint".to_owned(),
-                arguments: vec!["--fix".to_owned(), "$PATH".to_owned()],
-                stdin: false,
-            }),
-            input,
-            output,
-            ft,
-        )
-    }
-}
-
-#[cfg(test)]
 mod test_perflint {
     #[test_with::executable(perflint || pipx || uv)]
     fn test_perflint_python_2a683a1c25614024() -> Result<(), Box<dyn core::error::Error>> {
@@ -10541,62 +10457,6 @@ end
             mdsf::config::MdsfTool::Custom(mdsf::custom::CustomTool {
                 binary: "stylua".to_owned(),
                 arguments: vec!["--verify".to_owned(), "$PATH".to_owned()],
-                stdin: false,
-            }),
-            input,
-            output,
-            ft,
-        )
-    }
-}
-
-#[cfg(test)]
-mod test_superhtml_fmt {
-    #[test_with::executable(superhtml)]
-    fn test_superhtml_fmt_html_7a7c8fbd08a556f1() -> Result<(), Box<dyn core::error::Error>> {
-        let input = r#"<div>
-                    <p>
-                    Mads was here
-                    </p>
-        </div>"#;
-
-        let output = r#"<div>
-	<p>
-		Mads was here
-	</p>
-</div>"#;
-
-        let ft = "html";
-
-        crate::common::run_tooling_test(
-            mdsf::config::MdsfTool::Preset(mdsf::tools::Tooling::SuperhtmlFmt),
-            input,
-            output,
-            ft,
-        )
-    }
-
-    #[test_with::executable(superhtml)]
-    fn test_custom_tool_superhtml_html_7a7c8fbd08a556f1() -> Result<(), Box<dyn core::error::Error>>
-    {
-        let input = r#"<div>
-                    <p>
-                    Mads was here
-                    </p>
-        </div>"#;
-
-        let output = r#"<div>
-	<p>
-		Mads was here
-	</p>
-</div>"#;
-
-        let ft = "html";
-
-        crate::common::run_tooling_test(
-            mdsf::config::MdsfTool::Custom(mdsf::custom::CustomTool {
-                binary: "superhtml".to_owned(),
-                arguments: vec!["fmt".to_owned(), "$PATH".to_owned()],
                 stdin: false,
             }),
             input,

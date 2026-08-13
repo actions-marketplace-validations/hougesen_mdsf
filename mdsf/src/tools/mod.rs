@@ -106,6 +106,9 @@ pub mod erg_lint;
 pub mod erlfmt;
 pub mod eslint;
 pub mod fantomas;
+pub mod fatou_format;
+pub mod fatou_lint;
+pub mod fatou_lint_fix;
 pub mod fish_indent;
 pub mod fixjson;
 pub mod floskell;
@@ -234,6 +237,7 @@ pub mod ocp_indent;
 pub mod odinfmt;
 pub mod oelint_adv;
 pub mod opa_fmt;
+pub mod openapi_format;
 pub mod ormolu;
 pub mod oxfmt;
 pub mod oxlint;
@@ -338,6 +342,7 @@ pub mod stylefmt;
 pub mod stylelint;
 pub mod stylish_haskell;
 pub mod stylua;
+pub mod superhtml_check;
 pub mod superhtml_fmt;
 pub mod svlint;
 pub mod swift_format;
@@ -1240,6 +1245,30 @@ pub enum Tooling {
     ///
     /// `fantomas $PATH`
     Fantomas,
+
+    #[serde(rename = "fatou:format")]
+    /// Julia formatter and linter built in Rust
+    ///
+    /// [https://github.com/jolars/fatou](https://github.com/jolars/fatou)
+    ///
+    /// `fatou format $PATH`
+    FatouFormat,
+
+    #[serde(rename = "fatou:lint")]
+    /// Julia formatter and linter built in Rust
+    ///
+    /// [https://github.com/jolars/fatou](https://github.com/jolars/fatou)
+    ///
+    /// `fatou lint $PATH`
+    FatouLint,
+
+    #[serde(rename = "fatou:lint:fix")]
+    /// Julia formatter and linter built in Rust
+    ///
+    /// [https://github.com/jolars/fatou](https://github.com/jolars/fatou)
+    ///
+    /// `fatou lint --fix $PATH`
+    FatouLintFix,
 
     #[serde(rename = "fish_indent")]
     /// Fish indenter and prettifier
@@ -2265,6 +2294,14 @@ pub enum Tooling {
     /// `opa fmt $PATH -w`
     OpaFmt,
 
+    #[serde(rename = "openapi-format")]
+    /// Format an OpenAPI document by ordering, formatting and filtering fields
+    ///
+    /// [https://github.com/thim81/openapi-format](https://github.com/thim81/openapi-format)
+    ///
+    /// `openapi-format $PATH --output $PATH`
+    OpenapiFormat,
+
     #[serde(rename = "ormolu")]
     /// A formatter for Haskell source code
     ///
@@ -3096,6 +3133,14 @@ pub enum Tooling {
     ///
     /// `stylua --verify $PATH`
     Stylua,
+
+    #[serde(rename = "superhtml:check")]
+    /// HTML Validator, Formatter, LSP, and Templating Language Library
+    ///
+    /// [https://github.com/kristoff-it/superhtml](https://github.com/kristoff-it/superhtml)
+    ///
+    /// `superhtml check $PATH`
+    SuperhtmlCheck,
 
     #[serde(rename = "superhtml:fmt")]
     /// HTML Validator, Formatter, LSP, and Templating Language Library
@@ -4014,6 +4059,21 @@ impl Tooling {
             Self::Erlfmt => (&erlfmt::COMMANDS, erlfmt::set_args, erlfmt::IS_STDIN),
             Self::Eslint => (&eslint::COMMANDS, eslint::set_args, eslint::IS_STDIN),
             Self::Fantomas => (&fantomas::COMMANDS, fantomas::set_args, fantomas::IS_STDIN),
+            Self::FatouFormat => (
+                &fatou_format::COMMANDS,
+                fatou_format::set_args,
+                fatou_format::IS_STDIN,
+            ),
+            Self::FatouLint => (
+                &fatou_lint::COMMANDS,
+                fatou_lint::set_args,
+                fatou_lint::IS_STDIN,
+            ),
+            Self::FatouLintFix => (
+                &fatou_lint_fix::COMMANDS,
+                fatou_lint_fix::set_args,
+                fatou_lint_fix::IS_STDIN,
+            ),
             Self::FishIndent => (
                 &fish_indent::COMMANDS,
                 fish_indent::set_args,
@@ -4450,6 +4510,11 @@ impl Tooling {
                 oelint_adv::IS_STDIN,
             ),
             Self::OpaFmt => (&opa_fmt::COMMANDS, opa_fmt::set_args, opa_fmt::IS_STDIN),
+            Self::OpenapiFormat => (
+                &openapi_format::COMMANDS,
+                openapi_format::set_args,
+                openapi_format::IS_STDIN,
+            ),
             Self::Ormolu => (&ormolu::COMMANDS, ormolu::set_args, ormolu::IS_STDIN),
             Self::Oxfmt => (&oxfmt::COMMANDS, oxfmt::set_args, oxfmt::IS_STDIN),
             Self::Oxlint => (&oxlint::COMMANDS, oxlint::set_args, oxlint::IS_STDIN),
@@ -4786,6 +4851,11 @@ impl Tooling {
                 stylish_haskell::IS_STDIN,
             ),
             Self::Stylua => (&stylua::COMMANDS, stylua::set_args, stylua::IS_STDIN),
+            Self::SuperhtmlCheck => (
+                &superhtml_check::COMMANDS,
+                superhtml_check::set_args,
+                superhtml_check::IS_STDIN,
+            ),
             Self::SuperhtmlFmt => (
                 &superhtml_fmt::COMMANDS,
                 superhtml_fmt::set_args,
@@ -5092,6 +5162,9 @@ impl AsRef<str> for Tooling {
             Self::Erlfmt => "erlfmt",
             Self::Eslint => "eslint",
             Self::Fantomas => "fantomas",
+            Self::FatouFormat => "fatou:format",
+            Self::FatouLint => "fatou:lint",
+            Self::FatouLintFix => "fatou:lint:fix",
             Self::FishIndent => "fish_indent",
             Self::Fixjson => "fixjson",
             Self::Floskell => "floskell",
@@ -5220,6 +5293,7 @@ impl AsRef<str> for Tooling {
             Self::Odinfmt => "odinfmt",
             Self::OelintAdv => "oelint-adv",
             Self::OpaFmt => "opa:fmt",
+            Self::OpenapiFormat => "openapi-format",
             Self::Ormolu => "ormolu",
             Self::Oxfmt => "oxfmt",
             Self::Oxlint => "oxlint",
@@ -5324,6 +5398,7 @@ impl AsRef<str> for Tooling {
             Self::Stylelint => "stylelint",
             Self::StylishHaskell => "stylish-haskell",
             Self::Stylua => "stylua",
+            Self::SuperhtmlCheck => "superhtml:check",
             Self::SuperhtmlFmt => "superhtml:fmt",
             Self::Svlint => "svlint",
             Self::SwiftFormat => "swift-format",
@@ -5523,6 +5598,9 @@ mod test_tooling {
         assert_eq!(Tooling::Erlfmt, reverse(Tooling::Erlfmt)?);
         assert_eq!(Tooling::Eslint, reverse(Tooling::Eslint)?);
         assert_eq!(Tooling::Fantomas, reverse(Tooling::Fantomas)?);
+        assert_eq!(Tooling::FatouFormat, reverse(Tooling::FatouFormat)?);
+        assert_eq!(Tooling::FatouLint, reverse(Tooling::FatouLint)?);
+        assert_eq!(Tooling::FatouLintFix, reverse(Tooling::FatouLintFix)?);
         assert_eq!(Tooling::FishIndent, reverse(Tooling::FishIndent)?);
         assert_eq!(Tooling::Fixjson, reverse(Tooling::Fixjson)?);
         assert_eq!(Tooling::Floskell, reverse(Tooling::Floskell)?);
@@ -5681,6 +5759,7 @@ mod test_tooling {
         assert_eq!(Tooling::Odinfmt, reverse(Tooling::Odinfmt)?);
         assert_eq!(Tooling::OelintAdv, reverse(Tooling::OelintAdv)?);
         assert_eq!(Tooling::OpaFmt, reverse(Tooling::OpaFmt)?);
+        assert_eq!(Tooling::OpenapiFormat, reverse(Tooling::OpenapiFormat)?);
         assert_eq!(Tooling::Ormolu, reverse(Tooling::Ormolu)?);
         assert_eq!(Tooling::Oxfmt, reverse(Tooling::Oxfmt)?);
         assert_eq!(Tooling::Oxlint, reverse(Tooling::Oxlint)?);
@@ -5794,6 +5873,7 @@ mod test_tooling {
         assert_eq!(Tooling::Stylelint, reverse(Tooling::Stylelint)?);
         assert_eq!(Tooling::StylishHaskell, reverse(Tooling::StylishHaskell)?);
         assert_eq!(Tooling::Stylua, reverse(Tooling::Stylua)?);
+        assert_eq!(Tooling::SuperhtmlCheck, reverse(Tooling::SuperhtmlCheck)?);
         assert_eq!(Tooling::SuperhtmlFmt, reverse(Tooling::SuperhtmlFmt)?);
         assert_eq!(Tooling::Svlint, reverse(Tooling::Svlint)?);
         assert_eq!(Tooling::SwiftFormat, reverse(Tooling::SwiftFormat)?);
